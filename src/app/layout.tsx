@@ -1,19 +1,53 @@
 import type { Metadata } from "next";
-import { Manrope } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
-// Fallback font (Glancyr sera ajouté quand disponible)
-const manrope = Manrope({
-  subsets: ["latin"],
-  variable: "--font-manrope",
+// Configuration des fichiers séparés
+const glancyr = localFont({
+  src: [
+    {
+      path: "../../public/fonts/Glancyr-Thin.otf",
+      weight: "100",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Glancyr-ExtraLight.otf",
+      weight: "200",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Glancyr-Light.otf",
+      weight: "300",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Glancyr-Regular.otf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Glancyr-Medium.otf",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Glancyr-SemiBold.otf",
+      weight: "600",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Glancyr-Bold.otf",
+      weight: "700",
+      style: "normal",
+    },
+  ],
+  variable: "--font-glancyr",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "ABYSSE | Musée Sous-Marin de Toulon",
-  description:
-    "Découvrez le premier musée sous-marin au monde. Une plongée unique dans l'histoire maritime et les profondeurs océaniques à Toulon.",
-  keywords: ["musée", "sous-marin", "Toulon", "océan", "Casabianca", "plongée"],
+  title: "Musée Abysse | Toulon",
+  description: "Le premier musée dédié à l'exploration des grands fonds marins.",
 };
 
 export default function RootLayout({
@@ -22,8 +56,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" className={manrope.variable}>
-      <body>{children}</body>
+    <html lang="fr">
+      <body className={`${glancyr.variable} font-sans bg-[#020A19] text-[#E3F3F7] antialiased`}>
+        {children}
+      </body>
     </html>
   );
 }
