@@ -1,0 +1,151 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-display: var(--font-glancyr), var(--font-manrope), system-ui, sans-serif;
+  --font-body: var(--font-manrope), system-ui, sans-serif;
+  
+  --accent: #4CBBD5;
+  --accent-hover: #6CCCE5;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: auto;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+body {
+  background: #1a7a9a;
+  color: #ffffff;
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Titles use Glancyr */
+h1, h2, h3 {
+  font-family: var(--font-display);
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+}
+
+.canvas-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+::selection {
+  background: rgba(76, 187, 213, 0.4);
+  color: white;
+}
+
+/* Slow bubble float */
+@keyframes float-up {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
+  }
+  5% {
+    opacity: 0.12;
+  }
+  95% {
+    opacity: 0.12;
+  }
+  100% {
+    transform: translateY(-110vh) translateX(10px);
+    opacity: 0;
+  }
+}
+
+.animate-float-up {
+  animation: float-up linear infinite;
+}
+
+/* Very slow drift */
+@keyframes drift-slow {
+  0%, 100% {
+    transform: translate(0, 0);
+    opacity: 0.15;
+  }
+  50% {
+    transform: translate(15px, -20px);
+    opacity: 0.15;
+  }
+}
+
+.animate-drift-slow {
+  animation: drift-slow ease-in-out infinite;
+}
+
+/* Gentle seaweed sway */
+@keyframes sway-gentle {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(2deg);
+  }
+}
+
+@keyframes sway-gentle-reverse {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(-2deg);
+  }
+}
+
+.animate-sway-gentle {
+  animation: sway-gentle 6s ease-in-out infinite;
+}
+
+.animate-sway-gentle-reverse {
+  animation: sway-gentle-reverse 7s ease-in-out infinite;
+}
+
+/* Slow glow */
+@keyframes glow-slow {
+  0%, 100% {
+    opacity: 0;
+  }
+  30%, 70% {
+    opacity: 0.3;
+  }
+}
+
+.animate-glow-slow {
+  animation: glow-slow ease-in-out infinite;
+}
+
+/* Grain overlay */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.02;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
