@@ -89,7 +89,7 @@ function SimpleFish({ scrollProgress }: { scrollProgress: number }) {
     }));
   }, []);
 
-  useFrame(({ clock }) => {
+  useFrame(() => {
     if (!groupRef.current) return;
     groupRef.current.position.y = scrollProgress * 120;
   });
