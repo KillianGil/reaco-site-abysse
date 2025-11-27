@@ -7,24 +7,25 @@ import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { Submarine } from "./Submarine";
 import { OceanEnvironment } from "./OceanEnvironment";
+import { FishSchool } from "./FishSchool";
+import { DeepSeaCreature } from "./DeepSeaCreature";
 
 interface SceneProps {
   scrollProgress: number;
 }
 
-// Marine snow - FIXED: Large scale on Y axis + frustumCulled={false}
+// Marine snow layer 1
 function MarineSnow({ scrollProgress }: { scrollProgress: number }) {
   const particlesRef = useRef<THREE.Points>(null);
   
   const positions = useMemo(() => {
-    const count = 800;
+    const count = 1000;
     const pos = new Float32Array(count * 3);
     
     for (let i = 0; i < count; i++) {
-      // Wide X/Z spread, VERY tall Y spread
-      pos[i * 3] = (Math.random() - 0.5) * 80;      // X: -40 to 40
-      pos[i * 3 + 1] = (Math.random() - 0.5) * 200; // Y: -100 to 100 (tall!)
-      pos[i * 3 + 2] = (Math.random() - 0.5) * 80 - 20; // Z: behind camera
+      pos[i * 3] = (Math.random() - 0.5) * 100;
+      pos[i * 3 + 1] = Math.random() * 200 - 100;
+      pos[i * 3 + 2] = (Math.random() - 0.5) * 100 - 20;
     }
     
     return pos;
@@ -32,14 +33,13 @@ function MarineSnow({ scrollProgress }: { scrollProgress: number }) {
 
   useFrame(() => {
     if (!particlesRef.current) return;
-    // Particles rise as we scroll (simulating descent)
-    particlesRef.current.position.y = scrollProgress * 50;
+    particlesRef.current.position.y = scrollProgress * 60;
   });
 
   return (
-    <points ref={particlesRef} frustumCulled={false}>
+    <points ref={particlesRef} frustumCulled={false} position={[0, -50, 0]}>
       <bufferGeometry>
-        <bufferAttribute attach="attributes-position" count={800} array={positions} itemSize={3} />
+        <bufferAttribute attach="attributes-position" count={1000} array={positions} itemSize={3} />
       </bufferGeometry>
       <pointsMaterial 
         size={0.12} 
@@ -53,18 +53,18 @@ function MarineSnow({ scrollProgress }: { scrollProgress: number }) {
   );
 }
 
-// Second layer of particles - different depth
+// Marine snow layer 2
 function MarineSnowLayer2({ scrollProgress }: { scrollProgress: number }) {
   const particlesRef = useRef<THREE.Points>(null);
   
   const positions = useMemo(() => {
-    const count = 500;
+    const count = 600;
     const pos = new Float32Array(count * 3);
     
     for (let i = 0; i < count; i++) {
-      pos[i * 3] = (Math.random() - 0.5) * 60;
-      pos[i * 3 + 1] = (Math.random() - 0.5) * 180;
-      pos[i * 3 + 2] = (Math.random() - 0.5) * 60 - 30;
+      pos[i * 3] = (Math.random() - 0.5) * 80;
+      pos[i * 3 + 1] = Math.random() * 180 - 90;
+      pos[i * 3 + 2] = (Math.random() - 0.5) * 80 - 30;
     }
     
     return pos;
@@ -72,13 +72,13 @@ function MarineSnowLayer2({ scrollProgress }: { scrollProgress: number }) {
 
   useFrame(() => {
     if (!particlesRef.current) return;
-    particlesRef.current.position.y = scrollProgress * 40;
+    particlesRef.current.position.y = scrollProgress * 50;
   });
 
   return (
-    <points ref={particlesRef} frustumCulled={false}>
+    <points ref={particlesRef} frustumCulled={false} position={[0, -40, 0]}>
       <bufferGeometry>
-        <bufferAttribute attach="attributes-position" count={500} array={positions} itemSize={3} />
+        <bufferAttribute attach="attributes-position" count={600} array={positions} itemSize={3} />
       </bufferGeometry>
       <pointsMaterial 
         size={0.18} 
@@ -92,18 +92,18 @@ function MarineSnowLayer2({ scrollProgress }: { scrollProgress: number }) {
   );
 }
 
-// Third layer - far background
+// Marine snow layer 3
 function MarineSnowLayer3({ scrollProgress }: { scrollProgress: number }) {
   const particlesRef = useRef<THREE.Points>(null);
   
   const positions = useMemo(() => {
-    const count = 300;
+    const count = 400;
     const pos = new Float32Array(count * 3);
     
     for (let i = 0; i < count; i++) {
-      pos[i * 3] = (Math.random() - 0.5) * 100;
-      pos[i * 3 + 1] = (Math.random() - 0.5) * 250;
-      pos[i * 3 + 2] = (Math.random() - 0.5) * 40 - 50;
+      pos[i * 3] = (Math.random() - 0.5) * 120;
+      pos[i * 3 + 1] = Math.random() * 250 - 125;
+      pos[i * 3 + 2] = (Math.random() - 0.5) * 60 - 50;
     }
     
     return pos;
@@ -111,13 +111,13 @@ function MarineSnowLayer3({ scrollProgress }: { scrollProgress: number }) {
 
   useFrame(() => {
     if (!particlesRef.current) return;
-    particlesRef.current.position.y = scrollProgress * 60;
+    particlesRef.current.position.y = scrollProgress * 70;
   });
 
   return (
-    <points ref={particlesRef} frustumCulled={false}>
+    <points ref={particlesRef} frustumCulled={false} position={[0, -60, 0]}>
       <bufferGeometry>
-        <bufferAttribute attach="attributes-position" count={300} array={positions} itemSize={3} />
+        <bufferAttribute attach="attributes-position" count={400} array={positions} itemSize={3} />
       </bufferGeometry>
       <pointsMaterial 
         size={0.08} 
@@ -139,7 +139,7 @@ export function Scene({ scrollProgress }: SceneProps) {
           position: [0, 0, 12],
           fov: 50,
           near: 0.1,
-          far: 300,
+          far: 500,
         }}
         gl={{
           antialias: true,
@@ -152,12 +152,19 @@ export function Scene({ scrollProgress }: SceneProps) {
         <Suspense fallback={null}>
           <OceanEnvironment scrollProgress={scrollProgress} />
 
-          <Environment preset="night" background={false} />
+          {/* Environment for realistic reflections on fish scales and metal */}
+          <Environment preset="night" background={false} environmentIntensity={0.2} />
 
-          {/* Marine snow - 3 layers with frustumCulled={false} */}
+          {/* Marine snow - 3 layers */}
           <MarineSnow scrollProgress={scrollProgress} />
           <MarineSnowLayer2 scrollProgress={scrollProgress} />
           <MarineSnowLayer3 scrollProgress={scrollProgress} />
+
+          {/* Fish distributed along the descent */}
+          <FishSchool scrollProgress={scrollProgress} />
+
+          {/* Deep sea anglerfish - appears in biodiversity section */}
+          <DeepSeaCreature scrollProgress={scrollProgress} />
 
           {/* The submarine */}
           <Submarine scrollProgress={scrollProgress} />

@@ -4,7 +4,7 @@
 
 :root {
   --font-display: var(--font-glancyr), var(--font-manrope), system-ui, sans-serif;
-  --font-body: var(--font-manrope), system-ui, sans-serif;
+  --font-body: var(--font-glancyr), var(--font-manrope), system-ui, sans-serif;
   
   --accent: #4CBBD5;
   --accent-hover: #6CCCE5;
@@ -38,8 +38,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Titles use Glancyr */
-h1, h2, h3 {
+/* All text uses Glancyr */
+h1, h2, h3, h4, h5, h6, p, span, a, button {
   font-family: var(--font-display);
 }
 
