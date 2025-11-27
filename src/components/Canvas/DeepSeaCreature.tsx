@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
@@ -11,111 +11,55 @@ interface DeepSeaCreatureProps {
 
 export function DeepSeaCreature({ scrollProgress }: DeepSeaCreatureProps) {
   const { scene } = useGLTF("/models/anglerfish.glb");
-  const groupRef = useRef<THREE.Group>(null);
-  const lanternRef = useRef<THREE.PointLight>(null);
+  const ref = useRef<THREE.Group>(null);
+  const cloned = useMemo(() => scene.clone(), [scene]);
 
-  useFrame((state) => {
-    if (!groupRef.current) return;
-    const time = state.clock.elapsedTime;
+  useFrame(({ clock }) => {
+    if (!ref.current) return;
+    const t = clock.getElapsedTime();
 
-    // Slow, menacing movement
-    const floatX = Math.sin(time * 0.1) * 2;
-    const floatY = Math.sin(time * 0.15) * 1;
-    const floatZ = Math.sin(time * 0.08) * 1.5;
+    // Slow swimming
+    const swimX = Math.sin(t * 0.12) * 3;
+    const swimY = Math.sin(t * 0.18) * 1;
+    const swimZ = Math.cos(t * 0.1) * 1.5;
 
-    // Base position - deep in the abyss
-    // Appears around scroll 0.65-0.9 (Section 5: Biodiversity)
-    const baseY = -70 + scrollProgress * 30;
-    
-    groupRef.current.position.set(
-      8 + floatX,
-      baseY + floatY,
-      -15 + floatZ
+    // Position rises with scroll
+    const baseY = -90 + scrollProgress * 100;
+
+    ref.current.position.set(12 + swimX, baseY + swimY, -18 + swimZ);
+    ref.current.rotation.set(
+      Math.sin(t * 0.08) * 0.08,
+      Math.sin(t * 0.06) * 0.25 + Math.PI * 0.7,
+      Math.sin(t * 0.1) * 0.04
     );
-
-    // Slow hunting rotation
-    groupRef.current.rotation.y = Math.sin(time * 0.08) * 0.4 - Math.PI * 0.3;
-    groupRef.current.rotation.x = Math.sin(time * 0.1) * 0.15;
-    groupRef.current.rotation.z = Math.sin(time * 0.12) * 0.08;
-
-    // Lantern flicker effect
-    if (lanternRef.current) {
-      const flicker = Math.sin(time * 5) * 0.3 + Math.sin(time * 13) * 0.2 + Math.random() * 0.2;
-      lanternRef.current.intensity = 8 + flicker * 3;
-    }
   });
 
-  // Visibility: appears in deep section (65% - 95% scroll)
-  const isVisible = scrollProgress > 0.6 && scrollProgress < 0.95;
-  const fadeIn = Math.min((scrollProgress - 0.6) * 5, 1);
-  const fadeOut = scrollProgress > 0.9 ? 1 - (scrollProgress - 0.9) * 10 : 1;
-  const opacity = isVisible ? fadeIn * fadeOut : 0;
-
-  if (!isVisible || opacity < 0.1) return null;
+  // Only show in deep section
+  if (scrollProgress < 0.5) return null;
 
   return (
-    <group ref={groupRef} frustumCulled={false}>
-      {/* The anglerfish model - LARGE SCALE */}
-      <primitive 
-        object={scene.clone()} 
-        scale={12}
-        rotation={[0, Math.PI, 0]}
-      />
+    <group ref={ref} frustumCulled={false}>
+      <primitive object={cloned} scale={20} />
+
+      {/* Bright lantern */}
+      <pointLight position={[0, 3, 6]} intensity={15} color="#00ffaa" distance={40} decay={1} />
       
-      {/* Main bioluminescent lantern - BRIGHT */}
-      <pointLight
-        ref={lanternRef}
-        position={[0, 2, 4]}
-        intensity={8}
-        color="#00ff88"
-        distance={25}
-        decay={2}
-      />
-      
-      {/* Lantern glow orb */}
-      <mesh position={[0, 2, 4]}>
-        <sphereGeometry args={[0.3, 16, 16]} />
-        <meshStandardMaterial
-          color="#00ffaa"
-          emissive="#00ff88"
-          emissiveIntensity={5}
-          transparent
-          opacity={opacity}
-        />
+      {/* Glowing orb */}
+      <mesh position={[0, 3, 6]}>
+        <sphereGeometry args={[0.6, 16, 16]} />
+        <meshBasicMaterial color="#00ffcc" />
+      </mesh>
+      <mesh position={[0, 3, 6]}>
+        <sphereGeometry args={[1.2, 16, 16]} />
+        <meshBasicMaterial color="#00ff88" transparent opacity={0.35} />
       </mesh>
 
-      {/* Secondary eye glow */}
-      <pointLight
-        position={[1, 0.5, 2]}
-        intensity={2}
-        color="#00ffaa"
-        distance={8}
-      />
-      <pointLight
-        position={[-1, 0.5, 2]}
-        intensity={2}
-        color="#00ffaa"
-        distance={8}
-      />
-
-      {/* Ambient self-illumination */}
-      <pointLight
-        position={[0, 0, 0]}
-        intensity={1}
-        color="#003322"
-        distance={15}
-      />
-
-      {/* Dramatic rim light */}
-      <spotLight
-        position={[-10, 5, -5]}
-        angle={0.5}
-        penumbra={1}
-        intensity={3}
-        color="#004433"
-        distance={30}
-        target-position={[0, 0, 0]}
-      />
+      {/* Self light */}
+      <pointLight position={[0, 0, 0]} intensity={4} color="#002211" distance={25} />
+      
+      {/* Eyes */}
+      <pointLight position={[2, 0.5, 4]} intensity={6} color="#00ffaa" distance={15} />
+      <pointLight position={[-2, 0.5, 4]} intensity={6} color="#00ffaa" distance={15} />
     </group>
   );
 }
