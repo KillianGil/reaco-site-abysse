@@ -9,7 +9,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 export function Overlay() {
   return (
-    <div className="relative z-10">
+    <div className="relative z-10 pt-20">
       <Section1Surface />
       <Section2Histoire />
       <Section3Casabianca />
@@ -180,7 +180,7 @@ function Section2Histoire() {
 }
 
 // ============================================
-// SECTION 3 : LE CASABIANCA
+// SECTION 3 : LE CASABIANCA (TEXTE À DROITE)
 // ============================================
 function Section3Casabianca() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -205,15 +205,17 @@ function Section3Casabianca() {
       <div className="absolute top-0 left-[10%] right-[10%] h-px bg-white/10" />
 
       <div className="min-h-[160vh] grid grid-cols-12 gap-6 px-6 md:px-12 lg:px-20 py-32">
+        {/* Espace vide à gauche */}
         <div className="col-span-12 md:col-span-5" />
 
-        <div className="col-span-12 md:col-span-6 flex flex-col justify-center">
+        {/* Contenu à droite - aligné à droite */}
+        <div className="col-span-12 md:col-span-6 flex flex-col justify-center md:items-end md:text-right">
           
           <div className="casa-depth mb-6">
             <span className="text-4xl font-light text-[#4CBBD5] drop-shadow-md">Le Musée</span>
           </div>
 
-          <div className="casa-marker flex items-center gap-3 mb-5">
+          <div className="casa-marker flex items-center gap-3 mb-5 md:flex-row-reverse">
             <span className="text-[#4CBBD5] font-mono text-xs">02</span>
             <div className="w-10 h-px bg-white/20" />
             <span className="text-[9px] uppercase tracking-[0.2em] text-white/50 font-medium">Pièce maîtresse</span>
@@ -233,7 +235,7 @@ function Section3Casabianca() {
             symbole du génie naval français.
           </p>
 
-          <div className="casa-stats grid grid-cols-3 gap-3">
+          <div className="casa-stats grid grid-cols-3 gap-3 w-full max-w-md">
             {[
               { value: "2 600", label: "Tonnes" },
               { value: "73", label: "Mètres" },
@@ -347,7 +349,7 @@ function Section4Experience() {
 }
 
 // ============================================
-// SECTION 5 : BIODIVERSITÉ
+// SECTION 5 : BIODIVERSITÉ (TEXTE À DROITE)
 // ============================================
 function Section5Biodiversite() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -372,15 +374,17 @@ function Section5Biodiversite() {
       <div className="absolute top-0 left-[10%] right-[10%] h-px bg-white/10" />
 
       <div className="min-h-[150vh] grid grid-cols-12 gap-6 px-6 md:px-12 lg:px-20 py-32">
+        {/* Espace vide à gauche */}
         <div className="col-span-12 md:col-span-5" />
 
-        <div className="col-span-12 md:col-span-6 flex flex-col justify-center">
+        {/* Contenu à droite - aligné à droite */}
+        <div className="col-span-12 md:col-span-6 flex flex-col justify-center md:items-end md:text-right">
           
           <div className="bio-depth mb-6">
             <span className="text-4xl font-light text-[#4CBBD5] drop-shadow-md">Les Abysses</span>
           </div>
 
-          <div className="bio-marker flex items-center gap-3 mb-5">
+          <div className="bio-marker flex items-center gap-3 mb-5 md:flex-row-reverse">
             <span className="text-[#4CBBD5] font-mono text-xs">04</span>
             <div className="w-10 h-px bg-white/20" />
             <span className="text-[9px] uppercase tracking-[0.2em] text-white/50 font-medium">90% inexploré</span>
@@ -401,7 +405,7 @@ function Section5Biodiversite() {
           </p>
 
           <motion.div 
-            className="bio-quote p-5 border-l-2 border-[#4CBBD5]/40 bg-white/[0.03] backdrop-blur-sm"
+            className="bio-quote p-5 border-r-2 border-l-0 border-[#4CBBD5]/40 bg-white/[0.03] backdrop-blur-sm max-w-md"
             whileHover={{ backgroundColor: "rgba(255,255,255,0.06)" }}
             transition={{ duration: 0.3 }}
           >
@@ -451,7 +455,7 @@ function Section6Contact() {
           <span className="text-[9px] uppercase tracking-[0.2em] text-white/50 font-medium">Contact</span>
         </div>
 
-        <h2 className="contact-title text-4xl md:text-5xl font-light tracking-tight text-white mb-6 drop-shadow-lg">
+        <h2 className="contact-title text-4xl md:text-5xl font-light tracking-tight text-white mb-6 drop-shadow-lg relative z-0">
           NOUS<br />RENCONTRER
         </h2>
 

@@ -15,16 +15,7 @@ const Scene = dynamic(
   () => import("@/components/Canvas/Scene").then((mod) => mod.Scene),
   {
     ssr: false,
-    loading: () => (
-      <div className="fixed inset-0 bg-[#1a7a9a] z-0 flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <div className="relative">
-            <div className="w-12 h-12 border-2 border-white/20 border-t-[#4CBBD5] rounded-full animate-spin" />
-          </div>
-          <span className="text-sm text-white/50">Plongée en cours...</span>
-        </div>
-      </div>
-    ),
+    loading: () => null,
   }
 );
 

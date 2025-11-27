@@ -99,8 +99,8 @@ export function DepthGauge({ scrollProgress }: DepthGaugeProps) {
       </div>
 
       {/* Zone label */}
-      <div className="px-3 py-1.5 rounded bg-white/20 backdrop-blur-sm border border-white/30">
-        <span className="text-[10px] uppercase tracking-widest font-semibold text-white">
+      <div className="px-3 py-1.5 rounded bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center">
+        <span className="text-[10px] uppercase tracking-widest font-semibold text-white leading-none text-center whitespace-nowrap">
           {depth < 200 && "Surface"}
           {depth >= 200 && depth < 1000 && "Mésopélagique"}
           {depth >= 1000 && depth < 4000 && "Bathyal"}

@@ -2,7 +2,7 @@
 
 export function Navbar() {
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 px-6 md:px-10 py-5">
+    <nav className="fixed top-0 left-0 right-0 z-[100] px-6 md:px-10 py-5 bg-gradient-to-b from-black/30 to-transparent">
       <div className="flex items-center justify-between">
         {/* Logo */}
         <a href="#" className="text-white/90 text-sm font-medium tracking-[0.2em] uppercase hover:text-white transition-colors">
