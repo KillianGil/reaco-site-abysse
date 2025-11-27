@@ -28,58 +28,6 @@ function createCircleTexture() {
   return texture;
 }
 
-// Submarine bubbles
-function SubmarineBubbles({ scrollProgress }: { scrollProgress: number }) {
-  const groupRef = useRef<THREE.Group>(null);
-  
-  const bubbles = useMemo(() => {
-    const bubbleData = [];
-    for (let i = 0; i < 20; i++) {
-      bubbleData.push({
-        x: Math.random() * 2 - 1,
-        y: -2 + Math.random() * 0.5,
-        z: -8 + Math.random() * 2,
-        speed: 0.5 + Math.random() * 0.5,
-        phase: Math.random() * Math.PI * 2,
-        size: 0.03 + Math.random() * 0.05,
-      });
-    }
-    return bubbleData;
-  }, []);
-
-  useFrame(({ clock }) => {
-    if (!groupRef.current) return;
-    const t = clock.getElapsedTime();
-    
-    groupRef.current.children.forEach((bubble, i) => {
-      const data = bubbles[i];
-      const riseHeight = (t * data.speed + data.phase) % 8;
-      const wobbleX = Math.sin(t * 2 + data.phase) * 0.3;
-      
-      bubble.position.set(
-        data.x + wobbleX,
-        data.y + riseHeight + scrollProgress * 120,
-        data.z
-      );
-    });
-  });
-
-  return (
-    <group ref={groupRef}>
-      {bubbles.map((bubble, i) => (
-        <mesh key={i}>
-          <sphereGeometry args={[bubble.size, 8, 8]} />
-          <meshBasicMaterial 
-            color="#aaddff" 
-            transparent 
-            opacity={0.4}
-            depthWrite={false}
-          />
-        </mesh>
-      ))}
-    </group>
-  );
-}
 
 // Bioluminescent plankton
 function BioluminescentPlankton({ scrollProgress }: { scrollProgress: number }) {
