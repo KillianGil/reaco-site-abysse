@@ -7,128 +7,113 @@ import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { Submarine } from "./Submarine";
 import { OceanEnvironment } from "./OceanEnvironment";
+import { FishSchool } from "./FishSchool";
+import { Anglerfish } from "./Anglerfish";
+import { OceanDecorations } from "./OceanDecorations";
 
 interface SceneProps {
   scrollProgress: number;
 }
 
-// Marine snow
+// Create circular texture for particles
+function createCircleTexture() {
+  const canvas = document.createElement('canvas');
+  canvas.width = 32;
+  canvas.height = 32;
+  const ctx = canvas.getContext('2d')!;
+  
+  const gradient = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
+  gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+  gradient.addColorStop(0.5, 'rgba(255, 255, 255, 0.5)');
+  gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+  
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, 32, 32);
+  
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.needsUpdate = true;
+  return texture;
+}
+
+// Marine snow - gentle floating particles
 function MarineSnow({ scrollProgress }: { scrollProgress: number }) {
   const ref = useRef<THREE.Points>(null);
 
   const positions = useMemo(() => {
-    const count = 1200;
+    const count = 1500;
     const pos = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
-      pos[i * 3] = (Math.random() - 0.5) * 100;
-      pos[i * 3 + 1] = Math.random() * 300 - 150;
-      pos[i * 3 + 2] = (Math.random() - 0.5) * 80 - 20;
+      pos[i * 3] = (Math.random() - 0.5) * 120;
+      pos[i * 3 + 1] = Math.random() * 350 - 175;
+      pos[i * 3 + 2] = (Math.random() - 0.5) * 100 - 20;
     }
     return pos;
   }, []);
 
   useFrame(() => {
     if (ref.current) {
-      ref.current.position.y = scrollProgress * 80;
+      ref.current.position.y = scrollProgress * 100;
     }
   });
 
   return (
     <points ref={ref} frustumCulled={false}>
       <bufferGeometry>
-        <bufferAttribute attach="attributes-position" count={1200} array={positions} itemSize={3} />
+        <bufferAttribute attach="attributes-position" count={1500} array={positions} itemSize={3} />
       </bufferGeometry>
-      <pointsMaterial size={0.1} color="#ffffff" transparent opacity={0.3} sizeAttenuation depthWrite={false} />
+      <pointsMaterial 
+        size={0.15} 
+        color="#ffffff" 
+        transparent 
+        opacity={0.4} 
+        sizeAttenuation 
+        depthWrite={false}
+        alphaTest={0.01}
+      >
+        <primitive attach="map" object={createCircleTexture()} />
+      </pointsMaterial>
     </points>
   );
 }
 
+// Secondary layer of marine snow for depth
 function MarineSnow2({ scrollProgress }: { scrollProgress: number }) {
   const ref = useRef<THREE.Points>(null);
 
   const positions = useMemo(() => {
-    const count = 800;
+    const count = 1000;
     const pos = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
-      pos[i * 3] = (Math.random() - 0.5) * 90;
-      pos[i * 3 + 1] = Math.random() * 280 - 140;
-      pos[i * 3 + 2] = (Math.random() - 0.5) * 70 - 30;
+      pos[i * 3] = (Math.random() - 0.5) * 100;
+      pos[i * 3 + 1] = Math.random() * 320 - 160;
+      pos[i * 3 + 2] = (Math.random() - 0.5) * 80 - 30;
     }
     return pos;
   }, []);
 
   useFrame(() => {
     if (ref.current) {
-      ref.current.position.y = scrollProgress * 70;
+      ref.current.position.y = scrollProgress * 85;
     }
   });
 
   return (
     <points ref={ref} frustumCulled={false}>
       <bufferGeometry>
-        <bufferAttribute attach="attributes-position" count={800} array={positions} itemSize={3} />
+        <bufferAttribute attach="attributes-position" count={1000} array={positions} itemSize={3} />
       </bufferGeometry>
-      <pointsMaterial size={0.14} color="#d0e8ff" transparent opacity={0.22} sizeAttenuation depthWrite={false} />
+      <pointsMaterial 
+        size={0.18} 
+        color="#c8e4f0" 
+        transparent 
+        opacity={0.3} 
+        sizeAttenuation 
+        depthWrite={false}
+        alphaTest={0.01}
+      >
+        <primitive attach="map" object={createCircleTexture()} />
+      </pointsMaterial>
     </points>
-  );
-}
-
-// Simple fish - just small swimming shapes
-function SimpleFish({ scrollProgress }: { scrollProgress: number }) {
-  const groupRef = useRef<THREE.Group>(null);
-  
-  // 30 fish at different fixed Y positions
-  const fishData = useMemo(() => {
-    return Array.from({ length: 30 }, (_, i) => ({
-      x: (Math.random() - 0.5) * 60,
-      y: 20 - i * 4, // Spread from Y=20 to Y=-100
-      z: -15 - Math.random() * 20,
-      speed: 0.5 + Math.random() * 0.5,
-      phase: Math.random() * Math.PI * 2,
-      dir: Math.random() > 0.5 ? 1 : -1,
-    }));
-  }, []);
-
-  useFrame(() => {
-    if (!groupRef.current) return;
-    groupRef.current.position.y = scrollProgress * 120;
-  });
-
-  return (
-    <group ref={groupRef}>
-      {fishData.map((fish, i) => (
-        <SingleSimpleFish key={i} fish={fish} />
-      ))}
-    </group>
-  );
-}
-
-function SingleSimpleFish({ fish }: { fish: { x: number; y: number; z: number; speed: number; phase: number; dir: number } }) {
-  const meshRef = useRef<THREE.Mesh>(null);
-
-  useFrame(({ clock }) => {
-    if (!meshRef.current) return;
-    const t = clock.getElapsedTime();
-
-    // Swimming motion
-    const swimX = Math.sin(t * fish.speed + fish.phase) * 6;
-    
-    meshRef.current.position.set(
-      fish.x + swimX * fish.dir,
-      fish.y + Math.sin(t * fish.speed * 1.3 + fish.phase) * 0.3,
-      fish.z
-    );
-
-    // Face direction
-    meshRef.current.rotation.y = fish.dir > 0 ? 0 : Math.PI;
-    meshRef.current.rotation.z = Math.sin(t * 4 + fish.phase) * 0.1;
-  });
-
-  return (
-    <mesh ref={meshRef}>
-      <coneGeometry args={[0.08, 0.3, 4]} />
-      <meshStandardMaterial color="#88aacc" transparent opacity={0.6} />
-    </mesh>
   );
 }
 
@@ -137,18 +122,34 @@ export function Scene({ scrollProgress }: SceneProps) {
     <div className="canvas-container">
       <Canvas
         camera={{ position: [0, 0, 12], fov: 50, near: 0.1, far: 500 }}
-        gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
+        gl={{ 
+          antialias: true, 
+          alpha: false, 
+          powerPreference: "high-performance",
+        }}
         dpr={[1, 2]}
+        style={{ background: "#1a7a9a" }}
       >
+        <color attach="background" args={["#1a7a9a"]} />
+        
         <Suspense fallback={null}>
           <OceanEnvironment scrollProgress={scrollProgress} />
-          <Environment preset="night" background={false} environmentIntensity={0.15} />
+          <Environment preset="night" background={false} environmentIntensity={0.2} />
 
+          {/* Marine snow particles */}
           <MarineSnow scrollProgress={scrollProgress} />
           <MarineSnow2 scrollProgress={scrollProgress} />
 
-          <SimpleFish scrollProgress={scrollProgress} />
+          {/* Ocean decorations (bubbles, plankton, jellyfish, rays) */}
+          <OceanDecorations scrollProgress={scrollProgress} />
 
+          {/* Fish schools - in background behind submarine */}
+          <FishSchool scrollProgress={scrollProgress} />
+          
+          {/* Anglerfish in the abyss */}
+          <Anglerfish scrollProgress={scrollProgress} />
+
+          {/* The submarine - in front */}
           <Submarine scrollProgress={scrollProgress} />
 
           <Preload all />

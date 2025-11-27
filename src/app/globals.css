@@ -38,6 +38,15 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Prevent black flash on load */
+html {
+  background: #1a7a9a;
+}
+
+.canvas-container canvas {
+  background: #1a7a9a !important;
+}
+
 /* All text uses Glancyr */
 h1, h2, h3, h4, h5, h6, p, span, a, button {
   font-family: var(--font-display);

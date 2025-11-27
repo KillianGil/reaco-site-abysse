@@ -9,7 +9,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 export function Overlay() {
   return (
-    <div className="relative z-10 pt-20">
+    <div className="relative z-[5] pt-20">
       <Section1Surface />
       <Section2Histoire />
       <Section3Casabianca />
@@ -455,7 +455,7 @@ function Section6Contact() {
           <span className="text-[9px] uppercase tracking-[0.2em] text-white/50 font-medium">Contact</span>
         </div>
 
-        <h2 className="contact-title text-4xl md:text-5xl font-light tracking-tight text-white mb-6 drop-shadow-lg relative z-0">
+        <h2 className="contact-title text-4xl md:text-5xl font-light tracking-tight text-white mb-6 drop-shadow-lg">
           NOUS<br />RENCONTRER
         </h2>
 
