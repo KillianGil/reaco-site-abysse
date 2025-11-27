@@ -10,7 +10,6 @@ interface SubmarineProps {
 }
 
 export function Submarine({ scrollProgress }: SubmarineProps) {
-  // HOOKS MUST BE AT THE TOP - NO CONDITIONS BEFORE
   const fbx = useFBX("/models/submarine.fbx");
   
   const groupRef = useRef<THREE.Group>(null);
@@ -40,25 +39,31 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
     }
   }, [fbx, darkMaterial]);
 
-  // Keyframes - START CENTERED (0, 2, -8) above the title
-  const keyframes = useMemo(() => [
-    { progress: 0, pos: [0, 2, -8], rot: [0.05, 0, 0.02], facing: 0 },
-    { progress: 0.05, pos: [0, 2, -8], rot: [0.05, 0, 0.02], facing: 0 },
-    { progress: 0.12, pos: [6, 1, -12], rot: [0.06, -0.1, 0.02], facing: 0.3 },
-    { progress: 0.22, pos: [12, 0, -14], rot: [0.05, 0, 0.02], facing: 0.5 },
-    { progress: 0.32, pos: [14, -1, -12], rot: [0.03, 0.05, 0.01], facing: 0.8 },
-    { progress: 0.42, pos: [6, -2, -10], rot: [0.05, 0.1, 0], facing: 1.3 },
-    { progress: 0.52, pos: [-8, -3, -12], rot: [0.07, 0.08, -0.01], facing: 1.9 },
-    { progress: 0.62, pos: [-14, -4, -14], rot: [0.08, 0.05, -0.02], facing: 2.5 },
-    { progress: 0.72, pos: [-12, -5, -16], rot: [0.1, 0, -0.01], facing: 2.9 },
-    { progress: 0.82, pos: [-5, -7, -18], rot: [0.12, -0.05, 0], facing: 3.5 },
-    { progress: 0.92, pos: [2, -9, -22], rot: [0.15, -0.1, 0.01], facing: 3.9 },
-    { progress: 1, pos: [0, -12, -30], rot: [0.2, -0.05, 0], facing: 4.3 },
-  ], []);
+  const keyframes = useMemo(
+    () => [
+      { progress: 0, pos: [0, 2, -8], rot: [0.05, 0, 0.02], facing: 0 },
+      { progress: 0.05, pos: [0, 2, -8], rot: [0.05, 0, 0.02], facing: 0 },
+      { progress: 0.12, pos: [6, 1, -12], rot: [0.06, -0.1, 0.02], facing: 0.3 },
+      { progress: 0.22, pos: [12, 0, -14], rot: [0.05, 0, 0.02], facing: 0.5 },
+      { progress: 0.32, pos: [14, -1, -12], rot: [0.03, 0.05, 0.01], facing: 0.8 },
+      { progress: 0.42, pos: [6, -2, -10], rot: [0.05, 0.1, 0], facing: 1.3 },
+      { progress: 0.52, pos: [-8, -3, -12], rot: [0.07, 0.08, -0.01], facing: 1.9 },
+      { progress: 0.62, pos: [-14, -4, -14], rot: [0.08, 0.05, -0.02], facing: 2.5 },
+      { progress: 0.72, pos: [-12, -5, -16], rot: [0.1, 0, -0.01], facing: 2.9 },
+      { progress: 0.82, pos: [-5, -7, -18], rot: [0.12, -0.05, 0], facing: 3.5 },
+      { progress: 0.92, pos: [2, -9, -22], rot: [0.15, -0.1, 0.01], facing: 3.9 },
+      { progress: 1, pos: [0, -12, -30], rot: [0.2, -0.05, 0], facing: 4.3 },
+    ],
+    []
+  );
 
   const current = useRef({
-    x: 0, y: 2, z: -8,
-    rotX: 0.05, rotY: 0, rotZ: 0.02,
+    x: 0,
+    y: 2,
+    z: -8,
+    rotX: 0.05,
+    rotY: 0,
+    rotZ: 0.02,
     facing: 0,
   });
 
@@ -80,7 +85,10 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
     let end = keyframes[1];
 
     for (let i = 0; i < keyframes.length - 1; i++) {
-      if (scrollProgress >= keyframes[i].progress && scrollProgress <= keyframes[i + 1].progress) {
+      if (
+        scrollProgress >= keyframes[i].progress &&
+        scrollProgress <= keyframes[i + 1].progress
+      ) {
         start = keyframes[i];
         end = keyframes[i + 1];
         break;
@@ -88,11 +96,17 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
     }
 
     const segmentDuration = end.progress - start.progress;
-    const t = segmentDuration > 0
-      ? THREE.MathUtils.clamp((scrollProgress - start.progress) / segmentDuration, 0, 1)
-      : 0;
+    const t =
+      segmentDuration > 0
+        ? THREE.MathUtils.clamp(
+            (scrollProgress - start.progress) / segmentDuration,
+            0,
+            1
+          )
+        : 0;
 
-    const easeT = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+    const easeT =
+      t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
 
     const targetX = THREE.MathUtils.lerp(start.pos[0], end.pos[0], easeT);
     const targetY = THREE.MathUtils.lerp(start.pos[1], end.pos[1], easeT);
@@ -112,7 +126,7 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
     current.current.facing += (targetFacing - current.current.facing) * inertia;
 
     const idleIntensity = Math.max(0, 1 - scrollProgress * 3);
-    
+
     const floatX = Math.sin(time * 0.15) * (0.12 + idleIntensity * 0.3);
     const floatY = Math.sin(time * 0.2) * (0.15 + idleIntensity * 0.4);
     const floatZ = Math.sin(time * 0.12) * idleIntensity * 0.5;
@@ -132,20 +146,34 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
       current.current.rotZ + floatRotZ
     );
 
-    innerGroupRef.current.rotation.y = current.current.facing + current.current.rotY + floatRotY;
+    innerGroupRef.current.rotation.y =
+      current.current.facing + current.current.rotY + floatRotY;
 
     groupRef.current.scale.setScalar(0.85);
   });
 
   return (
     <>
-      {/* Strong lighting for submarine visibility */}
       <ambientLight intensity={0.4} color="#88ccff" />
       <directionalLight position={[5, 15, 10]} intensity={1.2} color="#aaddff" />
       <directionalLight position={[-5, 10, 5]} intensity={0.6} color="#88bbdd" />
-      <spotLight position={[10, 5, 0]} angle={0.6} penumbra={1} intensity={2} color="#5ac8e8" distance={50} />
-      <spotLight position={[-10, 5, 0]} angle={0.6} penumbra={1} intensity={2} color="#4ab8d8" distance={50} />
-      
+      <spotLight
+        position={[10, 5, 0]}
+        angle={0.6}
+        penumbra={1}
+        intensity={2}
+        color="#5ac8e8"
+        distance={50}
+      />
+      <spotLight
+        position={[-10, 5, 0]}
+        angle={0.6}
+        penumbra={1}
+        intensity={2}
+        color="#4ab8d8"
+        distance={50}
+      />
+
       <group ref={groupRef}>
         <group ref={innerGroupRef}>
           <primitive object={fbx} scale={0.012} rotation={[0, -Math.PI / 2, 0]} />

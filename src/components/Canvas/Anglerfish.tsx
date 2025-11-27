@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useFBX, useTexture } from "@react-three/drei";
 import * as THREE from "three";
@@ -14,15 +14,27 @@ export function Anglerfish({ scrollProgress }: AnglerfishProps) {
   const lanternRef = useRef<THREE.PointLight>(null);
   const glowRef = useRef<THREE.Mesh>(null);
   
-  // Load the new FBX model
-  const fbx = useFBX("/models/poisson-abysse/anglerfish-new/source/anglerfish2.fbx");
+  // Load the new FBX model with error handling
+  let fbx;
+  try {
+    fbx = useFBX("/models/poisson-abysse/anglerfish-new/source/anglerfish2.fbx");
+  } catch (error) {
+    console.error("Failed to load anglerfish model:", error);
+    return null;
+  }
   
   // Load textures (UDIM textures - use .1001 versions)
-  const textures = useTexture({
-    map: "/models/poisson-abysse/anglerfish-new/textures/BADY_BaseColor.<UDIM>.png",
-    emissiveMap: "/models/poisson-abysse/anglerfish-new/textures/BADY_Emission.<UDIM>.png",
-    normalMap: "/models/poisson-abysse/anglerfish-new/textures/BADY_Normal.<UDIM>.png",
-  });
+  let textures;
+  try {
+    textures = useTexture({
+      map: "/models/poisson-abysse/anglerfish-new/textures/BADY_BaseColor.<UDIM>.png",
+      emissiveMap: "/models/poisson-abysse/anglerfish-new/textures/BADY_Emission.<UDIM>.png",
+      normalMap: "/models/poisson-abysse/anglerfish-new/textures/BADY_Normal.<UDIM>.png",
+    });
+  } catch (error) {
+    console.error("Failed to load anglerfish textures:", error);
+    return null;
+  }
 
   // Apply dark deep-sea material
   useEffect(() => {
