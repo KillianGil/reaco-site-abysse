@@ -2,7 +2,7 @@
 
 import { Canvas } from "@react-three/fiber";
 import { Suspense, useRef, useMemo } from "react";
-import { Preload, Environment } from "@react-three/drei";
+import { Preload } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { Submarine } from "./Submarine";
@@ -40,7 +40,7 @@ function MarineSnow({ scrollProgress }: { scrollProgress: number }) {
   const ref = useRef<THREE.Points>(null);
 
   const positions = useMemo(() => {
-    const count = 1500;
+    const count = 1000; // Reduced from 1500 for better performance
     const pos = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
       pos[i * 3] = (Math.random() - 0.5) * 120;
@@ -59,7 +59,7 @@ function MarineSnow({ scrollProgress }: { scrollProgress: number }) {
   return (
     <points ref={ref} frustumCulled={false}>
       <bufferGeometry>
-        <bufferAttribute attach="attributes-position" count={1500} array={positions} itemSize={3} />
+        <bufferAttribute attach="attributes-position" count={1000} array={positions} itemSize={3} />
       </bufferGeometry>
       <pointsMaterial 
         size={0.15} 
@@ -81,7 +81,7 @@ function MarineSnow2({ scrollProgress }: { scrollProgress: number }) {
   const ref = useRef<THREE.Points>(null);
 
   const positions = useMemo(() => {
-    const count = 1000;
+    const count = 700; // Reduced from 1000 for better performance
     const pos = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
       pos[i * 3] = (Math.random() - 0.5) * 100;
@@ -100,7 +100,7 @@ function MarineSnow2({ scrollProgress }: { scrollProgress: number }) {
   return (
     <points ref={ref} frustumCulled={false}>
       <bufferGeometry>
-        <bufferAttribute attach="attributes-position" count={1000} array={positions} itemSize={3} />
+        <bufferAttribute attach="attributes-position" count={700} array={positions} itemSize={3} />
       </bufferGeometry>
       <pointsMaterial 
         size={0.18} 
@@ -126,15 +126,18 @@ export function Scene({ scrollProgress }: SceneProps) {
           antialias: true, 
           alpha: false, 
           powerPreference: "high-performance",
+          stencil: false,
+          depth: true,
         }}
-        dpr={[1, 2]}
+        dpr={[1, 1.5]}
+        performance={{ min: 0.5 }}
         style={{ background: "#1a7a9a" }}
       >
         <color attach="background" args={["#1a7a9a"]} />
         
         <Suspense fallback={null}>
           <OceanEnvironment scrollProgress={scrollProgress} />
-          <Environment preset="night" background={false} environmentIntensity={0.2} />
+          {/* Environment disabled to avoid HDR loading errors */}
 
           {/* Marine snow particles */}
           <MarineSnow scrollProgress={scrollProgress} />
@@ -152,7 +155,6 @@ export function Scene({ scrollProgress }: SceneProps) {
           {/* The submarine - in front */}
           <Submarine scrollProgress={scrollProgress} />
 
-          <Preload all />
         </Suspense>
       </Canvas>
     </div>

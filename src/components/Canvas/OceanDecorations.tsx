@@ -86,7 +86,7 @@ function BioluminescentPlankton({ scrollProgress }: { scrollProgress: number }) 
   const pointsRef = useRef<THREE.Points>(null);
   
   const { positions, colors, sizes } = useMemo(() => {
-    const count = 150;
+    const count = 100; // Reduced from 150 for better performance
     const pos = new Float32Array(count * 3);
     const col = new Float32Array(count * 3);
     const siz = new Float32Array(count);
@@ -126,9 +126,9 @@ function BioluminescentPlankton({ scrollProgress }: { scrollProgress: number }) 
   return (
     <points ref={pointsRef} frustumCulled={false}>
       <bufferGeometry>
-        <bufferAttribute attach="attributes-position" count={150} array={positions} itemSize={3} />
-        <bufferAttribute attach="attributes-color" count={150} array={colors} itemSize={3} />
-        <bufferAttribute attach="attributes-size" count={150} array={sizes} itemSize={1} />
+        <bufferAttribute attach="attributes-position" count={100} array={positions} itemSize={3} />
+        <bufferAttribute attach="attributes-color" count={100} array={colors} itemSize={3} />
+        <bufferAttribute attach="attributes-size" count={100} array={sizes} itemSize={1} />
       </bufferGeometry>
       <pointsMaterial 
         size={0.8}
@@ -145,12 +145,11 @@ function BioluminescentPlankton({ scrollProgress }: { scrollProgress: number }) 
   );
 }
 
-// Floating jellyfish-like lights (simple)
+// Floating jellyfish-like lights (simple) - Reduced for performance
 function JellyfishLights({ scrollProgress }: { scrollProgress: number }) {
   const jellyfishData = useMemo(() => [
     { x: -15, baseY: -30, z: -20, speed: 0.3, phase: 0, color: "#4a88ff" },
     { x: 12, baseY: -50, z: -18, speed: 0.25, phase: 1, color: "#6a66ff" },
-    { x: -18, baseY: -65, z: -22, speed: 0.28, phase: 2, color: "#5577ff" },
   ], []);
 
   return (

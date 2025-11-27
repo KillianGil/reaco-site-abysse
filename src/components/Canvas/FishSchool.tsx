@@ -12,7 +12,7 @@ interface FishSchoolProps {
 export function FishSchool({ scrollProgress }: FishSchoolProps) {
   const groupRef = useRef<THREE.Group>(null);
   
-  // Load all 3 fish models
+  // Load all 3 fish models - useFBX handles memory better
   const emperorFbx = useFBX("/models/poisson/Emperor Angelfish/EmperorAngelfish_FBX.fbx");
   const clownFbx = useFBX("/models/poisson/ClownFish/source/anime1.fbx");
   const fish3Fbx = useFBX("/models/poisson/Fish-3/source/fish_1_5.fbx");
@@ -37,24 +37,24 @@ export function FishSchool({ scrollProgress }: FishSchoolProps) {
   const fishDataRef = useRef([
     // SCHOOL A - Surface mix (Emperor + ClownFish)
     { model: 'emperor', x: 0, y: 8, z: -25, speed: 3.5, phase: 0, scale: 0.022, dir: -1, rotCorrection: 0 },
-    { model: 'clown', x: 3, y: 9, z: -27, speed: 3.3, phase: 0.3, scale: 0.008, dir: -1, rotCorrection: 0 },
+    { model: 'clown', x: 3, y: 9, z: -27, speed: 3.3, phase: 0.3, scale: 0.015, dir: -1, rotCorrection: 0 },
     { model: 'emperor', x: -2, y: 7, z: -23, speed: 3.7, phase: 0.6, scale: 0.019, dir: -1, rotCorrection: 0 },
-    { model: 'clown', x: 5, y: 8.5, z: -29, speed: 3.1, phase: 0.9, scale: 0.007, dir: -1, rotCorrection: 0 },
+    { model: 'clown', x: 5, y: 8.5, z: -29, speed: 3.1, phase: 0.9, scale: 0.014, dir: -1, rotCorrection: 0 },
     { model: 'emperor', x: -5, y: 9.5, z: -26, speed: 3.4, phase: 1.2, scale: 0.02, dir: -1, rotCorrection: 0 },
     
-    // SCHOOL B - Medium depth (Fish-3 + Emperor) - Fish-3 going right need 180° flip
-    { model: 'fish3', x: -4, y: -18, z: -26, speed: 3.2, phase: 0, scale: 0.012, dir: 1, rotCorrection: Math.PI },
+    // SCHOOL B - Medium depth (Fish-3 + Emperor) - Fish-3 side view with -90° rotation
+    { model: 'fish3', x: -4, y: -18, z: -26, speed: 3.2, phase: 0, scale: 0.012, dir: 1, rotCorrection: -Math.PI / 2 },
     { model: 'emperor', x: 0, y: -16, z: -24, speed: 3.0, phase: 0.4, scale: 0.022, dir: 1, rotCorrection: 0 },
-    { model: 'fish3', x: 4, y: -20, z: -28, speed: 3.4, phase: 0.8, scale: 0.01, dir: 1, rotCorrection: Math.PI },
+    { model: 'fish3', x: 4, y: -20, z: -28, speed: 3.4, phase: 0.8, scale: 0.01, dir: 1, rotCorrection: -Math.PI / 2 },
     { model: 'emperor', x: -6, y: -17, z: -22, speed: 3.1, phase: 1.2, scale: 0.018, dir: 1, rotCorrection: 0 },
-    { model: 'fish3', x: 2, y: -19, z: -30, speed: 3.3, phase: 1.6, scale: 0.011, dir: 1, rotCorrection: Math.PI },
+    { model: 'fish3', x: 2, y: -19, z: -30, speed: 3.3, phase: 1.6, scale: 0.011, dir: 1, rotCorrection: -Math.PI / 2 },
     
-    // SCHOOL C - Deep (All species mixed)
-    { model: 'clown', x: 0, y: -45, z: -27, speed: 2.8, phase: 0, scale: 0.007, dir: -1, rotCorrection: 0 },
-    { model: 'fish3', x: 4, y: -43, z: -25, speed: 2.6, phase: 0.5, scale: 0.01, dir: -1, rotCorrection: 0 },
+    // SCHOOL C - Deep (All species mixed) - Fish-3 going left need +90° rotation
+    { model: 'clown', x: 0, y: -45, z: -27, speed: 2.8, phase: 0, scale: 0.014, dir: -1, rotCorrection: 0 },
+    { model: 'fish3', x: 4, y: -43, z: -25, speed: 2.6, phase: 0.5, scale: 0.01, dir: -1, rotCorrection: Math.PI / 2 },
     { model: 'emperor', x: -3, y: -47, z: -31, speed: 3.0, phase: 1.0, scale: 0.018, dir: -1, rotCorrection: 0 },
-    { model: 'clown', x: 6, y: -44, z: -28, speed: 2.7, phase: 1.5, scale: 0.006, dir: -1, rotCorrection: 0 },
-    { model: 'fish3', x: -5, y: -46, z: -26, speed: 2.9, phase: 2.0, scale: 0.009, dir: -1, rotCorrection: 0 },
+    { model: 'clown', x: 6, y: -44, z: -28, speed: 2.7, phase: 1.5, scale: 0.013, dir: -1, rotCorrection: 0 },
+    { model: 'fish3', x: -5, y: -46, z: -26, speed: 2.9, phase: 2.0, scale: 0.009, dir: -1, rotCorrection: Math.PI / 2 },
   ]);
 
   // Store individual fish groups
@@ -152,11 +152,20 @@ export function FishSchool({ scrollProgress }: FishSchoolProps) {
       fishGroup.position.set(x + fish.x, y + wobbleY, fish.z + wobbleZ);
 
       // Face direction based on swimming direction
-      const baseRotationY = fish.dir > 0 ? 0 : Math.PI;
+      // For Fish-3: dir=1 means right (+90°), dir=-1 means left (-90°)
+      // For others: dir=1 means right (0°), dir=-1 means left (180°)
+      let baseRotationY;
+      if (fish.rotCorrection !== 0) {
+        // Fish-3 model
+        baseRotationY = fish.dir > 0 ? Math.PI / 2 : -Math.PI / 2;
+      } else {
+        // Emperor and Clown models
+        baseRotationY = fish.dir > 0 ? 0 : Math.PI;
+      }
       
       // Body undulation - lateral
       const bodyUndulation = Math.sin(t * 8 + fish.phase * 4) * 0.08;
-      fishGroup.rotation.y = baseRotationY + fish.rotCorrection + bodyUndulation;
+      fishGroup.rotation.y = baseRotationY + bodyUndulation;
       
       // Slight roll
       fishGroup.rotation.z = Math.sin(t * 4 + fish.phase * 2) * 0.04;
