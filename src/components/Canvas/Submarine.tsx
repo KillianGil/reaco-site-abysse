@@ -18,12 +18,12 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
 
   const darkMaterial = useMemo(() => {
     return new THREE.MeshPhysicalMaterial({
-      color: "#1a2835",
-      roughness: 0.25,
-      metalness: 0.85,
-      clearcoat: 0.3,
-      clearcoatRoughness: 0.2,
-      envMapIntensity: 1.2,
+      color: "#2a3a45",
+      roughness: 0.3,
+      metalness: 0.9,
+      clearcoat: 0.5,
+      clearcoatRoughness: 0.3,
+      envMapIntensity: 1.5,
     });
   }, []);
 
@@ -34,11 +34,11 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
           const mesh = child as THREE.Mesh;
           mesh.material = darkMaterial;
           mesh.castShadow = true;
+          mesh.receiveShadow = true;
         }
       });
     }
   }, [fbx, darkMaterial]);
-
   const keyframes = useMemo(
     () => [
       { progress: 0, pos: [0, 2, -8], rot: [0.05, 0, 0.02], facing: 0 },
@@ -59,11 +59,11 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
 
   const current = useRef({
     x: 0,
-    y: 2,
+    y: 3,
     z: -8,
-    rotX: 0.05,
+    rotX: 0.03,
     rotY: 0,
-    rotZ: 0.02,
+    rotZ: 0.01,
     facing: 0,
   });
 
@@ -72,15 +72,17 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
 
     const time = state.clock.elapsedTime;
 
-    if (!initialized.current && time < 0.5) {
-      groupRef.current.position.set(0, 2, -8);
-      groupRef.current.rotation.set(0.05, 0, 0.02);
+    // Initialisation douce
+    if (!initialized.current && time < 1) {
+      groupRef.current.position.set(0, 3, -8);
+      groupRef.current.rotation.set(0.03, 0, 0.01);
       innerGroupRef.current.rotation.y = 0;
       groupRef.current.scale.setScalar(0.85);
       initialized.current = true;
       return;
     }
 
+    // Trouver les keyframes actuels
     let start = keyframes[0];
     let end = keyframes[1];
 
@@ -105,8 +107,10 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
           )
         : 0;
 
-    const easeT =
-      t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+    // Easing plus naturel (ease-in-out cubique)
+    const easeT = t < 0.5 
+      ? 4 * t * t * t 
+      : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
     const targetX = THREE.MathUtils.lerp(start.pos[0], end.pos[0], easeT);
     const targetY = THREE.MathUtils.lerp(start.pos[1], end.pos[1], easeT);
@@ -116,7 +120,8 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
     const targetRotZ = THREE.MathUtils.lerp(start.rot[2], end.rot[2], easeT);
     const targetFacing = THREE.MathUtils.lerp(start.facing, end.facing, easeT);
 
-    const inertia = scrollProgress < 0.1 ? 0.01 : 0.02;
+    // Inertie plus élevée = mouvement plus fluide
+    const inertia = scrollProgress < 0.1 ? 0.03 : 0.05;
     current.current.x += (targetX - current.current.x) * inertia;
     current.current.y += (targetY - current.current.y) * inertia;
     current.current.z += (targetZ - current.current.z) * inertia;
@@ -125,14 +130,14 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
     current.current.rotZ += (targetRotZ - current.current.rotZ) * inertia;
     current.current.facing += (targetFacing - current.current.facing) * inertia;
 
-    const idleIntensity = Math.max(0, 1 - scrollProgress * 3);
-
-    const floatX = Math.sin(time * 0.15) * (0.12 + idleIntensity * 0.3);
-    const floatY = Math.sin(time * 0.2) * (0.15 + idleIntensity * 0.4);
-    const floatZ = Math.sin(time * 0.12) * idleIntensity * 0.5;
-    const floatRotX = Math.sin(time * 0.1) * (0.006 + idleIntensity * 0.015);
-    const floatRotY = Math.sin(time * 0.08) * idleIntensity * 0.02;
-    const floatRotZ = Math.sin(time * 0.13) * (0.004 + idleIntensity * 0.01);
+    // Mouvement de flottement plus subtil
+    const idleIntensity = Math.max(0, 1 - scrollProgress * 2);
+    const floatX = Math.sin(time * 0.12) * (0.08 + idleIntensity * 0.25);
+    const floatY = Math.sin(time * 0.18) * (0.1 + idleIntensity * 0.3);
+    const floatZ = Math.sin(time * 0.1) * idleIntensity * 0.4;
+    const floatRotX = Math.sin(time * 0.08) * (0.004 + idleIntensity * 0.01);
+    const floatRotY = Math.sin(time * 0.07) * idleIntensity * 0.015;
+    const floatRotZ = Math.sin(time * 0.11) * (0.003 + idleIntensity * 0.008);
 
     groupRef.current.position.set(
       current.current.x + floatX,
@@ -154,24 +159,53 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
 
   return (
     <>
-      <ambientLight intensity={0.4} color="#88ccff" />
-      <directionalLight position={[5, 15, 10]} intensity={1.2} color="#aaddff" />
-      <directionalLight position={[-5, 10, 5]} intensity={0.6} color="#88bbdd" />
+      {/* Éclairage amélioré - plus cinématique */}
+      <ambientLight intensity={0.3} color="#6da8c8" />
+      
+      {/* Lumière principale du soleil (depuis la surface) */}
+      <directionalLight 
+        position={[10, 60, 15]} 
+        intensity={1.8} 
+        color="#c8e4f5"
+        castShadow
+      />
+      
+      {/* Lumière d'appoint douce */}
+      <directionalLight 
+        position={[-8, 40, 10]} 
+        intensity={0.8} 
+        color="#a8cce0" 
+      />
+      
+      {/* Spots latéraux pour sculpter le sous-marin */}
       <spotLight
-        position={[10, 5, 0]}
-        angle={0.6}
-        penumbra={1}
-        intensity={2}
-        color="#5ac8e8"
-        distance={50}
+        position={[15, 8, 5]}
+        angle={0.5}
+        penumbra={0.8}
+        intensity={3}
+        color="#7ac8e8"
+        distance={60}
+        castShadow
       />
       <spotLight
-        position={[-10, 5, 0]}
-        angle={0.6}
-        penumbra={1}
+        position={[-15, 8, 5]}
+        angle={0.5}
+        penumbra={0.8}
+        intensity={3}
+        color="#68b8d8"
+        distance={60}
+        castShadow
+      />
+      
+      {/* Lumières sous le sous-marin (comme des projecteurs) */}
+      <spotLight
+        position={[0, -2, 0]}
+        angle={0.3}
+        penumbra={0.5}
         intensity={2}
-        color="#4ab8d8"
-        distance={50}
+        color="#ffffff"
+        distance={30}
+        target={groupRef.current || undefined}
       />
 
       <group ref={groupRef}>

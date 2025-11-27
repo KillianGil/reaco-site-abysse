@@ -60,74 +60,84 @@ export function FishSchool({ scrollProgress }: FishSchoolProps) {
   // Store individual fish groups
   const fishGroupsRef = useRef<THREE.Group[]>([]);
 
-  // Create fish groups
-  useEffect(() => {
-    if (!emperorFbx || !clownFbx || !fish3Fbx || !groupRef.current) return;
+// Dans useEffect de FishSchool.tsx - REMPLACER par :
 
-    // Clear previous groups
-    fishGroupsRef.current.forEach(group => {
-      groupRef.current?.remove(group);
-    });
-    fishGroupsRef.current = [];
+useEffect(() => {
+  if (!emperorFbx || !clownFbx || !fish3Fbx || !groupRef.current) return;
 
-    fishDataRef.current.forEach((fishData) => {
-      const fishGroup = new THREE.Group();
-      
-      // Select the right model and texture
-      let fbxModel: THREE.Group;
-      let material: THREE.Material;
-      
-      if (fishData.model === 'emperor') {
-        fbxModel = emperorFbx;
-        material = new THREE.MeshStandardMaterial({
-          map: emperorTextures.map,
-          normalMap: emperorTextures.normalMap,
-          metalness: 0.3,
-          roughness: 0.5,
-          side: THREE.DoubleSide,
-        });
-      } else if (fishData.model === 'clown') {
-        fbxModel = clownFbx;
-        material = new THREE.MeshStandardMaterial({
-          map: clownTextures.map,
-          normalMap: clownTextures.normalMap,
-          metalnessMap: clownTextures.metalnessMap,
-          metalness: 0.4,
-          roughness: 0.5,
-          side: THREE.DoubleSide,
-        });
-      } else { // fish3
-        fbxModel = fish3Fbx;
-        material = new THREE.MeshStandardMaterial({
-          map: fish3Textures.map,
-          metalness: 0.3,
-          roughness: 0.6,
-          side: THREE.DoubleSide,
-        });
-      }
-
-      // Clone geometry for this fish
-      fbxModel.traverse((child) => {
-        if ((child as THREE.Mesh).isMesh) {
-          const mesh = child as THREE.Mesh;
-          const clonedMesh = new THREE.Mesh(
-            mesh.geometry.clone(),
-            material.clone()
-          );
-          clonedMesh.position.copy(mesh.position);
-          clonedMesh.rotation.copy(mesh.rotation);
-          clonedMesh.scale.copy(mesh.scale);
-          fishGroup.add(clonedMesh);
+  // Nettoyer les anciens groupes
+  fishGroupsRef.current.forEach(group => {
+    groupRef.current?.remove(group);
+    // ✅ IMPORTANT : Dispose des ressources
+    group.traverse((child) => {
+      if (child instanceof THREE.Mesh) {
+        child.geometry.dispose();
+        if (Array.isArray(child.material)) {
+          child.material.forEach(m => m.dispose());
+        } else {
+          child.material.dispose();
         }
-      });
+      }
+    });
+  });
+  fishGroupsRef.current = [];
 
-      // Apply scale
-      fishGroup.scale.set(fishData.scale, fishData.scale, fishData.scale);
-      groupRef.current?.add(fishGroup);
-      fishGroupsRef.current.push(fishGroup);
+  fishDataRef.current.forEach((fishData) => {
+    const fishGroup = new THREE.Group();
+    
+    let fbxModel: THREE.Group;
+    let material: THREE.Material;
+    
+    if (fishData.model === 'emperor') {
+      fbxModel = emperorFbx;
+      material = new THREE.MeshStandardMaterial({
+        map: emperorTextures.map,
+        normalMap: emperorTextures.normalMap,
+        metalness: 0.3,
+        roughness: 0.5,
+        side: THREE.DoubleSide,
+      });
+    } else if (fishData.model === 'clown') {
+      fbxModel = clownFbx;
+      material = new THREE.MeshStandardMaterial({
+        map: clownTextures.map,
+        normalMap: clownTextures.normalMap,
+        metalnessMap: clownTextures.metalnessMap,
+        metalness: 0.4,
+        roughness: 0.5,
+        side: THREE.DoubleSide,
+      });
+    } else {
+      fbxModel = fish3Fbx;
+      material = new THREE.MeshStandardMaterial({
+        map: fish3Textures.map,
+        metalness: 0.3,
+        roughness: 0.6,
+        side: THREE.DoubleSide,
+      });
+    }
+
+    // ✅ NE PAS CLONER - Réutiliser les géométries
+    fbxModel.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        const mesh = child as THREE.Mesh;
+        const instanceMesh = new THREE.Mesh(
+          mesh.geometry, // ✅ Pas de clone !
+          material       // ✅ Un seul matériau par espèce
+        );
+        instanceMesh.position.copy(mesh.position);
+        instanceMesh.rotation.copy(mesh.rotation);
+        instanceMesh.scale.copy(mesh.scale);
+        fishGroup.add(instanceMesh);
+      }
     });
 
-  }, [emperorFbx, clownFbx, fish3Fbx, emperorTextures, clownTextures, fish3Textures]);
+    fishGroup.scale.set(fishData.scale, fishData.scale, fishData.scale);
+    groupRef.current?.add(fishGroup);
+    fishGroupsRef.current.push(fishGroup);
+  });
+
+}, [emperorFbx, clownFbx, fish3Fbx, emperorTextures, clownTextures, fish3Textures]);
 
   // Animate all fish
   useFrame(({ clock }) => {

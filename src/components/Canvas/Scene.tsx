@@ -9,12 +9,12 @@ import { OceanEnvironment } from "./OceanEnvironment";
 import { FishSchool } from "./FishSchool";
 import { Anglerfish } from "./Anglerfish";
 import { OceanDecorations } from "./OceanDecorations";
+import { Godrays } from "./Godrays";
 
 interface SceneProps {
   scrollProgress: number;
 }
 
-// Create circular texture for particles
 function createCircleTexture() {
   const canvas = document.createElement('canvas');
   canvas.width = 32;
@@ -34,12 +34,11 @@ function createCircleTexture() {
   return texture;
 }
 
-// Marine snow - gentle floating particles
 function MarineSnow({ scrollProgress }: { scrollProgress: number }) {
   const ref = useRef<THREE.Points>(null);
 
   const positions = useMemo(() => {
-    const count = 1000; // Reduced from 1500 for better performance
+    const count = 1000;
     const pos = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
       pos[i * 3] = (Math.random() - 0.5) * 120;
@@ -58,7 +57,12 @@ function MarineSnow({ scrollProgress }: { scrollProgress: number }) {
   return (
     <points ref={ref} frustumCulled={false}>
       <bufferGeometry>
-        <bufferAttribute attach="attributes-position" count={1000} array={positions} itemSize={3} />
+        <bufferAttribute 
+          attach="attributes-position" 
+          count={1000} 
+          array={positions} 
+          itemSize={3} 
+        />
       </bufferGeometry>
       <pointsMaterial 
         size={0.15} 
@@ -75,12 +79,11 @@ function MarineSnow({ scrollProgress }: { scrollProgress: number }) {
   );
 }
 
-// Secondary layer of marine snow for depth
 function MarineSnow2({ scrollProgress }: { scrollProgress: number }) {
   const ref = useRef<THREE.Points>(null);
 
   const positions = useMemo(() => {
-    const count = 700; // Reduced from 1000 for better performance
+    const count = 700;
     const pos = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
       pos[i * 3] = (Math.random() - 0.5) * 100;
@@ -99,7 +102,12 @@ function MarineSnow2({ scrollProgress }: { scrollProgress: number }) {
   return (
     <points ref={ref} frustumCulled={false}>
       <bufferGeometry>
-        <bufferAttribute attach="attributes-position" count={700} array={positions} itemSize={3} />
+        <bufferAttribute 
+          attach="attributes-position" 
+          count={700} 
+          array={positions} 
+          itemSize={3} 
+        />
       </bufferGeometry>
       <pointsMaterial 
         size={0.18} 
@@ -120,7 +128,12 @@ export function Scene({ scrollProgress }: SceneProps) {
   return (
     <div className="canvas-container">
       <Canvas
-        camera={{ position: [0, 0, 12], fov: 50, near: 0.1, far: 500 }}
+        camera={{ 
+          position: [0, 0, 12], 
+          fov: 50, 
+          near: 0.1, 
+          far: 500 
+        }}
         gl={{ 
           antialias: true, 
           alpha: false, 
@@ -135,24 +148,50 @@ export function Scene({ scrollProgress }: SceneProps) {
         <color attach="background" args={["#1a7a9a"]} />
         
         <Suspense fallback={null}>
+          {/* Lumières principales */}
+          <ambientLight intensity={0.5} color="#7ac8e8" />
+          
+          <spotLight
+            position={[0, 50, 0]}
+            angle={0.6}
+            penumbra={1}
+            intensity={3}
+            color="#aaddff"
+            distance={100}
+          />
+          
+          <pointLight 
+            position={[30, 20, -20]} 
+            intensity={2} 
+            color="#88ccff" 
+            distance={50} 
+          />
+          <pointLight 
+            position={[-30, 20, -20]} 
+            intensity={2} 
+            color="#6ac8ff" 
+            distance={50} 
+          />
+          
           <OceanEnvironment scrollProgress={scrollProgress} />
-          {/* Environment disabled to avoid HDR loading errors */}
 
-          {/* Marine snow particles */}
+          {/* Particules marines */}
           <MarineSnow scrollProgress={scrollProgress} />
           <MarineSnow2 scrollProgress={scrollProgress} />
 
-          {/* Ocean decorations (bubbles, plankton, jellyfish, rays) */}
+          {/* Décorations océaniques */}
           <OceanDecorations scrollProgress={scrollProgress} />
 
-          {/* Fish schools - in background behind submarine */}
+          {/* Poissons en arrière-plan */}
           <FishSchool scrollProgress={scrollProgress} />
           
-          {/* Anglerfish in the abyss */}
+          {/* Poisson des abysses */}
           <Anglerfish scrollProgress={scrollProgress} />
 
-          {/* The submarine - in front */}
+          {/* Sous-marin principal */}
           <Submarine scrollProgress={scrollProgress} />
+
+          <Godrays scrollProgress={scrollProgress} />
 
         </Suspense>
       </Canvas>
