@@ -1,67 +1,114 @@
 "use client";
 
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 
-interface DeepSeaCreatureProps {
-  scrollProgress: number;
-}
-
-export function DeepSeaCreature({ scrollProgress }: DeepSeaCreatureProps) {
-  const { scene } = useGLTF("/models/anglerfish.glb");
+export function Anglerfish({ scrollProgress }: { scrollProgress: number }) {
+  const { scene } = useGLTF("/models/deep-sea-fish2.glb");
   const ref = useRef<THREE.Group>(null);
-  const cloned = useMemo(() => scene.clone(), [scene]);
+  const clonedScene = useMemo(() => scene.clone(), [scene]);
 
-  useFrame(({ clock }) => {
+  useEffect(() => {
+    console.log("Anglerfish loaded, scrollProgress:", scrollProgress);
+    
+    clonedScene.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        const mesh = child as THREE.Mesh;
+        
+        if (mesh.material) {
+          mesh.castShadow = true;
+          mesh.receiveShadow = true;
+          
+          // Garde les matériaux originaux
+          if (Array.isArray(mesh.material)) {
+            mesh.material.forEach(mat => {
+              const stdMat = mat as THREE.MeshStandardMaterial;
+              if (stdMat.emissive) {
+                stdMat.emissive = new THREE.Color("#000000");
+                stdMat.emissiveIntensity = 0;
+              }
+            });
+          } else {
+            const stdMat = mesh.material as THREE.MeshStandardMaterial;
+            if (stdMat.emissive) {
+              stdMat.emissive = new THREE.Color("#000000");
+              stdMat.emissiveIntensity = 0;
+            }
+          }
+        }
+      }
+    });
+  }, [clonedScene, scrollProgress]);
+
+  useFrame((state) => {
     if (!ref.current) return;
-    const t = clock.getElapsedTime();
-
-    // Slow swimming
-    const swimX = Math.sin(t * 0.12) * 3;
-    const swimY = Math.sin(t * 0.18) * 1;
-    const swimZ = Math.cos(t * 0.1) * 1.5;
-
-    // Position rises with scroll
-    const baseY = -90 + scrollProgress * 100;
-
-    ref.current.position.set(12 + swimX, baseY + swimY, -18 + swimZ);
-    ref.current.rotation.set(
-      Math.sin(t * 0.08) * 0.08,
-      Math.sin(t * 0.06) * 0.25 + Math.PI * 0.7,
-      Math.sin(t * 0.1) * 0.04
-    );
+    
+    // ✅ Apparition plus tôt pour tester
+    const isVisible = scrollProgress > 0.7;
+    ref.current.visible = isVisible;
+    
+    if (isVisible) {
+      const t = state.clock.elapsedTime;
+      
+      // Mouvement lent
+      ref.current.position.y = -80 + Math.sin(t * 0.2) * 4;
+      ref.current.position.x = Math.sin(t * 0.15) * 5;
+      
+      ref.current.rotation.z = Math.sin(t * 0.15) * 0.1;
+      ref.current.rotation.y = Math.PI + Math.sin(t * 0.1) * 0.2; // Face à la caméra
+      ref.current.rotation.x = Math.sin(t * 0.08) * 0.08;
+      
+      // Debug
+      console.log("Anglerfish visible at:", ref.current.position);
+    }
   });
 
-  // Only show in deep section
-  if (scrollProgress < 0.5) return null;
-
   return (
-    <group ref={ref} frustumCulled={false}>
-      <primitive object={cloned} scale={20} />
-
-      {/* Bright lantern */}
-      <pointLight position={[0, 3, 6]} intensity={15} color="#00ffaa" distance={40} decay={1} />
+    <group 
+      ref={ref} 
+      position={[0, -80, -15]} // ✅ Plus proche et centré
+      rotation={[0, Math.PI, 0]} 
+      visible={false}
+    >
+      {/* Lanterne bioluminescente INTENSE */}
+      <pointLight 
+        position={[0, 4, 6]}
+        distance={50}
+        intensity={20}
+        color="#00ff88"
+        decay={1.2}
+      />
       
-      {/* Glowing orb */}
-      <mesh position={[0, 3, 6]}>
-        <sphereGeometry args={[0.6, 16, 16]} />
+      {/* Orbe de la lanterne */}
+      <mesh position={[0, 4, 6]}>
+        <sphereGeometry args={[0.3, 16, 16]} />
         <meshBasicMaterial color="#00ffcc" />
       </mesh>
-      <mesh position={[0, 3, 6]}>
-        <sphereGeometry args={[1.2, 16, 16]} />
-        <meshBasicMaterial color="#00ff88" transparent opacity={0.35} />
+      
+      {/* Halo lumineux */}
+      <mesh position={[0, 4, 6]}>
+        <sphereGeometry args={[0.6, 16, 16]} />
+        <meshBasicMaterial 
+          color="#00ff88" 
+          transparent 
+          opacity={0.5}
+          blending={THREE.AdditiveBlending}
+        />
       </mesh>
 
-      {/* Self light */}
-      <pointLight position={[0, 0, 0]} intensity={4} color="#002211" distance={25} />
+      {/* ✅ Taille moyenne */}
+      <primitive object={clonedScene} scale={6} />
       
-      {/* Eyes */}
-      <pointLight position={[2, 0.5, 4]} intensity={6} color="#00ffaa" distance={15} />
-      <pointLight position={[-2, 0.5, 4]} intensity={6} color="#00ffaa" distance={15} />
+      {/* Yeux lumineux */}
+      <pointLight position={[1.2, 0.8, 3]} intensity={8} color="#00ffaa" distance={25} />
+      <pointLight position={[-1.2, 0.8, 3]} intensity={8} color="#00ffaa" distance={25} />
+      
+      {/* Lumière d'ambiance pour le corps */}
+      <pointLight position={[0, 0, 0]} intensity={3} color="#001a1a" distance={20} />
     </group>
   );
 }
 
-useGLTF.preload("/models/anglerfish.glb");
+useGLTF.preload("/models/deep-sea-fish2.glb");

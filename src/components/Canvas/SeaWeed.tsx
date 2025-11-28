@@ -1,8 +1,9 @@
+// components/Canvas/SeaWeed.tsx
 "use client";
 
 import { useRef, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
-
+import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 
 interface SeaweedProps {
@@ -12,42 +13,123 @@ interface SeaweedProps {
 export function Seaweed({ scrollProgress }: SeaweedProps) {
   const groupRef = useRef<THREE.Group>(null);
   
-  // Charge ton modèle 3D d'algues ici
-  // const { scene } = useGLTF("/models/seaweed/seaweed.glb");
-  
+  const seaweed = useGLTF("/models/seaweed2.glb");
+
+  // ✅ Réduction à 80 pour les performances (au lieu de 160)
+  const seaweedData = useRef(
+    Array.from({ length: 80 }, (_, i) => {
+      const angle = Math.random() * Math.PI * 2;
+      // Rayon légèrement augmenté pour compenser le nombre réduit
+      const radius = 8 + Math.random() * 50; 
+      
+      return {
+        x: Math.cos(angle) * radius,
+        y: -118 - Math.random() * 7,
+        z: -30 + Math.sin(angle) * radius * 0.6,
+        scale: 6 + Math.random() * 6, // Plus grandes pour remplir l'espace
+        rotation: Math.random() * Math.PI * 2,
+        speed: 0.2 + Math.random() * 0.4,
+        swayAmount: 0.1 + Math.random() * 0.15,
+      };
+    })
+  );
+
+  const seaweedGroupsRef = useRef<THREE.Group[]>([]);
+
   useEffect(() => {
-    // Configuration du matériau si nécessaire
-    // scene.traverse((child) => {
-    //   if ((child as THREE.Mesh).isMesh) {
-    //     const mesh = child as THREE.Mesh;
-    //     // Ajuste les matériaux
-    //   }
-    // });
-  }, []);
+    if (!groupRef.current) return;
+
+    seaweedGroupsRef.current.forEach(group => {
+      groupRef.current?.remove(group);
+    });
+    seaweedGroupsRef.current = [];
+
+    seaweedData.current.forEach((data) => {
+      const seaweedGroup = new THREE.Group();
+      const clonedScene = seaweed.scene.clone();
+      
+      clonedScene.traverse((child) => {
+        if ((child as THREE.Mesh).isMesh) {
+          const mesh = child as THREE.Mesh;
+          mesh.castShadow = true;
+          mesh.receiveShadow = true;
+          
+          if (mesh.material) {
+            if (Array.isArray(mesh.material)) {
+              mesh.material.forEach(mat => {
+                (mat as THREE.MeshStandardMaterial).emissive = new THREE.Color("#004a2a");
+                (mat as THREE.MeshStandardMaterial).emissiveIntensity = 0.3;
+              });
+            } else {
+              (mesh.material as THREE.MeshStandardMaterial).emissive = new THREE.Color("#004a2a");
+              (mesh.material as THREE.MeshStandardMaterial).emissiveIntensity = 0.3;
+            }
+          }
+        }
+      });
+
+      seaweedGroup.add(clonedScene);
+      seaweedGroup.position.set(data.x, data.y, data.z);
+      seaweedGroup.scale.setScalar(data.scale);
+      seaweedGroup.rotation.y = data.rotation;
+
+      groupRef.current?.add(seaweedGroup);
+      seaweedGroupsRef.current.push(seaweedGroup);
+    });
+
+  }, [seaweed]);
 
   useFrame(({ clock }) => {
     if (!groupRef.current) return;
     const t = clock.getElapsedTime();
-    
-    // Animation de balancement subtil
-    groupRef.current.rotation.z = Math.sin(t * 0.5) * 0.05;
-    
-    // Suit le scroll
-    groupRef.current.position.y = -50 + scrollProgress * 120;
+
+    seaweedGroupsRef.current.forEach((group, i) => {
+      const data = seaweedData.current[i];
+      const sway = Math.sin(t * data.speed + i * 13) * data.swayAmount;
+      const twist = Math.sin(t * data.speed * 0.7 + i * 7) * 0.05;
+      
+      group.rotation.z = sway;
+      group.rotation.x = twist;
+    });
+
+    groupRef.current.position.y = scrollProgress * 100;
+    // Apparition un peu plus tardive pour économiser des ressources en haut
+    groupRef.current.visible = scrollProgress > 0.8; 
   });
 
   return (
-    <group ref={groupRef}>
-      {/* Une fois que tu as le modèle, décommente : */}
-      {/* <primitive object={scene.clone()} scale={0.5} /> */}
-      
-      {/* Placeholder temporaire */}
-      <mesh position={[15, 0, -25]}>
-        <cylinderGeometry args={[0.1, 0.15, 8, 8]} />
-        <meshStandardMaterial color="#2a5a4a" />
-      </mesh>
-    </group>
+    <>
+      <group ref={groupRef} />
+      {scrollProgress > 0.8 && (
+        <>
+          <pointLight 
+            position={[0, -110 + scrollProgress * 100, -30]} 
+            intensity={50} 
+            color="#5aca9a" 
+            distance={70} 
+          />
+          {Array.from({ length: 8 }, (_, i) => { // Un peu moins de lumières aussi
+            const angle = (i / 8) * Math.PI * 2;
+            const radius = 25;
+            return (
+              <pointLight
+                key={i}
+                position={[
+                  Math.cos(angle) * radius,
+                  -115 + scrollProgress * 100,
+                  -30 + Math.sin(angle) * radius * 0.5
+                ]}
+                intensity={30}
+                color="#4aba8a"
+                distance={50}
+              />
+            );
+          })}
+          <ambientLight intensity={0.3} color="#2a6a5a" />
+        </>
+      )}
+    </>
   );
 }
 
-// useGLTF.preload("/models/seaweed/seaweed.glb");
+useGLTF.preload("/models/seaweed2.glb");

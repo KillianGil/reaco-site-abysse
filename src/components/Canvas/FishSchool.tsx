@@ -1,3 +1,4 @@
+// components/Canvas/FishSchool.tsx
 "use client";
 
 import { useRef, useEffect, useMemo } from "react";
@@ -11,50 +12,114 @@ interface FishSchoolProps {
 
 export function FishSchool({ scrollProgress }: FishSchoolProps) {
   const groupRef = useRef<THREE.Group>(null);
-  
-  // ✅ Charger tous les modèles FBX
+
   const emperorFbx = useFBX("/models/poisson/Emperor Angelfish/EmperorAngelfish_FBX.fbx");
   const fish3Fbx = useFBX("/models/poisson/Fish-3/source/fish_1_5.fbx");
-  
-  // ✅ Charger les textures
+
   const emperorTextures = useTexture({
     map: "/models/poisson/Emperor Angelfish/Emperor-Angelfish-A.png",
     normalMap: "/models/poisson/Emperor Angelfish/Emperor-Angelfish-N.png",
   });
-  
+
   const fish3Textures = useTexture({
     map: "/models/poisson/Fish-3/textures/fish_1_diffuse.jpeg",
   });
 
-  // ✅ Configuration des poissons (position, type, comportement)
+  // ✅ BANCS PLUS NATURELS avec chemins courbes
+  // Vitesse augmentée (~1.2x) et Taille augmentée (~1.2x)
+  // MIX DES ESPÈCES et ESPACEMENT AUGMENTÉ
   const fishDataRef = useRef([
-    // BANC 1 - Surface (Emperor Angelfish)
-    { model: 'emperor', x: 0, y: 8, z: -25, speed: 3.5, phase: 0, scale: 0.022, dir: -1 },
-    { model: 'emperor', x: -2, y: 7, z: -23, speed: 3.7, phase: 0.6, scale: 0.019, dir: -1 },
-    { model: 'emperor', x: 5, y: 8.5, z: -29, speed: 3.1, phase: 0.9, scale: 0.014, dir: -1 },
-    { model: 'emperor', x: -5, y: 9.5, z: -26, speed: 3.4, phase: 1.2, scale: 0.02, dir: -1 },
-    
-    // BANC 2 - Profondeur moyenne (Mix)
-    { model: 'fish3', x: -4, y: -18, z: -26, speed: 3.2, phase: 0, scale: 0.012, dir: 1 },
-    { model: 'emperor', x: 0, y: -16, z: -24, speed: 3.0, phase: 0.4, scale: 0.022, dir: 1 },
-    { model: 'fish3', x: 4, y: -20, z: -28, speed: 3.4, phase: 0.8, scale: 0.01, dir: 1 },
-    { model: 'emperor', x: -6, y: -17, z: -22, speed: 3.1, phase: 1.2, scale: 0.018, dir: 1 },
-    { model: 'fish3', x: 2, y: -19, z: -30, speed: 3.3, phase: 1.6, scale: 0.011, dir: 1 },
-    
-    // BANC 3 - Profondeur (Mix)
-    { model: 'emperor', x: 0, y: -45, z: -27, speed: 2.8, phase: 0, scale: 0.014, dir: -1 },
-    { model: 'fish3', x: 4, y: -43, z: -25, speed: 2.6, phase: 0.5, scale: 0.01, dir: -1 },
-    { model: 'emperor', x: -3, y: -47, z: -31, speed: 3.0, phase: 1.0, scale: 0.018, dir: -1 },
-    { model: 'fish3', x: -5, y: -46, z: -26, speed: 2.9, phase: 2.0, scale: 0.009, dir: -1 },
+    // BANC 1 - Surface (formation en V - Mixte)
+    { model: 'emperor', baseX: 0, baseY: 8, baseZ: -25, offsetX: 0, offsetY: 0, offsetZ: 0, speed: 4.2, phase: 0, scale: 0.016, pathType: 'curve-left' },
+    { model: 'fish3', baseX: 0, baseY: 8, baseZ: -25, offsetX: -4, offsetY: -1, offsetZ: -2, speed: 4.3, phase: 0.2, scale: 0.005, pathType: 'curve-left' },
+    { model: 'emperor', baseX: 0, baseY: 8, baseZ: -25, offsetX: 4, offsetY: -1, offsetZ: -2, speed: 4.1, phase: 0.1, scale: 0.016, pathType: 'curve-left' },
+    { model: 'fish3', baseX: 0, baseY: 8, baseZ: -25, offsetX: -8, offsetY: -2, offsetZ: -4, speed: 4.4, phase: 0.3, scale: 0.005, pathType: 'curve-left' },
+    { model: 'fish3', baseX: 0, baseY: 8, baseZ: -25, offsetX: 8, offsetY: -2, offsetZ: -4, speed: 4.0, phase: 0.15, scale: 0.005, pathType: 'curve-left' },
+    { model: 'emperor', baseX: 0, baseY: 8, baseZ: -25, offsetX: -12, offsetY: -3, offsetZ: -6, speed: 4.2, phase: 0.4, scale: 0.015, pathType: 'curve-left' },
+    { model: 'emperor', baseX: 0, baseY: 8, baseZ: -25, offsetX: 12, offsetY: -3, offsetZ: -6, speed: 4.3, phase: 0.25, scale: 0.015, pathType: 'curve-left' },
+
+    // BANC 2 - Profondeur moyenne (formation serrée - Mixte)
+    { model: 'fish3', baseX: -4, baseY: -18, baseZ: -26, offsetX: 0, offsetY: 0, offsetZ: 0, speed: 3.8, phase: 0, scale: 0.005, pathType: 'curve-right' },
+    { model: 'emperor', baseX: -4, baseY: -18, baseZ: -26, offsetX: 3, offsetY: 1, offsetZ: -1, speed: 3.7, phase: 0.1, scale: 0.016, pathType: 'curve-right' },
+    { model: 'fish3', baseX: -4, baseY: -18, baseZ: -26, offsetX: -3, offsetY: 1, offsetZ: -1, speed: 4.0, phase: 0.15, scale: 0.005, pathType: 'curve-right' },
+    { model: 'emperor', baseX: -4, baseY: -18, baseZ: -26, offsetX: 6, offsetY: 2, offsetZ: -2, speed: 3.6, phase: 0.2, scale: 0.015, pathType: 'curve-right' },
+    { model: 'fish3', baseX: -4, baseY: -18, baseZ: -26, offsetX: -6, offsetY: 2, offsetZ: -2, speed: 4.1, phase: 0.25, scale: 0.005, pathType: 'curve-right' },
+    { model: 'emperor', baseX: -4, baseY: -18, baseZ: -26, offsetX: 9, offsetY: 3, offsetZ: -3, speed: 3.7, phase: 0.3, scale: 0.015, pathType: 'curve-right' },
+    { model: 'fish3', baseX: -4, baseY: -18, baseZ: -26, offsetX: -9, offsetY: 3, offsetZ: -3, speed: 3.8, phase: 0.35, scale: 0.005, pathType: 'curve-right' },
+
+    // BANC 3 - Profondeur (formation dispersée - Mixte)
+    { model: 'emperor', baseX: 0, baseY: -45, baseZ: -27, offsetX: 0, offsetY: 0, offsetZ: 0, speed: 3.4, phase: 0, scale: 0.016, pathType: 'wave' },
+    { model: 'fish3', baseX: 0, baseY: -45, baseZ: -27, offsetX: 6, offsetY: 2, offsetZ: -2, speed: 3.2, phase: 0.2, scale: 0.005, pathType: 'wave' },
+    { model: 'emperor', baseX: 0, baseY: -45, baseZ: -27, offsetX: -6, offsetY: 2, offsetZ: -2, speed: 3.5, phase: 0.15, scale: 0.015, pathType: 'wave' },
+    { model: 'fish3', baseX: 0, baseY: -45, baseZ: -27, offsetX: 10, offsetY: 4, offsetZ: -4, speed: 3.1, phase: 0.3, scale: 0.005, pathType: 'wave' },
+    { model: 'emperor', baseX: 0, baseY: -45, baseZ: -27, offsetX: -10, offsetY: 4, offsetZ: -4, speed: 3.6, phase: 0.25, scale: 0.015, pathType: 'wave' },
+
+    // ✅ NOUVEAUX BANCS POUR LA PROFONDEUR (-80 à -150)
+
+    // BANC 4 - Zone sombre (-80) - Mixte
+    { model: 'fish3', baseX: 10, baseY: -80, baseZ: -30, offsetX: 0, offsetY: 0, offsetZ: 0, speed: 3.0, phase: 0, scale: 0.005, pathType: 'curve-left' },
+    { model: 'emperor', baseX: 10, baseY: -80, baseZ: -30, offsetX: -3, offsetY: 1, offsetZ: -1, speed: 3.1, phase: 0.1, scale: 0.016, pathType: 'curve-left' },
+    { model: 'fish3', baseX: 10, baseY: -80, baseZ: -30, offsetX: 3, offsetY: -1, offsetZ: -1, speed: 2.9, phase: 0.2, scale: 0.005, pathType: 'curve-left' },
+    { model: 'emperor', baseX: 10, baseY: -80, baseZ: -30, offsetX: -6, offsetY: 2, offsetZ: -2, speed: 3.0, phase: 0.3, scale: 0.015, pathType: 'curve-left' },
+
+    // BANC 5 - Abysses (-120) - Mixte
+    { model: 'emperor', baseX: -15, baseY: -120, baseZ: -35, offsetX: 0, offsetY: 0, offsetZ: 0, speed: 2.4, phase: 0, scale: 0.017, pathType: 'wave' },
+    { model: 'fish3', baseX: -15, baseY: -120, baseZ: -35, offsetX: 4, offsetY: 2, offsetZ: -2, speed: 2.5, phase: 0.1, scale: 0.006, pathType: 'wave' },
+    { model: 'emperor', baseX: -15, baseY: -120, baseZ: -35, offsetX: -4, offsetY: -2, offsetZ: -2, speed: 2.3, phase: 0.2, scale: 0.016, pathType: 'wave' },
+
+    // BANC 6 - Fond marin (-160) - Mixte
+    { model: 'fish3', baseX: 0, baseY: -160, baseZ: -25, offsetX: 0, offsetY: 0, offsetZ: 0, speed: 2.2, phase: 0, scale: 0.006, pathType: 'curve-right' },
+    { model: 'emperor', baseX: 0, baseY: -160, baseZ: -25, offsetX: 5, offsetY: 0, offsetZ: -1, speed: 2.3, phase: 0.1, scale: 0.016, pathType: 'curve-right' },
+    { model: 'fish3', baseX: 0, baseY: -160, baseZ: -25, offsetX: -5, offsetY: 0, offsetZ: -1, speed: 2.0, phase: 0.2, scale: 0.006, pathType: 'curve-right' },
+    { model: 'emperor', baseX: 0, baseY: -160, baseZ: -25, offsetX: 9, offsetY: 1, offsetZ: -2, speed: 2.2, phase: 0.3, scale: 0.015, pathType: 'curve-right' },
+    { model: 'fish3', baseX: 0, baseY: -160, baseZ: -25, offsetX: -9, offsetY: 1, offsetZ: -2, speed: 2.2, phase: 0.4, scale: 0.006, pathType: 'curve-right' },
   ]);
 
-  // ✅ Stocker les groupes de poissons
   const fishGroupsRef = useRef<THREE.Group[]>([]);
+
+  // ✅ Calculer position avec chemin courbe
+  const calculateFishPosition = (fish: any, t: number) => {
+    // On augmente la plage (120 au lieu de 90) pour éviter les "sauts" visibles aux bords
+    const swimProgress = (t * fish.speed + fish.phase * 12) % 120;
+
+    let x, wobbleY, wobbleZ;
+
+    // On centre le mouvement sur 0 (de -60 à +60)
+    const centeredProgress = swimProgress - 60;
+
+    // CORRECTION MOUVEMENT: On réduit drastiquement l'amplitude des courbes
+    // pour que le mouvement soit plus linéaire et constant, évitant l'effet de "freinage"
+
+    if (fish.pathType === 'curve-left') {
+      // Courbe vers la gauche (très légère)
+      const curve = Math.sin(centeredProgress * 0.05) * 3; // Amplitude réduite (6 -> 3)
+      x = centeredProgress + curve;
+      wobbleY = Math.sin(t * 2.5 + fish.phase * 3) * 0.4 + Math.sin(centeredProgress * 0.05) * 2;
+      wobbleZ = Math.sin(t * 2 + fish.phase * 2) * 0.5;
+    } else if (fish.pathType === 'curve-right') {
+      // Courbe vers la droite (très légère)
+      const curve = Math.sin(centeredProgress * 0.05) * -3; // Amplitude réduite (6 -> 3)
+      x = -centeredProgress + curve;
+      wobbleY = Math.sin(t * 2.3 + fish.phase * 3) * 0.4 + Math.sin(centeredProgress * 0.05) * 2;
+      wobbleZ = Math.sin(t * 1.8 + fish.phase * 2) * 0.5;
+    } else {
+      // Vague (très légère)
+      const wave = Math.sin(centeredProgress * 0.04) * 4; // Amplitude réduite (8 -> 4)
+      x = centeredProgress + wave;
+      wobbleY = Math.sin(t * 2.4 + fish.phase * 3) * 0.5 + Math.sin(centeredProgress * 0.06) * 3;
+      wobbleZ = Math.sin(t * 2.1 + fish.phase * 2) * 0.6;
+    }
+
+    return {
+      x: x + fish.offsetX,
+      y: fish.baseY + fish.offsetY + wobbleY,
+      z: fish.baseZ + fish.offsetZ + wobbleZ
+    };
+  };
 
   useEffect(() => {
     if (!emperorFbx || !fish3Fbx || !groupRef.current) return;
 
-    // Nettoyer les anciens groupes
     fishGroupsRef.current.forEach(group => {
       groupRef.current?.remove(group);
       group.traverse((child) => {
@@ -72,11 +137,10 @@ export function FishSchool({ scrollProgress }: FishSchoolProps) {
 
     fishDataRef.current.forEach((fishData) => {
       const fishGroup = new THREE.Group();
-      
+
       let fbxModel: THREE.Group;
       let material: THREE.Material;
-      
-      // ✅ Choisir le bon modèle et matériau
+
       if (fishData.model === 'emperor') {
         fbxModel = emperorFbx;
         material = new THREE.MeshStandardMaterial({
@@ -96,12 +160,11 @@ export function FishSchool({ scrollProgress }: FishSchoolProps) {
         });
       }
 
-      // ✅ Créer les instances (pas de clone pour économiser la mémoire)
       fbxModel.traverse((child) => {
         if ((child as THREE.Mesh).isMesh) {
           const mesh = child as THREE.Mesh;
           const instanceMesh = new THREE.Mesh(
-            mesh.geometry, // Réutiliser la géométrie
+            mesh.geometry,
             material
           );
           instanceMesh.position.copy(mesh.position);
@@ -118,41 +181,28 @@ export function FishSchool({ scrollProgress }: FishSchoolProps) {
 
   }, [emperorFbx, fish3Fbx, emperorTextures, fish3Textures]);
 
-  // ✅ Animation réaliste
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime();
 
     fishGroupsRef.current.forEach((fishGroup, i) => {
       const fish = fishDataRef.current[i];
-      
-      // Mouvement continu (boucle)
-      const swimProgress = (t * fish.speed + fish.phase * 12) % 90;
-      const x = fish.dir > 0 
-        ? -45 + swimProgress
-        : 45 - swimProgress;
 
-      // Position Y avec scroll
-      const y = fish.y + scrollProgress * 120;
-      
-      // ✅ Mouvement naturel de nage
-      const wobbleY = Math.sin(t * 2.5 + fish.phase * 3) * 0.3;
-      const wobbleZ = Math.sin(t * 2 + fish.phase * 2) * 0.4;
+      const pos = calculateFishPosition(fish, t);
+      const y = pos.y + scrollProgress * 120;
 
-      fishGroup.position.set(x + fish.x, y + wobbleY, fish.z + wobbleZ);
+      fishGroup.position.set(pos.x, y, pos.z);
 
-      // ✅ Rotation selon la direction
+      // ✅ Rotation naturelle selon le chemin
       let baseRotationY;
       if (fish.model === 'fish3') {
-        baseRotationY = fish.dir > 0 ? Math.PI / 2 : -Math.PI / 2;
+        baseRotationY = fish.pathType === 'curve-right' ? -Math.PI / 2 : Math.PI / 2;
       } else {
-        baseRotationY = fish.dir > 0 ? 0 : Math.PI;
+        baseRotationY = fish.pathType === 'curve-right' ? Math.PI : 0;
       }
-      
-      // ✅ Ondulation du corps
-      const bodyUndulation = Math.sin(t * 8 + fish.phase * 4) * 0.08;
+
+      const bodyUndulation = Math.sin(t * 5 + fish.phase * 4) * 0.15; // Plus lent mais plus ample pour être plus fluide
       fishGroup.rotation.y = baseRotationY + bodyUndulation;
-      
-      // ✅ Roll et pitch subtils
+
       fishGroup.rotation.z = Math.sin(t * 4 + fish.phase * 2) * 0.04;
       fishGroup.rotation.x = Math.sin(t * 3 + fish.phase) * 0.03;
     });
