@@ -41,18 +41,38 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
   }, [fbx, darkMaterial]);
   const keyframes = useMemo(
     () => [
-      { progress: 0, pos: [0, 2, -8], rot: [0.05, 0, 0.02], facing: 0 },
-      { progress: 0.05, pos: [0, 2, -8], rot: [0.05, 0, 0.02], facing: 0 },
-      { progress: 0.12, pos: [6, 1, -12], rot: [0.06, -0.1, 0.02], facing: 0.3 },
-      { progress: 0.22, pos: [12, 0, -14], rot: [0.05, 0, 0.02], facing: 0.5 },
-      { progress: 0.32, pos: [14, -1, -12], rot: [0.03, 0.05, 0.01], facing: 0.8 },
-      { progress: 0.42, pos: [6, -2, -10], rot: [0.05, 0.1, 0], facing: 1.3 },
-      { progress: 0.52, pos: [-8, -3, -12], rot: [0.07, 0.08, -0.01], facing: 1.9 },
-      { progress: 0.62, pos: [-14, -4, -14], rot: [0.08, 0.05, -0.02], facing: 2.5 },
-      { progress: 0.72, pos: [-12, -5, -16], rot: [0.1, 0, -0.01], facing: 2.9 },
-      { progress: 0.82, pos: [-5, -7, -18], rot: [0.12, -0.05, 0], facing: 3.5 },
-      { progress: 0.92, pos: [2, -9, -22], rot: [0.15, -0.1, 0.01], facing: 3.9 },
-      { progress: 1, pos: [0, -12, -30], rot: [0.2, -0.05, 0], facing: 4.3 },
+      // SURFACE - À droite
+      { progress: 0, pos: [5, 2, -8], rot: [0.05, 0, 0.02], facing: 0 },
+      { progress: 0.05, pos: [5, 2, -8], rot: [0.05, 0, 0.02], facing: 0 },
+      
+      // SECTION 1 "HISTOIRE" - Reste à droite
+      { progress: 0.12, pos: [10, 1, -12], rot: [0.06, -0.15, 0.02], facing: 0.3 },
+      { progress: 0.22, pos: [14, -0.5, -14], rot: [0.05, -0.2, 0.01], facing: 0.5 },
+      
+      // TOURNE VERS GAUCHE (rotation fluide)
+      { progress: 0.30, pos: [8, -1.5, -15], rot: [0.04, 0.1, 0.01], facing: 1.2 },
+      
+      // SECTION 2 "CASABIANCA" - À GAUCHE
+      { progress: 0.42, pos: [-10, -2.5, -16], rot: [0.05, 0.4, -0.01], facing: 2.0 },
+      
+      // TOURNE VERS DROITE (rotation fluide)
+      { progress: 0.50, pos: [-2, -3.5, -17], rot: [0.06, 0.15, 0], facing: 2.5 },
+      
+      // SECTION 3 "EXPÉRIENCE" - À DROITE (mais commence déjà à tourner)
+      { progress: 0.62, pos: [8, -5, -18], rot: [0.07, -0.1, 0.01], facing: 3.0 },
+      
+      // ✅ TRANSITION IMMÉDIATE VERS GAUCHE
+      { progress: 0.68, pos: [6, -5.5, -19], rot: [0.08, 0, 0.01], facing: 3.3 },
+      { progress: 0.72, pos: [0, -6.5, -20], rot: [0.09, 0.15, 0], facing: 3.6 },
+      { progress: 0.76, pos: [-6, -7, -21], rot: [0.10, 0.25, -0.01], facing: 3.8 },
+      
+      // SECTION 4 "BIODIVERSITÉ" - Bien à gauche
+      { progress: 0.82, pos: [-10, -8, -22], rot: [0.11, 0.3, -0.01], facing: 4.0 },
+      { progress: 0.92, pos: [-14, -10, -25], rot: [0.13, 0.2, 0], facing: 4.1 },
+      
+      // ABYSSE - Descente profonde progressive
+      { progress: 0.96, pos: [-10, -12, -28], rot: [0.15, 0.1, 0], facing: 4.2 },
+      { progress: 1, pos: [-3, -15, -32], rot: [0.18, 0, 0], facing: 4.3 },
     ],
     []
   );
