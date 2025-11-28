@@ -17,7 +17,7 @@ export function Seaweed({ scrollProgress }: SeaweedProps) {
 
   // ✅ Réduction à 80 pour les performances (au lieu de 160)
   const seaweedData = useRef(
-    Array.from({ length: 80 }, (_, i) => {
+    Array.from({ length: 80 }, () => {
       const angle = Math.random() * Math.PI * 2;
       // Rayon légèrement augmenté pour compenser le nombre réduit
       const radius = 8 + Math.random() * 50;

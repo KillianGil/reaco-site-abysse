@@ -141,7 +141,7 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
     const targetRotY = THREE.MathUtils.lerp(start.rot[1], end.rot[1], easeT);
     const targetRotZ = THREE.MathUtils.lerp(start.rot[2], end.rot[2], easeT);
     const targetFacing = THREE.MathUtils.lerp(start.facing, end.facing, easeT);
-    // @ts-ignore - scale property added dynamically
+    // scale property added dynamically
     const targetScale = THREE.MathUtils.lerp(start.scale || 1, end.scale || 1, easeT);
 
     const inertia = scrollProgress < 0.1 ? 0.03 : 0.05;
@@ -152,7 +152,7 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
     current.current.rotY += (targetRotY - current.current.rotY) * inertia;
     current.current.rotZ += (targetRotZ - current.current.rotZ) * inertia;
     current.current.facing += (targetFacing - current.current.facing) * inertia;
-    // @ts-ignore
+    // scale property added dynamically
     current.current.scale += (targetScale - current.current.scale) * inertia;
 
     const idleIntensity = Math.max(0, 1 - scrollProgress * 2);
@@ -178,7 +178,7 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
     innerGroupRef.current.rotation.y =
       current.current.facing + current.current.rotY + floatRotY;
 
-    // @ts-ignore
+    // scale property added dynamically
     const finalScale = current.current.scale * 1.2; // 1.2 is base scale (increased)
     groupRef.current.scale.setScalar(finalScale);
   });

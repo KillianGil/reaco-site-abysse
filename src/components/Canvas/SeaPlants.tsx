@@ -3,7 +3,6 @@
 
 import { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
-import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 
 interface SeaPlantsProps {
@@ -25,11 +24,11 @@ export function SeaPlants({ scrollProgress }: SeaPlantsProps) {
         width: 1.2 + Math.random() * 1.5,
         phase: Math.random() * Math.PI * 2,
         speed: 0.3 + Math.random() * 0.4,
-        color: i % 3 === 0 
+        color: i % 3 === 0
           ? "#2a6a4a" // Vert foncé
-          : i % 3 === 1 
-          ? "#3a7a5a" // Vert moyen
-          : "#1a5a3a", // Vert très foncé
+          : i % 3 === 1
+            ? "#3a7a5a" // Vert moyen
+            : "#1a5a3a", // Vert très foncé
       };
     });
   }, []);
@@ -62,7 +61,7 @@ export function SeaPlants({ scrollProgress }: SeaPlantsProps) {
               metalness={0.05}
             />
           </mesh>
-          
+
           {/* Feuilles */}
           {[0, 0.3, 0.6, 0.9].map((offset, j) => (
             <mesh
