@@ -1,11 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Optimize for Three.js
-  transpilePackages: ["three"],
-  
-  // Webpack configuration for Three.js
   webpack: (config) => {
-    config.externals = config.externals || [];
+    config.module.rules.push({
+      test: /\.(glb|gltf|fbx)$/,
+      type: 'asset/resource',
+    });
     return config;
   },
 };

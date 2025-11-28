@@ -17,13 +17,14 @@ export function LenisProvider({ children }: LenisProviderProps) {
   useEffect(() => {
     // Initialize Lenis for buttery smooth scrolling
     const lenis = new Lenis({
-      duration: 1.4,
+      duration: 1.8, // ⚡ Plus lent = moins de recalculs (était 1.4)
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: "vertical",
       gestureOrientation: "vertical",
       smoothWheel: true,
-      touchMultiplier: 2,
+      touchMultiplier: 1.5, // ⚡ Réduit (était 2)
       infinite: false,
+      wheelMultiplier: 0.8, // ⚡ NOUVEAU : ralentit la molette
     });
 
     lenisRef.current = lenis;
