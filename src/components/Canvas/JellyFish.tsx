@@ -16,8 +16,8 @@ export function Jellyfish({ scrollProgress }: JellyfishProps) {
   const groupRef = useRef<THREE.Group>(null);
 
   // Plage de visibilité (profondeur)
-  const START_SCROLL = 0.6; // Apparaît beaucoup plus tôt (était 0.75)
-  const END_SCROLL = 1.2;
+  const START_SCROLL = 0.3; // Apparition beaucoup plus tôt
+  const END_SCROLL = 0.9;
 
   useEffect(() => {
     // Force l'animation du fichier GLB
@@ -55,24 +55,18 @@ export function Jellyfish({ scrollProgress }: JellyfishProps) {
     if (!groupRef.current) return;
 
     // Gestion visibilité avec FADE (plus doux)
-    // On élargit la zone de détection pour commencer le fade plus tôt
-    const isVisibleRange = scrollProgress > START_SCROLL - 0.15 && scrollProgress < END_SCROLL + 0.15;
+    const isVisibleRange = scrollProgress > START_SCROLL - 0.1 && scrollProgress < END_SCROLL + 0.1;
 
     // Calcul de l'opacité cible
     let targetOpacity = 0;
     if (isVisibleRange) {
       // Fade in/out basé sur la distance aux bords de la zone
-      // On veut 1 au milieu, 0 aux bords
+      const distFromStart = scrollProgress - (START_SCROLL - 0.1);
+      const distFromEnd = (END_SCROLL + 0.1) - scrollProgress;
 
-      // Distance par rapport au début
-      const distFromStart = scrollProgress - (START_SCROLL - 0.15);
-      // Distance par rapport à la fin
-      const distFromEnd = (END_SCROLL + 0.15) - scrollProgress;
-
-      // On prend le min des deux pour avoir un fade in ET un fade out
-      const fade = Math.min(distFromStart, distFromEnd) * 4; // *4 pour que le fade soit assez rapide
-
-      targetOpacity = Math.max(0, Math.min(1.0, fade)); // Opacité max 1.0
+      // FADE PLUS RAPIDE (x8 au lieu de x4)
+      const fade = Math.min(distFromStart, distFromEnd) * 8;
+      targetOpacity = Math.max(0, Math.min(1.0, fade));
     }
 
     // Appliquer l'opacité progressivement
@@ -86,33 +80,31 @@ export function Jellyfish({ scrollProgress }: JellyfishProps) {
       }
     });
 
-    // Si totalement invisible, on peut skip le reste des calculs (optionnel)
-    // mais on laisse tourner pour que ça ne "saute" pas quand ça réapparaît
-    groupRef.current.visible = true; // Toujours visible pour le moteur, on gère avec l'opacité
+    groupRef.current.visible = true;
 
     const t = state.clock.elapsedTime;
 
-    // ✅ MOUVEMENT AUTONOME
+    // ✅ MOUVEMENT AUTONOME BOOSTÉ
 
-    // Mouvement sinusoïdal complexe
-    const floatY = Math.sin(t * 0.3) * 15 + Math.sin(t * 0.1) * 10;
-    const floatX = Math.sin(t * 0.2) * 20;
-    const floatZ = Math.cos(t * 0.15) * 10;
+    // Mouvement sinusoïdal complexe - AMPLITUDE AUGMENTÉE
+    const floatY = Math.sin(t * 0.4) * 25 + Math.sin(t * 0.15) * 15; // Plus ample et un peu plus rapide
+    const floatX = Math.sin(t * 0.25) * 30; // Plus large
+    const floatZ = Math.cos(t * 0.2) * 15;
 
     // Position de base (profondeur fixe)
     const BASE_DEPTH = -60;
 
-    // Offset X pour ne pas être au centre (sur le texte)
-    // CORRECTION: On change de côté pour voir si ça plait mieux (gauche)
+    // Offset X fixe (plus d'entrée latérale artificielle)
     const OFFSET_X = -25;
 
     const cameraY = scrollProgress * 100;
 
     // Position finale
-    // CORRECTION: On recule un peu en Z (-40) pour être sûr qu'elle soit visible et pas trop grosse
+    // CORRECTION: On lock la position Y à la caméra pour qu'elle ne soit jamais perdue
+    // On ajoute juste le flottement autonome par dessus
     groupRef.current.position.set(
       floatX + OFFSET_X,
-      BASE_DEPTH + cameraY + floatY,
+      BASE_DEPTH + cameraY + floatY * 0.3, // On garde 30% du mouvement vertical
       -40 + floatZ
     );
 
@@ -125,12 +117,11 @@ export function Jellyfish({ scrollProgress }: JellyfishProps) {
     groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, targetRotationX, 0.05);
     groupRef.current.rotation.z = THREE.MathUtils.lerp(groupRef.current.rotation.z, targetRotationZ, 0.05);
 
-    // Pulsation rythmique (scale) - RÉDUITE pour éviter conflit avec animation GLB
+    // Pulsation rythmique (scale)
     const pulse = Math.sin(t * 2);
     const squish = pulse * 0.02; // Très léger
 
-    // CORRECTION TAILLE: On augmente la taille de base (4 -> 6)
-    const baseScale = 6;
+    const baseScale = 5;
     groupRef.current.scale.set(baseScale - squish, baseScale + squish, baseScale - squish);
   });
 

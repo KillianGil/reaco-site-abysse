@@ -12,7 +12,7 @@ interface SeaweedProps {
 
 export function Seaweed({ scrollProgress }: SeaweedProps) {
   const groupRef = useRef<THREE.Group>(null);
-  
+
   const seaweed = useGLTF("/models/seaweed2.glb");
 
   // ✅ Réduction à 80 pour les performances (au lieu de 160)
@@ -20,10 +20,14 @@ export function Seaweed({ scrollProgress }: SeaweedProps) {
     Array.from({ length: 80 }, (_, i) => {
       const angle = Math.random() * Math.PI * 2;
       // Rayon légèrement augmenté pour compenser le nombre réduit
-      const radius = 8 + Math.random() * 50; 
-      
+      const radius = 8 + Math.random() * 50;
+
+      // Distribution plus large sur l'axe X, avec emphase sur la gauche (-X)
+      // Range: -50 à +30 (plus de plantes à gauche)
+      const xBase = (Math.random() - 0.65) * 80;
+
       return {
-        x: Math.cos(angle) * radius,
+        x: xBase,
         y: -118 - Math.random() * 7,
         z: -30 + Math.sin(angle) * radius * 0.6,
         scale: 6 + Math.random() * 6, // Plus grandes pour remplir l'espace
@@ -47,13 +51,13 @@ export function Seaweed({ scrollProgress }: SeaweedProps) {
     seaweedData.current.forEach((data) => {
       const seaweedGroup = new THREE.Group();
       const clonedScene = seaweed.scene.clone();
-      
+
       clonedScene.traverse((child) => {
         if ((child as THREE.Mesh).isMesh) {
           const mesh = child as THREE.Mesh;
           mesh.castShadow = true;
           mesh.receiveShadow = true;
-          
+
           if (mesh.material) {
             if (Array.isArray(mesh.material)) {
               mesh.material.forEach(mat => {
@@ -87,14 +91,14 @@ export function Seaweed({ scrollProgress }: SeaweedProps) {
       const data = seaweedData.current[i];
       const sway = Math.sin(t * data.speed + i * 13) * data.swayAmount;
       const twist = Math.sin(t * data.speed * 0.7 + i * 7) * 0.05;
-      
+
       group.rotation.z = sway;
       group.rotation.x = twist;
     });
 
     groupRef.current.position.y = scrollProgress * 100;
     // Apparition un peu plus tardive pour économiser des ressources en haut
-    groupRef.current.visible = scrollProgress > 0.8; 
+    groupRef.current.visible = scrollProgress > 0.8;
   });
 
   return (
@@ -102,11 +106,11 @@ export function Seaweed({ scrollProgress }: SeaweedProps) {
       <group ref={groupRef} />
       {scrollProgress > 0.8 && (
         <>
-          <pointLight 
-            position={[0, -110 + scrollProgress * 100, -30]} 
-            intensity={50} 
-            color="#5aca9a" 
-            distance={70} 
+          <pointLight
+            position={[0, -110 + scrollProgress * 100, -30]}
+            intensity={50}
+            color="#5aca9a"
+            distance={70}
           />
           {Array.from({ length: 8 }, (_, i) => { // Un peu moins de lumières aussi
             const angle = (i / 8) * Math.PI * 2;

@@ -12,6 +12,7 @@ import { OceanDecorations } from "./OceanDecorations";
 import { FastFish } from "./FastFish";
 import { Seaweed } from "./SeaWeed";
 import { Jellyfish } from "./JellyFish";
+import { MantaRay } from "./MantaRay";
 
 interface SceneProps {
   scrollProgress: number;
@@ -275,14 +276,12 @@ export function Scene({ scrollProgress }: SceneProps) {
           <OceanDecorations scrollProgress={scrollProgress} />
           {/* ✅ Créatures */}
           <Submarine scrollProgress={scrollProgress} />
+          <Jellyfish scrollProgress={scrollProgress} />
           <FishSchool scrollProgress={scrollProgress} />
           <FastFish scrollProgress={scrollProgress} />
           <Seaweed scrollProgress={scrollProgress} />
-          <Jellyfish scrollProgress={scrollProgress} />
-
-          {scrollProgress > 0.65 && (
-            <Anglerfish scrollProgress={scrollProgress} />
-          )}
+          <MantaRay scrollProgress={scrollProgress} />
+          <Anglerfish scrollProgress={scrollProgress} />
         </Suspense>
       </Canvas>
     </div>

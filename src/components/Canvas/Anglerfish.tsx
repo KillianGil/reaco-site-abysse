@@ -6,13 +6,14 @@ import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 
 export function Anglerfish({ scrollProgress }: { scrollProgress: number }) {
+  // On utilise un try/catch implicite avec useGLTF, mais on va ajouter un fallback visuel
   const gltf = useGLTF("/models/deep-sea-fish.glb");
   const ref = useRef<THREE.Group>(null);
-  const clonedScene = useMemo(() => gltf.scene.clone(), [gltf.scene]);
+  const clonedScene = useMemo(() => gltf ? gltf.scene.clone() : null, [gltf]);
   const lightRef = useRef<THREE.PointLight>(null);
 
   // Position très profonde (le fond est vers 1.8 - 2.0 de scroll)
-  const APPEAR_SCROLL = 1.6;
+  const APPEAR_SCROLL = 1.2;
 
   useFrame((state) => {
     if (!ref.current) return;
@@ -83,11 +84,26 @@ export function Anglerfish({ scrollProgress }: { scrollProgress: number }) {
         />
       </mesh>
 
-      {/* LE POISSON */}
-      <primitive
-        object={clonedScene}
-        scale={12} // Assez gros pour faire peur
-      />
+      {/* LE POISSON ou FALLBACK */}
+      {clonedScene ? (
+        <group>
+          <primitive
+            object={clonedScene}
+            scale={12}
+          />
+          {/* DEBUG LURE: Petite sphère attachée au poisson pour vérifier sa position si le modèle est invisible */}
+          <mesh position={[0, 0.5, 3.5]}>
+            <sphereGeometry args={[0.2, 8, 8]} />
+            <meshBasicMaterial color="cyan" />
+          </mesh>
+        </group>
+      ) : (
+        // Fallback si le modèle ne charge pas (cube rouge effrayant)
+        <mesh scale={[5, 5, 10]}>
+          <boxGeometry />
+          <meshStandardMaterial color="red" wireframe />
+        </mesh>
+      )}
 
       {/* Yeux brillants dans le noir */}
       <pointLight position={[1.5, 1, 4]} intensity={5} color="#ffff00" distance={10} />

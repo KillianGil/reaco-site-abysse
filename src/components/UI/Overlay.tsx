@@ -33,7 +33,7 @@ function Section1Surface() {
 
       if (titleRef.current) {
         const chars = titleRef.current.querySelectorAll(".char");
-        tl.fromTo(chars, 
+        tl.fromTo(chars,
           { opacity: 0, y: 80, rotateX: -40 },
           { opacity: 1, y: 0, rotateX: 0, duration: 1.2, stagger: 0.08, ease: "power3.out" }
         );
@@ -68,7 +68,7 @@ function Section1Surface() {
         <div className="absolute left-[90%] top-0 bottom-0 w-px bg-white/5" />
       </div>
 
-      <div className="text-center px-8 max-w-3xl">
+      <div className="text-center px-8 max-w-3xl -mt-64">
         <p className="surface-1 text-[10px] uppercase tracking-[0.5em] text-white/50 mb-6 drop-shadow-md font-medium">
           Musée Sous-Marin • Toulon
         </p>
@@ -113,9 +113,10 @@ function Section2Histoire() {
     const ctx = gsap.context(() => {
       const elements = [".hist-depth", ".hist-marker", ".hist-title", ".hist-tagline", ".hist-body", ".hist-stat"];
       elements.forEach((sel, i) => {
-        gsap.fromTo(sel, 
+        gsap.fromTo(sel,
           { opacity: 0, y: 50 },
-          { opacity: 1, y: 0, duration: 0.8, delay: i * 0.1, ease: "power3.out",
+          {
+            opacity: 1, y: 0, duration: 0.8, delay: i * 0.1, ease: "power3.out",
             scrollTrigger: { trigger: sectionRef.current, start: "top 55%", toggleActions: "play none none reverse" }
           }
         );
@@ -130,7 +131,7 @@ function Section2Histoire() {
 
       <div className="min-h-[150vh] grid grid-cols-12 gap-6 px-6 md:px-12 lg:px-20 py-32">
         <div className="col-span-12 md:col-span-5 md:col-start-2 flex flex-col justify-center">
-          
+
           <div className="hist-depth mb-6">
             <span className="text-4xl font-light text-[#4CBBD5] drop-shadow-md">L&apos;Histoire</span>
           </div>
@@ -150,17 +151,17 @@ function Section2Histoire() {
           </p>
 
           <p className="hist-body text-sm font-medium leading-[1.9] text-white/60 mb-8 max-w-sm drop-shadow-sm">
-            1943. C&apos;est dans la rade de Toulon que les &quot;Mousquemers&quot; — Cousteau, Tailliez, Dumas — 
-            inventent la plongée autonome moderne. De Jules Verne au Bathyscaphe FNRS III, 
+            1943. C&apos;est dans la rade de Toulon que les &quot;Mousquemers&quot; — Cousteau, Tailliez, Dumas —
+            inventent la plongée autonome moderne. De Jules Verne au Bathyscaphe FNRS III,
             cette terre est le berceau de la conquête sous-marine mondiale.
           </p>
 
-          <motion.div 
+          <motion.div
             className="hist-stat p-5 border-l-2 border-[#4CBBD5]/60 bg-white/[0.03] backdrop-blur-sm cursor-pointer"
             whileHover={{ scale: 1.02, backgroundColor: "rgba(255,255,255,0.05)" }}
             transition={{ duration: 0.2 }}
           >
-            <motion.span 
+            <motion.span
               className="block text-3xl font-light text-white mb-1"
               whileHover={{ scale: 1.1, color: "#4CBBD5" }}
               transition={{ duration: 0.2 }}
@@ -189,9 +190,10 @@ function Section3Casabianca() {
     const ctx = gsap.context(() => {
       const elements = [".casa-depth", ".casa-marker", ".casa-title", ".casa-tagline", ".casa-body", ".casa-stats"];
       elements.forEach((sel, i) => {
-        gsap.fromTo(sel, 
+        gsap.fromTo(sel,
           { opacity: 0, y: 50, x: 20 },
-          { opacity: 1, y: 0, x: 0, duration: 0.8, delay: i * 0.1, ease: "power3.out",
+          {
+            opacity: 1, y: 0, x: 0, duration: 0.8, delay: i * 0.1, ease: "power3.out",
             scrollTrigger: { trigger: sectionRef.current, start: "top 50%", toggleActions: "play none none reverse" }
           }
         );
@@ -210,7 +212,7 @@ function Section3Casabianca() {
 
         {/* Contenu à droite - aligné à droite */}
         <div className="col-span-12 md:col-span-6 flex flex-col justify-center md:items-end md:text-right">
-          
+
           <div className="casa-depth mb-6">
             <span className="text-4xl font-light text-[#4CBBD5] drop-shadow-md">Le Musée</span>
           </div>
@@ -230,8 +232,8 @@ function Section3Casabianca() {
           </p>
 
           <p className="casa-body text-sm font-medium leading-[1.9] text-white/60 mb-8 max-w-md drop-shadow-sm">
-            Pièce maîtresse du musée : un véritable Sous-marin Nucléaire d&apos;Attaque (SNA) de 2 600 tonnes, 
-            désarmé et transformé en espace d&apos;exposition. Explorez les entrailles de ce chasseur silencieux, 
+            Pièce maîtresse du musée : un véritable Sous-marin Nucléaire d&apos;Attaque (SNA) de 2 600 tonnes,
+            désarmé et transformé en espace d&apos;exposition. Explorez les entrailles de ce chasseur silencieux,
             symbole du génie naval français.
           </p>
 
@@ -241,17 +243,17 @@ function Section3Casabianca() {
               { value: "73", label: "Mètres" },
               { value: "70", label: "Hommes" },
             ].map((stat, i) => (
-              <motion.div 
+              <motion.div
                 key={i}
                 className="p-4 border border-white/10 text-center bg-white/[0.02] backdrop-blur-sm cursor-pointer"
-                whileHover={{ 
-                  scale: 1.05, 
+                whileHover={{
+                  scale: 1.05,
                   backgroundColor: "rgba(76, 187, 213, 0.1)",
                   borderColor: "rgba(76, 187, 213, 0.3)"
                 }}
                 transition={{ duration: 0.2 }}
               >
-                <motion.span 
+                <motion.span
                   className="block text-2xl font-light text-[#4CBBD5] mb-1"
                   whileHover={{ scale: 1.1 }}
                   transition={{ duration: 0.2 }}
@@ -278,9 +280,10 @@ function Section4Experience() {
     const ctx = gsap.context(() => {
       const elements = [".exp-depth", ".exp-marker", ".exp-title", ".exp-tagline", ".exp-body", ".exp-features"];
       elements.forEach((sel, i) => {
-        gsap.fromTo(sel, 
+        gsap.fromTo(sel,
           { opacity: 0, y: 50 },
-          { opacity: 1, y: 0, duration: 0.8, delay: i * 0.1, ease: "power3.out",
+          {
+            opacity: 1, y: 0, duration: 0.8, delay: i * 0.1, ease: "power3.out",
             scrollTrigger: { trigger: sectionRef.current, start: "top 55%", toggleActions: "play none none reverse" }
           }
         );
@@ -295,7 +298,7 @@ function Section4Experience() {
 
       <div className="min-h-[145vh] grid grid-cols-12 gap-6 px-6 md:px-12 lg:px-20 py-32">
         <div className="col-span-12 md:col-span-5 md:col-start-2 flex flex-col justify-center">
-          
+
           <div className="exp-depth mb-6">
             <span className="text-4xl font-light text-[#4CBBD5] drop-shadow-md">L&apos;Expérience</span>
           </div>
@@ -315,8 +318,8 @@ function Section4Experience() {
           </p>
 
           <p className="exp-body text-sm font-medium leading-[1.9] text-white/60 mb-8 max-w-sm drop-shadow-sm">
-            Simulateurs de pilotage, expériences en réalité virtuelle, parcours immersifs... 
-            Découvrez les technologies françaises de pointe (Ifremer, Naval Group) et vivez 
+            Simulateurs de pilotage, expériences en réalité virtuelle, parcours immersifs...
+            Découvrez les technologies françaises de pointe (Ifremer, Naval Group) et vivez
             l&apos;exploration sous-marine comme jamais auparavant.
           </p>
 
@@ -325,11 +328,11 @@ function Section4Experience() {
               { title: "Simulateurs VR", sub: "Pilotez un ROV" },
               { title: "Parcours immersif", sub: "6 zones thématiques" },
             ].map((feature, i) => (
-              <motion.div 
+              <motion.div
                 key={i}
                 className="p-4 border border-white/10 bg-white/[0.02] backdrop-blur-sm cursor-pointer"
-                whileHover={{ 
-                  scale: 1.03, 
+                whileHover={{
+                  scale: 1.03,
                   backgroundColor: "rgba(255,255,255,0.08)",
                   backdropFilter: "blur(12px)"
                 }}
@@ -358,9 +361,10 @@ function Section5Biodiversite() {
     const ctx = gsap.context(() => {
       const elements = [".bio-depth", ".bio-marker", ".bio-title", ".bio-tagline", ".bio-body", ".bio-quote"];
       elements.forEach((sel, i) => {
-        gsap.fromTo(sel, 
+        gsap.fromTo(sel,
           { opacity: 0, y: 50, x: 20 },
-          { opacity: 1, y: 0, x: 0, duration: 0.8, delay: i * 0.1, ease: "power3.out",
+          {
+            opacity: 1, y: 0, x: 0, duration: 0.8, delay: i * 0.1, ease: "power3.out",
             scrollTrigger: { trigger: sectionRef.current, start: "top 50%", toggleActions: "play none none reverse" }
           }
         );
@@ -379,7 +383,7 @@ function Section5Biodiversite() {
 
         {/* Contenu à droite - aligné à droite */}
         <div className="col-span-12 md:col-span-6 flex flex-col justify-center md:items-end md:text-right">
-          
+
           <div className="bio-depth mb-6">
             <span className="text-4xl font-light text-[#4CBBD5] drop-shadow-md">Les Abysses</span>
           </div>
@@ -399,12 +403,12 @@ function Section5Biodiversite() {
           </p>
 
           <p className="bio-body text-sm font-medium leading-[1.9] text-white/60 mb-8 max-w-md drop-shadow-sm">
-            Bioluminescence, créatures extraordinaires, écosystèmes uniques... Les profondeurs 
-            océaniques abritent des merveilles que le musée vous invite à explorer. Comprendre 
+            Bioluminescence, créatures extraordinaires, écosystèmes uniques... Les profondeurs
+            océaniques abritent des merveilles que le musée vous invite à explorer. Comprendre
             ces environnements fragiles est essentiel pour les protéger.
           </p>
 
-          <motion.div 
+          <motion.div
             className="bio-quote p-5 border-r-2 border-l-0 border-[#4CBBD5]/40 bg-white/[0.03] backdrop-blur-sm max-w-md"
             whileHover={{ backgroundColor: "rgba(255,255,255,0.06)" }}
             transition={{ duration: 0.3 }}
@@ -432,9 +436,10 @@ function Section6Contact() {
     const ctx = gsap.context(() => {
       const elements = [".contact-marker", ".contact-title", ".contact-body", ".contact-info", ".contact-partners", ".contact-footer"];
       elements.forEach((sel, i) => {
-        gsap.fromTo(sel, 
+        gsap.fromTo(sel,
           { opacity: 0, y: 40 },
-          { opacity: 1, y: 0, duration: 0.8, delay: i * 0.08, ease: "power3.out",
+          {
+            opacity: 1, y: 0, duration: 0.8, delay: i * 0.08, ease: "power3.out",
             scrollTrigger: { trigger: sectionRef.current, start: "top 55%", toggleActions: "play none none reverse" }
           }
         );
@@ -448,7 +453,7 @@ function Section6Contact() {
       <div className="absolute top-0 left-[10%] right-[10%] h-px bg-white/10" />
 
       <div className="text-center max-w-xl" id="partenaires">
-        
+
         <div className="contact-marker flex items-center justify-center gap-3 mb-8">
           <span className="text-[#4CBBD5] font-mono text-xs">05</span>
           <div className="w-10 h-px bg-white/20" />
@@ -460,7 +465,7 @@ function Section6Contact() {
         </h2>
 
         <p className="contact-body text-sm font-medium leading-[1.9] text-white/60 mb-10 max-w-md mx-auto drop-shadow-sm">
-          Le projet ABYSSE prend forme. Vous souhaitez en savoir plus, devenir partenaire 
+          Le projet ABYSSE prend forme. Vous souhaitez en savoir plus, devenir partenaire
           ou simplement nous poser une question ? Contactez notre équipe.
         </p>
 
@@ -492,7 +497,7 @@ function Section6Contact() {
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {["Marine Nationale", "Région Sud", "Naval Group", "Ifremer"].map((partner, i) => (
-              <motion.div 
+              <motion.div
                 key={i}
                 className="text-center cursor-pointer"
                 whileHover={{ scale: 1.1, opacity: 1 }}

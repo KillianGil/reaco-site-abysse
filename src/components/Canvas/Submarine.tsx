@@ -14,11 +14,11 @@ interface SubmarineProps {
 export function Submarine({ scrollProgress }: SubmarineProps) {
   // ✅ VERSION GLB (plus léger)
   const { scene } = useGLTF("/models/submarine.glb");
-  
+
   // ✅ VERSION FBX (commentée - décommente si besoin)
   // const fbx = useFBX("/models/submarine.fbx");
   // const scene = fbx;
-  
+
   const groupRef = useRef<THREE.Group>(null);
   const innerGroupRef = useRef<THREE.Group>(null);
   const initialized = useRef(false);
@@ -40,50 +40,55 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
 
   const keyframes = useMemo(
     () => [
-      // SURFACE - À droite (COMME AVANT)
-      { progress: 0, pos: [5, 2, -8], rot: [0.05, 0, 0.02], facing: 0 },
-      { progress: 0.05, pos: [5, 2, -8], rot: [0.05, 0, 0.02], facing: 0 },
-      
-      // SECTION 1 "HISTOIRE" - Reste à droite
-      { progress: 0.12, pos: [10, 1, -12], rot: [0.06, -0.15, 0.02], facing: 0.3 },
-      { progress: 0.22, pos: [14, -0.5, -14], rot: [0.05, -0.2, 0.01], facing: 0.5 },
-      
+      // SURFACE - DÉPART PROFOND (Z-AXIS ENTRY)
+      // Au début (0), il est loin au fond (Z=-60), plus visible (Scale=0.4), face caméra (RotY=PI)
+      { progress: 0, pos: [0, 2, -60], rot: [0, Math.PI, 0], facing: 0, scale: 0.4 },
+
+      // ARRIVÉE DANS LA SCÈNE (ZOOM AVANT)
+      // À 0.1, il arrive à sa position de "base" (Z=-8), taille normale, et se tourne de profil
+      { progress: 0.1, pos: [5, 2, -8], rot: [0.05, 0, 0.02], facing: 0, scale: 1 },
+
+      // SECTION 1 "HISTOIRE" - Reste à droite (0.12 - 0.22)
+      { progress: 0.12, pos: [10, 1, -12], rot: [0.06, -0.15, 0.02], facing: 0.3, scale: 1 },
+      { progress: 0.22, pos: [14, -0.5, -14], rot: [0.05, -0.2, 0.01], facing: 0.5, scale: 1 },
+
       // TOURNE VERS GAUCHE
-      { progress: 0.30, pos: [8, -1.5, -15], rot: [0.04, 0.1, 0.01], facing: 1.2 },
-      
-      // SECTION 2 "CASABIANCA" - À GAUCHE
-      { progress: 0.42, pos: [-10, -2.5, -16], rot: [0.05, 0.4, -0.01], facing: 2.0 },
-      
+      { progress: 0.30, pos: [8, -1.5, -15], rot: [0.04, 0.1, 0.01], facing: 1.2, scale: 1 },
+
+      // SECTION 2 "CASABIANCA" - À GAUCHE (0.38 - 0.48)
+      { progress: 0.38, pos: [-10, -2.5, -16], rot: [0.05, 0.4, -0.01], facing: 2.0, scale: 1 },
+      { progress: 0.48, pos: [-12, -3.5, -17], rot: [0.06, 0.3, 0], facing: 2.2, scale: 1 },
+
       // TOURNE VERS DROITE
-      { progress: 0.50, pos: [-2, -3.5, -17], rot: [0.06, 0.15, 0], facing: 2.5 },
-      
-      // SECTION 3 "EXPÉRIENCE" - À DROITE
-      { progress: 0.62, pos: [8, -5, -18], rot: [0.07, -0.1, 0.01], facing: 3.0 },
-      
+      { progress: 0.53, pos: [-2, -4.0, -17.5], rot: [0.06, 0.15, 0], facing: 2.5, scale: 1 },
+
+      // SECTION 3 "EXPÉRIENCE" - À DROITE (0.58 - 0.68)
+      { progress: 0.58, pos: [8, -5, -18], rot: [0.07, -0.1, 0.01], facing: 3.0, scale: 1 },
+      { progress: 0.68, pos: [10, -5.5, -19], rot: [0.08, -0.15, 0.01], facing: 3.1, scale: 1 },
+
       // TRANSITION VERS GAUCHE
-      { progress: 0.68, pos: [6, -5.5, -19], rot: [0.08, 0, 0.01], facing: 3.3 },
-      { progress: 0.72, pos: [0, -6.5, -20], rot: [0.09, 0.15, 0], facing: 3.6 },
-      { progress: 0.76, pos: [-6, -7, -21], rot: [0.10, 0.25, -0.01], facing: 3.8 },
-      
-      // SECTION 4 "BIODIVERSITÉ" - À GAUCHE
-      { progress: 0.82, pos: [-10, -8, -22], rot: [0.11, 0.3, -0.01], facing: 4.0 },
-      { progress: 0.92, pos: [-14, -10, -25], rot: [0.13, 0.2, 0], facing: 4.1 },
-      
+      { progress: 0.73, pos: [0, -6.5, -20], rot: [0.09, 0.15, 0], facing: 3.6, scale: 1 },
+
+      // SECTION 4 "BIODIVERSITÉ" - À GAUCHE (0.78 - 0.88)
+      { progress: 0.78, pos: [-10, -8, -22], rot: [0.11, 0.3, -0.01], facing: 4.0, scale: 1 },
+      { progress: 0.88, pos: [-14, -10, -25], rot: [0.13, 0.2, 0], facing: 4.1, scale: 1 },
+
       // ABYSSE
-      { progress: 0.96, pos: [-10, -12, -28], rot: [0.15, 0.1, 0], facing: 4.2 },
-      { progress: 1, pos: [-3, -15, -32], rot: [0.18, 0, 0], facing: 4.3 },
+      { progress: 0.96, pos: [-10, -12, -28], rot: [0.15, 0.1, 0], facing: 4.2, scale: 1 },
+      { progress: 1, pos: [-3, -15, -32], rot: [0.18, 0, 0], facing: 4.3, scale: 1 },
     ],
     []
   );
 
   const current = useRef({
     x: 0,
-    y: 3,
-    z: -8,
-    rotX: 0.03,
-    rotY: 0,
-    rotZ: 0.01,
+    y: 2,
+    z: -80, // Commence loin
+    rotX: 0,
+    rotY: Math.PI, // Face caméra
+    rotZ: 0,
     facing: 0,
+    scale: 0.1, // Tout petit
   });
 
   useFrame((state) => {
@@ -92,10 +97,11 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
     const time = state.clock.elapsedTime;
 
     if (!initialized.current && time < 1) {
-      groupRef.current.position.set(0, 3, -8);
-      groupRef.current.rotation.set(0.03, 0, 0.01);
+      // POSITION INITIALE (HORS CHAMP - PROFOND)
+      groupRef.current.position.set(0, 2, -60);
+      groupRef.current.rotation.set(0, Math.PI, 0);
       innerGroupRef.current.rotation.y = 0;
-      groupRef.current.scale.setScalar(0.85);
+      groupRef.current.scale.setScalar(0.4 * 1.2); // Scale * baseScale
       initialized.current = true;
       return;
     }
@@ -118,14 +124,14 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
     const t =
       segmentDuration > 0
         ? THREE.MathUtils.clamp(
-            (scrollProgress - start.progress) / segmentDuration,
-            0,
-            1
-          )
+          (scrollProgress - start.progress) / segmentDuration,
+          0,
+          1
+        )
         : 0;
 
-    const easeT = t < 0.5 
-      ? 4 * t * t * t 
+    const easeT = t < 0.5
+      ? 4 * t * t * t
       : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
     const targetX = THREE.MathUtils.lerp(start.pos[0], end.pos[0], easeT);
@@ -135,6 +141,8 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
     const targetRotY = THREE.MathUtils.lerp(start.rot[1], end.rot[1], easeT);
     const targetRotZ = THREE.MathUtils.lerp(start.rot[2], end.rot[2], easeT);
     const targetFacing = THREE.MathUtils.lerp(start.facing, end.facing, easeT);
+    // @ts-ignore - scale property added dynamically
+    const targetScale = THREE.MathUtils.lerp(start.scale || 1, end.scale || 1, easeT);
 
     const inertia = scrollProgress < 0.1 ? 0.03 : 0.05;
     current.current.x += (targetX - current.current.x) * inertia;
@@ -144,6 +152,8 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
     current.current.rotY += (targetRotY - current.current.rotY) * inertia;
     current.current.rotZ += (targetRotZ - current.current.rotZ) * inertia;
     current.current.facing += (targetFacing - current.current.facing) * inertia;
+    // @ts-ignore
+    current.current.scale += (targetScale - current.current.scale) * inertia;
 
     const idleIntensity = Math.max(0, 1 - scrollProgress * 2);
     const floatX = Math.sin(time * 0.12) * (0.08 + idleIntensity * 0.25);
@@ -168,26 +178,28 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
     innerGroupRef.current.rotation.y =
       current.current.facing + current.current.rotY + floatRotY;
 
-    groupRef.current.scale.setScalar(1);
+    // @ts-ignore
+    const finalScale = current.current.scale * 1.2; // 1.2 is base scale (increased)
+    groupRef.current.scale.setScalar(finalScale);
   });
 
   return (
     <>
       <ambientLight intensity={0.3} color="#6da8c8" />
-      
-      <directionalLight 
-        position={[10, 60, 15]} 
-        intensity={1.8} 
+
+      <directionalLight
+        position={[10, 60, 15]}
+        intensity={1.8}
         color="#c8e4f5"
         castShadow
       />
-      
-      <directionalLight 
-        position={[-8, 40, 10]} 
-        intensity={0.8} 
-        color="#a8cce0" 
+
+      <directionalLight
+        position={[-8, 40, 10]}
+        intensity={0.8}
+        color="#a8cce0"
       />
-      
+
       <spotLight
         position={[15, 8, 5]}
         angle={0.5}
@@ -206,7 +218,7 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
         distance={60}
         castShadow
       />
-      
+
       <spotLight
         position={[0, -2, 0]}
         angle={0.3}
@@ -220,12 +232,12 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
       <group ref={groupRef}>
         <group ref={innerGroupRef}>
           {/* ✅ GLB VERSION - Taille normale, rotation originale */}
-          <primitive 
-            object={scene} 
+          <primitive
+            object={scene}
             scale={0.012}  // ✅ Taille d'origine
             rotation={[0, -Math.PI / 2, 0]}  // ✅ Rotation d'origine
           />
-          
+
           {/* ✅ FBX VERSION (commenté - décommente si tu veux l'utiliser)
           <primitive 
             object={scene} 

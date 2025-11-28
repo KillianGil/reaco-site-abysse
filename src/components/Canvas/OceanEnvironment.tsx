@@ -22,12 +22,12 @@ export function OceanEnvironment({ scrollProgress }: OceanEnvironmentProps) {
   useFrame(() => {
     // Simple linear interpolation
     const t = Math.min(scrollProgress, 1);
-    
+
     const startColor = colors.surface;
     const endColor = colors.abyss;
-    
+
     const bgColor = startColor.clone().lerp(endColor, t);
-    
+
     scene.background = bgColor;
 
     if (scene.fog instanceof THREE.FogExp2) {
