@@ -35,7 +35,7 @@ function BioluminescentPlankton({
   const pointsRef = useRef<THREE.Points>(null);
   
   const { positions, colors, sizes } = useMemo(() => {
-    const count = 100;
+    const count = 50;
     const pos = new Float32Array(count * 3);
     const col = new Float32Array(count * 3);
     const siz = new Float32Array(count);

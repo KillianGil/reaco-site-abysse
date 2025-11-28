@@ -9,7 +9,6 @@ import { OceanEnvironment } from "./OceanEnvironment";
 import { FishSchool } from "./FishSchool";
 import { Anglerfish } from "./Anglerfish";
 import { OceanDecorations } from "./OceanDecorations";
-import { Godrays } from "./Godrays";
 
 interface SceneProps {
   scrollProgress: number;
@@ -38,7 +37,7 @@ function MarineSnow({ scrollProgress }: { scrollProgress: number }) {
   const ref = useRef<THREE.Points>(null);
 
   const positions = useMemo(() => {
-    const count = 1000;
+    const count = 500;
     const pos = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
       pos[i * 3] = (Math.random() - 0.5) * 120;
@@ -59,7 +58,7 @@ function MarineSnow({ scrollProgress }: { scrollProgress: number }) {
       <bufferGeometry>
         <bufferAttribute 
           attach="attributes-position" 
-          count={1000} 
+          count={500} 
           array={positions} 
           itemSize={3} 
         />
@@ -83,7 +82,7 @@ function MarineSnow2({ scrollProgress }: { scrollProgress: number }) {
   const ref = useRef<THREE.Points>(null);
 
   const positions = useMemo(() => {
-    const count = 700;
+    const count = 350;
     const pos = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
       pos[i * 3] = (Math.random() - 0.5) * 100;
@@ -104,7 +103,7 @@ function MarineSnow2({ scrollProgress }: { scrollProgress: number }) {
       <bufferGeometry>
         <bufferAttribute 
           attach="attributes-position" 
-          count={700} 
+          count={350} 
           array={positions} 
           itemSize={3} 
         />
@@ -148,7 +147,6 @@ export function Scene({ scrollProgress }: SceneProps) {
         <color attach="background" args={["#1a7a9a"]} />
         
         <Suspense fallback={null}>
-          {/* Lumières principales */}
           <ambientLight intensity={0.5} color="#7ac8e8" />
           
           <spotLight
@@ -161,38 +159,27 @@ export function Scene({ scrollProgress }: SceneProps) {
           />
           
           <pointLight 
-            position={[30, 20, -20]} 
-            intensity={2} 
+            position={[0, 20, -20]} 
+            intensity={3} 
             color="#88ccff" 
-            distance={50} 
-          />
-          <pointLight 
-            position={[-30, 20, -20]} 
-            intensity={2} 
-            color="#6ac8ff" 
-            distance={50} 
+            distance={60} 
           />
           
           <OceanEnvironment scrollProgress={scrollProgress} />
 
-          {/* Particules marines */}
           <MarineSnow scrollProgress={scrollProgress} />
           <MarineSnow2 scrollProgress={scrollProgress} />
 
-          {/* Décorations océaniques */}
           <OceanDecorations scrollProgress={scrollProgress} />
 
-          {/* Poissons en arrière-plan */}
+          {/* ✅ TOUJOURS AFFICHÉS */}
+          <Submarine scrollProgress={scrollProgress} />
           <FishSchool scrollProgress={scrollProgress} />
           
-          {/* Poisson des abysses */}
-          <Anglerfish scrollProgress={scrollProgress} />
-
-          {/* Sous-marin principal */}
-          <Submarine scrollProgress={scrollProgress} />
-
-          <Godrays scrollProgress={scrollProgress} />
-
+          {/* Anglerfish seulement en profondeur */}
+          {scrollProgress > 0.65 && (
+            <Anglerfish scrollProgress={scrollProgress} />
+          )}
         </Suspense>
       </Canvas>
     </div>
