@@ -45,7 +45,7 @@ export function FastFish({ scrollProgress }: FastFishProps) {
     let endPos: THREE.Vector3;
 
     // Décalage aléatoire pour éviter que le banc soit trop parfait
-    const randomOffset = 5;
+    // Décalage aléatoire pour éviter que le banc soit trop parfait
 
     if (trajectoryType < 0.35) {
       // Gauche -> Droite
@@ -131,6 +131,7 @@ export function FastFish({ scrollProgress }: FastFishProps) {
     // Lance quelques poissons pour commencer, mais moins agressif
     spawnSchool(0);
     spawnSingleFish(0.5);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useFrame((state) => {
