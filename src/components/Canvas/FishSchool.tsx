@@ -10,6 +10,20 @@ interface FishSchoolProps {
   scrollProgress: number;
 }
 
+interface FishData {
+  model: string;
+  baseX: number;
+  baseY: number;
+  baseZ: number;
+  offsetX: number;
+  offsetY: number;
+  offsetZ: number;
+  speed: number;
+  phase: number;
+  scale: number;
+  pathType: string;
+}
+
 export function FishSchool({ scrollProgress }: FishSchoolProps) {
   const groupRef = useRef<THREE.Group>(null);
 
@@ -78,7 +92,7 @@ export function FishSchool({ scrollProgress }: FishSchoolProps) {
   const fishGroupsRef = useRef<THREE.Group[]>([]);
 
   // ✅ Calculer position avec chemin courbe
-  const calculateFishPosition = (fish: any, t: number) => {
+  const calculateFishPosition = (fish: FishData, t: number) => {
     // On augmente la plage (120 au lieu de 90) pour éviter les "sauts" visibles aux bords
     const swimProgress = (t * fish.speed + fish.phase * 12) % 120;
 
