@@ -14,19 +14,12 @@ export function FishSchool({ scrollProgress }: FishSchoolProps) {
   
   // Load all 3 fish models - useFBX handles memory better
   const emperorFbx = useFBX("/models/poisson/Emperor Angelfish/EmperorAngelfish_FBX.fbx");
-  const clownFbx = useFBX("/models/poisson/ClownFish/source/anime1.fbx");
   const fish3Fbx = useFBX("/models/poisson/Fish-3/source/fish_1_5.fbx");
   
   // Load textures for each species
   const emperorTextures = useTexture({
-    map: "/models/poisson/Emperor Angelfish/Emperor Angelfish A.png",
-    normalMap: "/models/poisson/Emperor Angelfish/Emperor Angelfish N.png",
-  });
-  
-  const clownTextures = useTexture({
-    map: "/models/poisson/ClownFish/textures/lambert1_Base_Color.png",
-    normalMap: "/models/poisson/ClownFish/textures/lambert1_Normal_OpenGL.png",
-    metalnessMap: "/models/poisson/ClownFish/textures/lambert1_Metallic.png",
+    map: "/models/poisson/Emperor Angelfish/Emperor-Angelfish-A.png",
+    normalMap: "/models/poisson/Emperor Angelfish/Emperor-Angelfish-N.png",
   });
   
   const fish3Textures = useTexture({
@@ -37,23 +30,21 @@ export function FishSchool({ scrollProgress }: FishSchoolProps) {
   const fishDataRef = useRef([
     // SCHOOL A - Surface mix (Emperor + ClownFish)
     { model: 'emperor', x: 0, y: 8, z: -25, speed: 3.5, phase: 0, scale: 0.022, dir: -1, rotCorrection: 0 },
-    { model: 'clown', x: 3, y: 9, z: -27, speed: 3.3, phase: 0.3, scale: 0.015, dir: -1, rotCorrection: 0 },
     { model: 'emperor', x: -2, y: 7, z: -23, speed: 3.7, phase: 0.6, scale: 0.019, dir: -1, rotCorrection: 0 },
-    { model: 'clown', x: 5, y: 8.5, z: -29, speed: 3.1, phase: 0.9, scale: 0.014, dir: -1, rotCorrection: 0 },
+    { model: 'emperor', x: 5, y: 8.5, z: -29, speed: 3.1, phase: 0.9, scale: 0.014, dir: -1, rotCorrection: 0 },
     { model: 'emperor', x: -5, y: 9.5, z: -26, speed: 3.4, phase: 1.2, scale: 0.02, dir: -1, rotCorrection: 0 },
     
     // SCHOOL B - Medium depth (Fish-3 + Emperor) - Fish-3 side view with -90° rotation
-    { model: 'fish3', x: -4, y: -18, z: -26, speed: 3.2, phase: 0, scale: 0.012, dir: 1, rotCorrection: -Math.PI / 2 },
+    { model: 'emperor', x: -4, y: -18, z: -26, speed: 3.2, phase: 0, scale: 0.012, dir: 1, rotCorrection: -Math.PI / 2 },
     { model: 'emperor', x: 0, y: -16, z: -24, speed: 3.0, phase: 0.4, scale: 0.022, dir: 1, rotCorrection: 0 },
-    { model: 'fish3', x: 4, y: -20, z: -28, speed: 3.4, phase: 0.8, scale: 0.01, dir: 1, rotCorrection: -Math.PI / 2 },
+    { model: 'emperor', x: 4, y: -20, z: -28, speed: 3.4, phase: 0.8, scale: 0.01, dir: 1, rotCorrection: -Math.PI / 2 },
     { model: 'emperor', x: -6, y: -17, z: -22, speed: 3.1, phase: 1.2, scale: 0.018, dir: 1, rotCorrection: 0 },
     { model: 'fish3', x: 2, y: -19, z: -30, speed: 3.3, phase: 1.6, scale: 0.011, dir: 1, rotCorrection: -Math.PI / 2 },
     
     // SCHOOL C - Deep (All species mixed) - Fish-3 going left need +90° rotation
-    { model: 'clown', x: 0, y: -45, z: -27, speed: 2.8, phase: 0, scale: 0.014, dir: -1, rotCorrection: 0 },
+    { model: 'emperor', x: 0, y: -45, z: -27, speed: 2.8, phase: 0, scale: 0.014, dir: -1, rotCorrection: 0 },
     { model: 'fish3', x: 4, y: -43, z: -25, speed: 2.6, phase: 0.5, scale: 0.01, dir: -1, rotCorrection: Math.PI / 2 },
     { model: 'emperor', x: -3, y: -47, z: -31, speed: 3.0, phase: 1.0, scale: 0.018, dir: -1, rotCorrection: 0 },
-    { model: 'clown', x: 6, y: -44, z: -28, speed: 2.7, phase: 1.5, scale: 0.013, dir: -1, rotCorrection: 0 },
     { model: 'fish3', x: -5, y: -46, z: -26, speed: 2.9, phase: 2.0, scale: 0.009, dir: -1, rotCorrection: Math.PI / 2 },
   ]);
 
@@ -63,7 +54,7 @@ export function FishSchool({ scrollProgress }: FishSchoolProps) {
 // Dans useEffect de FishSchool.tsx - REMPLACER par :
 
 useEffect(() => {
-  if (!emperorFbx || !clownFbx || !fish3Fbx || !groupRef.current) return;
+  if (!emperorFbx || !fish3Fbx || !groupRef.current) return;
 
   // Nettoyer les anciens groupes
   fishGroupsRef.current.forEach(group => {
@@ -97,16 +88,6 @@ useEffect(() => {
         roughness: 0.5,
         side: THREE.DoubleSide,
       });
-    } else if (fishData.model === 'clown') {
-      fbxModel = clownFbx;
-      material = new THREE.MeshStandardMaterial({
-        map: clownTextures.map,
-        normalMap: clownTextures.normalMap,
-        metalnessMap: clownTextures.metalnessMap,
-        metalness: 0.4,
-        roughness: 0.5,
-        side: THREE.DoubleSide,
-      });
     } else {
       fbxModel = fish3Fbx;
       material = new THREE.MeshStandardMaterial({
@@ -137,7 +118,7 @@ useEffect(() => {
     fishGroupsRef.current.push(fishGroup);
   });
 
-}, [emperorFbx, clownFbx, fish3Fbx, emperorTextures, clownTextures, fish3Textures]);
+}, [emperorFbx, fish3Fbx, emperorTextures, fish3Textures]);
 
   // Animate all fish
   useFrame(({ clock }) => {
