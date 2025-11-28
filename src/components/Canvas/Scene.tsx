@@ -33,24 +33,47 @@ function createCircleTexture() {
   return texture;
 }
 
+// ✅ MARINE SNOW OPTIMISÉ
 function MarineSnow({ scrollProgress }: { scrollProgress: number }) {
   const ref = useRef<THREE.Points>(null);
 
-  const positions = useMemo(() => {
-    const count = 500;
+  const { positions, velocities } = useMemo(() => {
+    const count = 800; // Augmenté pour plus de réalisme
     const pos = new Float32Array(count * 3);
+    const vel = new Float32Array(count * 3);
+    
     for (let i = 0; i < count; i++) {
       pos[i * 3] = (Math.random() - 0.5) * 120;
       pos[i * 3 + 1] = Math.random() * 350 - 175;
       pos[i * 3 + 2] = (Math.random() - 0.5) * 100 - 20;
+      
+      vel[i * 3] = (Math.random() - 0.5) * 0.02;
+      vel[i * 3 + 1] = -Math.random() * 0.05 - 0.02;
+      vel[i * 3 + 2] = (Math.random() - 0.5) * 0.01;
     }
-    return pos;
+    
+    return { positions: pos, velocities: vel };
   }, []);
 
   useFrame(() => {
-    if (ref.current) {
-      ref.current.position.y = scrollProgress * 100;
+    if (!ref.current) return;
+    
+    const posArray = ref.current.geometry.attributes.position.array as Float32Array;
+    
+    for (let i = 0; i < posArray.length / 3; i++) {
+      posArray[i * 3] += velocities[i * 3];
+      posArray[i * 3 + 1] += velocities[i * 3 + 1];
+      posArray[i * 3 + 2] += velocities[i * 3 + 2];
+      
+      // Reset si trop bas
+      if (posArray[i * 3 + 1] < -175) {
+        posArray[i * 3 + 1] = 175;
+        posArray[i * 3] = (Math.random() - 0.5) * 120;
+      }
     }
+    
+    ref.current.geometry.attributes.position.needsUpdate = true;
+    ref.current.position.y = scrollProgress * 100;
   });
 
   return (
@@ -58,7 +81,7 @@ function MarineSnow({ scrollProgress }: { scrollProgress: number }) {
       <bufferGeometry>
         <bufferAttribute 
           attach="attributes-position" 
-          count={500} 
+          count={800} 
           array={positions} 
           itemSize={3} 
         />
@@ -67,59 +90,151 @@ function MarineSnow({ scrollProgress }: { scrollProgress: number }) {
         size={0.15} 
         color="#ffffff" 
         transparent 
-        opacity={0.4} 
+        opacity={0.5} 
         sizeAttenuation 
         depthWrite={false}
         alphaTest={0.01}
-      >
-        <primitive attach="map" object={createCircleTexture()} />
-      </pointsMaterial>
+        map={createCircleTexture()}
+      />
     </points>
   );
 }
 
-function MarineSnow2({ scrollProgress }: { scrollProgress: number }) {
-  const ref = useRef<THREE.Points>(null);
+// ✅ WATER CAUSTICS (lumière qui danse)
+function WaterCaustics({ scrollProgress }: { scrollProgress: number }) {
+  const meshRef = useRef<THREE.Mesh>(null);
 
-  const positions = useMemo(() => {
-    const count = 350;
-    const pos = new Float32Array(count * 3);
-    for (let i = 0; i < count; i++) {
-      pos[i * 3] = (Math.random() - 0.5) * 100;
-      pos[i * 3 + 1] = Math.random() * 320 - 160;
-      pos[i * 3 + 2] = (Math.random() - 0.5) * 80 - 30;
-    }
-    return pos;
+  const material = useMemo(() => {
+    return new THREE.ShaderMaterial({
+      uniforms: {
+        uTime: { value: 0 },
+        uOpacity: { value: 1 },
+      },
+      vertexShader: `
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        uniform float uTime;
+        uniform float uOpacity;
+        varying vec2 vUv;
+        
+        float caustic(vec2 uv, float time) {
+          vec2 p = mod(uv * 6.0 + vec2(time * 0.2, time * 0.15), 1.0) - 0.5;
+          float d = length(p);
+          float c = sin(d * 15.0 - time * 2.0) * 0.5 + 0.5;
+          c *= 1.0 - smoothstep(0.3, 0.5, d);
+          return pow(c, 3.0);
+        }
+        
+        void main() {
+          float c1 = caustic(vUv, uTime);
+          float c2 = caustic(vUv * 1.3 + 0.5, uTime * 1.1);
+          float c3 = caustic(vUv * 0.8 + 0.25, uTime * 0.9);
+          
+          float caustics = (c1 + c2 * 0.6 + c3 * 0.4) * 1.5;
+          
+          vec3 color = vec3(0.7, 0.9, 1.0);
+          float alpha = caustics * uOpacity * 0.4;
+          
+          gl_FragColor = vec4(color, alpha);
+        }
+      `,
+      transparent: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
   }, []);
 
-  useFrame(() => {
-    if (ref.current) {
-      ref.current.position.y = scrollProgress * 85;
+  useFrame((state) => {
+    if (meshRef.current) {
+      material.uniforms.uTime.value = state.clock.elapsedTime;
+      material.uniforms.uOpacity.value = Math.max(0, 1 - scrollProgress * 1.5);
     }
   });
 
+  if (scrollProgress > 0.6) return null;
+
   return (
-    <points ref={ref} frustumCulled={false}>
-      <bufferGeometry>
-        <bufferAttribute 
-          attach="attributes-position" 
-          count={350} 
-          array={positions} 
-          itemSize={3} 
-        />
-      </bufferGeometry>
-      <pointsMaterial 
-        size={0.18} 
-        color="#c8e4f0" 
-        transparent 
-        opacity={0.3} 
-        sizeAttenuation 
-        depthWrite={false}
-        alphaTest={0.01}
-      >
-        <primitive attach="map" object={createCircleTexture()} />
-      </pointsMaterial>
-    </points>
+    <mesh
+      ref={meshRef}
+      position={[0, 35, 0]}
+      rotation={[-Math.PI / 2, 0, 0]}
+      scale={[150, 150, 1]}
+    >
+      <planeGeometry args={[1, 1, 1, 1]} />
+      <primitive object={material} attach="material" />
+    </mesh>
+  );
+}
+
+// ✅ VOLUMETRIC LIGHT RAYS
+function VolumetricLight({ scrollProgress }: { scrollProgress: number }) {
+  const meshRef = useRef<THREE.Mesh>(null);
+
+  const shaderMaterial = useMemo(() => {
+    return new THREE.ShaderMaterial({
+      uniforms: {
+        uTime: { value: 0 },
+        uOpacity: { value: 1 },
+      },
+      vertexShader: `
+        varying vec2 vUv;
+        varying vec3 vPosition;
+        void main() {
+          vUv = uv;
+          vPosition = position;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        uniform float uTime;
+        uniform float uOpacity;
+        varying vec2 vUv;
+        varying vec3 vPosition;
+        
+        void main() {
+          float rays = sin(vPosition.x * 0.2 + uTime * 0.3) * 0.5 + 0.5;
+          rays *= sin(vPosition.z * 0.15 - uTime * 0.2) * 0.5 + 0.5;
+          
+          float fade = 1.0 - vUv.y;
+          fade = pow(fade, 2.0);
+          
+          vec3 color = vec3(0.6, 0.8, 1.0);
+          float alpha = rays * fade * uOpacity * 0.15;
+          
+          gl_FragColor = vec4(color, alpha);
+        }
+      `,
+      transparent: true,
+      side: THREE.DoubleSide,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+    });
+  }, []);
+
+  useFrame((state) => {
+    if (meshRef.current) {
+      shaderMaterial.uniforms.uTime.value = state.clock.elapsedTime;
+      shaderMaterial.uniforms.uOpacity.value = Math.max(0, 1 - scrollProgress * 1.8);
+    }
+  });
+
+  if (scrollProgress > 0.6) return null;
+
+  return (
+    <mesh
+      ref={meshRef}
+      position={[0, 40, -25]}
+      rotation={[-Math.PI / 2.5, 0, 0]}
+      scale={[80, 60, 1]}
+    >
+      <planeGeometry args={[1, 1, 32, 32]} />
+      <primitive object={shaderMaterial} attach="material" />
+    </mesh>
   );
 }
 
@@ -142,41 +257,24 @@ export function Scene({ scrollProgress }: SceneProps) {
         }}
         dpr={[1, 1.5]}
         performance={{ min: 0.5 }}
-        style={{ background: "#1a7a9a" }}
+        style={{ background: "#006994" }}
       >
-        <color attach="background" args={["#1a7a9a"]} />
+        <color attach="background" args={["#006994"]} />
         
         <Suspense fallback={null}>
-          <ambientLight intensity={0.5} color="#7ac8e8" />
-          
-          <spotLight
-            position={[0, 50, 0]}
-            angle={0.6}
-            penumbra={1}
-            intensity={3}
-            color="#aaddff"
-            distance={100}
-          />
-          
-          <pointLight 
-            position={[0, 20, -20]} 
-            intensity={3} 
-            color="#88ccff" 
-            distance={60} 
-          />
-          
           <OceanEnvironment scrollProgress={scrollProgress} />
 
+          {/* ✅ Effets visuels */}
+          <WaterCaustics scrollProgress={scrollProgress} />
+          <VolumetricLight scrollProgress={scrollProgress} />
           <MarineSnow scrollProgress={scrollProgress} />
-          <MarineSnow2 scrollProgress={scrollProgress} />
 
           <OceanDecorations scrollProgress={scrollProgress} />
 
-          {/* ✅ TOUJOURS AFFICHÉS */}
+          {/* ✅ Créatures */}
           <Submarine scrollProgress={scrollProgress} />
           <FishSchool scrollProgress={scrollProgress} />
           
-          {/* Anglerfish seulement en profondeur */}
           {scrollProgress > 0.65 && (
             <Anglerfish scrollProgress={scrollProgress} />
           )}
