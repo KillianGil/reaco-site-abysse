@@ -12,7 +12,9 @@ interface MantaRayProps {
 }
 
 export function MantaRay({ scrollProgress }: MantaRayProps) {
-    const { scene, animations } = useGLTF("/models/manta_ray.glb");
+    // RETOUR AUX SOURCES : On charge la scène brute, sans clonage ni modification de matériau
+    // Cela devrait garantir que la texture originale s'affiche correctement
+    const { scene, animations } = useGLTF("/models/manta-final.glb");
     const { actions } = useAnimations(animations, scene);
     const groupRef = useRef<THREE.Group>(null);
 
@@ -21,7 +23,6 @@ export function MantaRay({ scrollProgress }: MantaRayProps) {
     const END_SCROLL = 0.75;
 
     useEffect(() => {
-        // Jouer les animations si présentes
         if (actions) {
             const actionKeys = Object.keys(actions);
             if (actionKeys.length > 0) {
@@ -29,91 +30,54 @@ export function MantaRay({ scrollProgress }: MantaRayProps) {
                     const action = actions[key];
                     if (action) {
                         action.reset().fadeIn(0.5).play();
-                        action.timeScale = 0.6; // Nage lente et majestueuse
+                        action.timeScale = 1.5; // Animation plus rapide pour nage fluide
                     }
                 });
             }
         }
-
-        // Configurer UNIQUEMENT la transparence pour conserver la texture originale
-        scene.traverse((child) => {
-            if ((child as THREE.Mesh).isMesh) {
-                const mesh = child as THREE.Mesh;
-                if (mesh.material) {
-                    const mat = mesh.material as THREE.MeshStandardMaterial;
-                    // Ne modifier QUE la transparence, garder toutes les autres propriétés
-                    mat.transparent = true;
-                    mat.opacity = 0; // Commence invisible pour le fade-in
-                    // NE PAS modifier roughness, metalness, map, color, etc.
-                }
-            }
-        });
-    }, [scene, actions]);
+    }, [actions]);
 
     useFrame(({ clock }) => {
         if (!groupRef.current) return;
         const t = clock.getElapsedTime();
 
-        // Gestion visibilité avec FADE
-        const isVisibleRange = scrollProgress > START_SCROLL - 0.1 && scrollProgress < END_SCROLL + 0.1;
+        // Visible UNIQUEMENT pendant la plage de scroll (comme une "fenêtre")
+        const scrollInRange = scrollProgress >= START_SCROLL && scrollProgress <= END_SCROLL;
+        groupRef.current.visible = scrollInRange;
 
-        // Calcul de l'opacité cible
-        let targetOpacity = 0;
-        if (isVisibleRange) {
-            const distFromStart = scrollProgress - (START_SCROLL - 0.1);
-            const distFromEnd = (END_SCROLL + 0.1) - scrollProgress;
-            const fade = Math.min(distFromStart, distFromEnd) * 6;
-            targetOpacity = Math.max(0, Math.min(1.0, fade));
+        if (scrollInRange) {
+            // MOUVEMENT AUTONOME basé sur le TEMPS
+            // Ajustement pour qu'elle commence HORS ÉCRAN quand on entre dans la plage
+            const timeOffset = START_SCROLL * 50; // Offset basé sur le scroll start
+            const swimProgress = ((t + timeOffset) * 0.03) % 1; // Cycle de 33 secondes
+
+            // Traverse de droite à gauche de façon autonome
+            const floatX = 50 - swimProgress * 90; // De 50 (hors écran droite) à -40 (hors écran gauche)
+            const floatY = Math.sin(t * 0.7) * 6; // Ondulation naturelle
+            const floatZ = Math.cos(t * 0.5) * 7;
+
+            // Position finale AVEC cameraY pour rester visible
+            const cameraY = scrollProgress * 100;
+            groupRef.current.position.set(
+                floatX,
+                -55 + cameraY + floatY,
+                -22 + floatZ
+            );
+
+            // Rotation fluide basée sur le temps
+            const targetRotationY = -Math.PI / 2 + Math.sin(t * 0.6) * 0.18;
+            const targetRotationZ = Math.sin(t * 0.8) * 0.12;
+            const targetRotationX = Math.sin(t * 0.6) * 0.1;
+
+            // Lerp ENCORE PLUS rapide pour fluidité maximale
+            groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, targetRotationY, 0.3);
+            groupRef.current.rotation.z = THREE.MathUtils.lerp(groupRef.current.rotation.z, targetRotationZ, 0.3);
+            groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, targetRotationX, 0.3);
         }
 
-        // Appliquer l'opacité progressivement
-        scene.traverse((child) => {
-            if ((child as THREE.Mesh).isMesh) {
-                const mesh = child as THREE.Mesh;
-                if (mesh.material) {
-                    const mat = mesh.material as THREE.MeshStandardMaterial;
-                    mat.opacity = THREE.MathUtils.lerp(mat.opacity, targetOpacity, 0.1);
-                }
-            }
-        });
-
-        groupRef.current.visible = true;
-
-        // Position qui suit le scroll
-        const cameraY = scrollProgress * 100;
-
-        // Mouvement de nage lent
-        const swimProgress = (t * 0.04) % 1;
-
-        // Trajectoire latérale - COMMENCE HORS ÉCRAN à droite
-        const floatX = 30 - swimProgress * 55; // De droite (hors écran) à gauche (hors écran)
-        const floatY = Math.sin(t * 0.4) * 6; // Ondulation verticale douce
-        const floatZ = Math.cos(t * 0.25) * 10; // Profondeur variable
-
-        // Position finale
-        groupRef.current.position.set(
-            floatX,
-            -55 + cameraY + floatY, // Un peu plus bas que la méduse
-            -22 + floatZ // Assez proche mais pas trop
-        );
-
-        // Rotation fluide et naturelle
-        const targetRotationY = -Math.PI / 2 + Math.sin(t * 0.4) * 0.15;
-        const targetRotationZ = Math.sin(t * 0.8) * 0.1;
-        const targetRotationX = Math.sin(t * 0.4) * 0.06;
-
-        groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, targetRotationY, 0.05);
-        groupRef.current.rotation.z = THREE.MathUtils.lerp(groupRef.current.rotation.z, targetRotationZ, 0.05);
-        groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, targetRotationX, 0.05);
-
-        // Pulsation légère (respiration)
-        const pulse = Math.sin(t * 1.5) * 0.03;
-        const baseScale = 1.4; // Réduit pour être plus naturel et proportionnel
-        groupRef.current.scale.set(
-            baseScale + pulse,
-            baseScale - pulse * 0.5,
-            baseScale + pulse
-        );
+        // Taille naturelle
+        const baseScale = 0.9;
+        groupRef.current.scale.set(baseScale, baseScale, baseScale);
     });
 
     return (
@@ -123,4 +87,4 @@ export function MantaRay({ scrollProgress }: MantaRayProps) {
     );
 }
 
-useGLTF.preload("/models/manta_ray.glb");
+useGLTF.preload("/models/manta-final.glb");

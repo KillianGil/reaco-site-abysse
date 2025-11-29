@@ -1,124 +1,134 @@
 "use client";
 
-import { useRef, useMemo } from "react";
+import { useRef, useEffect, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 
-export function Anglerfish({ scrollProgress }: { scrollProgress: number }) {
-  // On utilise un try/catch implicite avec useGLTF, mais on va ajouter un fallback visuel
-  const gltf = useGLTF("/models/deep-sea-fish.glb");
-  const ref = useRef<THREE.Group>(null);
-  const clonedScene = useMemo(() => gltf ? gltf.scene.clone() : null, [gltf]);
-  const lightRef = useRef<THREE.PointLight>(null);
-
-  // Position très profonde (le fond est vers 1.8 - 2.0 de scroll)
-  const APPEAR_SCROLL = 1.2;
-
-  useFrame((state) => {
-    if (!ref.current) return;
-
-    // Apparition progressive quand on arrive au fond
-    const isVisible = scrollProgress > APPEAR_SCROLL;
-    ref.current.visible = isVisible;
-
-    if (isVisible) {
-      const t = state.clock.elapsedTime;
-
-      // Animation d'émergence (monte doucement)
-      const emergeProgress = Math.min(1, (scrollProgress - APPEAR_SCROLL) * 3);
-      const baseDepth = -190; // Très profond
-      const emergeHeight = 20;
-
-      // Position finale
-      ref.current.position.y = baseDepth + (emergeProgress * emergeHeight) + Math.sin(t * 0.5) * 2;
-      ref.current.position.x = Math.sin(t * 0.3) * 5;
-      ref.current.position.z = -15 + Math.sin(t * 0.2) * 2;
-
-      // Rotation menaçante
-      ref.current.rotation.y = Math.PI + Math.sin(t * 0.2) * 0.3; // Regarde vers la caméra avec léger mouvement
-      ref.current.rotation.z = Math.sin(t * 0.1) * 0.1;
-
-      // Pulse de la lanterne (très lent et effrayant)
-      if (lightRef.current) {
-        // Battement de coeur irrégulier
-        const heartbeat = Math.sin(t * 10) > 0.9 ? 1.5 : 1;
-        lightRef.current.intensity = (20 + Math.sin(t * 1.5) * 10) * heartbeat;
-      }
-    }
-  });
-
-  return (
-    <group
-      ref={ref}
-      position={[0, -200, -15]} // Départ très bas
-      rotation={[0, Math.PI, 0]}
-      visible={false}
-    >
-      {/* Lanterne TRÈS lumineuse et colorée */}
-      <pointLight
-        ref={lightRef}
-        position={[0, 5, 7]}
-        distance={80}
-        intensity={30}
-        color="#00ffaa"
-        decay={1.5}
-      />
-
-      {/* Orbe visible de loin */}
-      <mesh position={[0, 5, 7]}>
-        <sphereGeometry args={[0.6, 16, 16]} />
-        <meshBasicMaterial color="#ccffdd" toneMapped={false} />
-      </mesh>
-
-      {/* Halo volumétrique simulé */}
-      <mesh position={[0, 5, 7]}>
-        <sphereGeometry args={[2, 16, 16]} />
-        <meshBasicMaterial
-          color="#00ff88"
-          transparent
-          opacity={0.4}
-          blending={THREE.AdditiveBlending}
-          toneMapped={false}
-          side={THREE.BackSide}
-        />
-      </mesh>
-
-      {/* LE POISSON ou FALLBACK */}
-      {clonedScene ? (
-        <group>
-          <primitive
-            object={clonedScene}
-            scale={12}
-          />
-          {/* DEBUG LURE: Petite sphère attachée au poisson pour vérifier sa position si le modèle est invisible */}
-          <mesh position={[0, 0.5, 3.5]}>
-            <sphereGeometry args={[0.2, 8, 8]} />
-            <meshBasicMaterial color="cyan" />
-          </mesh>
-        </group>
-      ) : (
-        // Fallback si le modèle ne charge pas (cube rouge effrayant)
-        <mesh scale={[5, 5, 10]}>
-          <boxGeometry />
-          <meshStandardMaterial color="red" wireframe />
-        </mesh>
-      )}
-
-      {/* Yeux brillants dans le noir */}
-      <pointLight position={[1.5, 1, 4]} intensity={5} color="#ffff00" distance={10} />
-      <pointLight position={[-1.5, 1, 4]} intensity={5} color="#ffff00" distance={10} />
-
-      <mesh position={[1.5, 1, 4]}>
-        <sphereGeometry args={[0.15, 8, 8]} />
-        <meshBasicMaterial color="#ffffaa" toneMapped={false} />
-      </mesh>
-      <mesh position={[-1.5, 1, 4]}>
-        <sphereGeometry args={[0.15, 8, 8]} />
-        <meshBasicMaterial color="#ffffaa" toneMapped={false} />
-      </mesh>
-    </group>
-  );
+interface AnglerfishProps {
+  scrollProgress: number;
 }
 
-useGLTF.preload("/models/deep-sea-fish.glb");
+interface AnglerfishInstance {
+  group: THREE.Group;
+  startTime: number;
+  startPos: THREE.Vector3;
+  endPos: THREE.Vector3;
+  duration: number;
+}
+
+export function Anglerfish({ scrollProgress }: AnglerfishProps) {
+  const groupRef = useRef<THREE.Group>(null);
+  const { scene } = useGLTF("/models/anglerfish-final.glb");
+
+  // Modèle clonable
+  const fishModel = useMemo(() => scene, [scene]);
+
+  const instancesRef = useRef<AnglerfishInstance[]>([]);
+  const lastSpawnRef = useRef(0);
+
+  // Fonction pour faire apparaître un Anglerfish
+  const spawnFish = (time: number) => {
+    if (!groupRef.current) return;
+
+    // Apparaît seulement au fond (scroll > 0.8)
+    if (scrollProgress < 0.8) return;
+
+    const visibleY = -110 + (scrollProgress * 100); // Environ -20 à -10 sur l'écran
+
+    const trajectoryType = Math.random();
+    let startPos: THREE.Vector3;
+    let endPos: THREE.Vector3;
+
+    if (trajectoryType < 0.5) {
+      // Gauche -> Droite
+      startPos = new THREE.Vector3(-60, visibleY + (Math.random() - 0.5) * 10, -20);
+      endPos = new THREE.Vector3(60, visibleY + (Math.random() - 0.5) * 10, -20);
+    } else {
+      // Droite -> Gauche
+      startPos = new THREE.Vector3(60, visibleY + (Math.random() - 0.5) * 10, -20);
+      endPos = new THREE.Vector3(-60, visibleY + (Math.random() - 0.5) * 10, -20);
+    }
+
+    const fishGroup = new THREE.Group();
+    const clonedScene = fishModel.clone();
+
+    // Configuration du modèle
+    clonedScene.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        const mesh = child as THREE.Mesh;
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+      }
+    });
+
+    fishGroup.add(clonedScene);
+
+    // Échelle PETITE (comme demandé)
+    fishGroup.scale.setScalar(0.15);
+    fishGroup.position.copy(startPos);
+
+    // Ajout de la lumière
+    const light = new THREE.PointLight(0x88ff44, 5, 15, 2);
+    light.position.set(0, 2, 1);
+    fishGroup.add(light);
+
+    const duration = 20 + Math.random() * 10; // Nage lente (20-30s)
+
+    const instance: AnglerfishInstance = {
+      group: fishGroup,
+      startTime: time,
+      startPos,
+      endPos,
+      duration,
+    };
+
+    groupRef.current.add(fishGroup);
+    instancesRef.current.push(instance);
+  };
+
+  useFrame((state) => {
+    if (!groupRef.current) return;
+    const time = state.clock.elapsedTime;
+
+    // Spawn rare (toutes les 5 secondes) si on est au fond
+    if (time - lastSpawnRef.current > 5 && scrollProgress > 0.85) {
+      spawnFish(time);
+      lastSpawnRef.current = time;
+    }
+
+    // Animation
+    instancesRef.current.forEach((instance, index) => {
+      const elapsed = time - instance.startTime;
+      const progress = Math.min(elapsed / instance.duration, 1);
+
+      if (progress >= 1) {
+        groupRef.current?.remove(instance.group);
+        instancesRef.current.splice(index, 1);
+        return;
+      }
+
+      // Mouvement linéaire fluide
+      const currentPos = new THREE.Vector3().lerpVectors(
+        instance.startPos,
+        instance.endPos,
+        progress
+      );
+
+      // Ajouter un petit mouvement de vague vertical (bobbing)
+      currentPos.y += Math.sin(time * 0.5 + index) * 0.5;
+
+      instance.group.position.copy(currentPos);
+
+      // Orientation : regarde vers la destination
+      instance.group.lookAt(instance.endPos);
+
+      // Ondulation
+      instance.group.rotation.z = Math.sin(time * 2 + index) * 0.05;
+    });
+  });
+
+  return <group ref={groupRef} />;
+}
+
+useGLTF.preload("/models/anglerfish-final.glb");

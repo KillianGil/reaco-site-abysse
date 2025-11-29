@@ -1,23 +1,18 @@
-// components/Canvas/Jellyfish.tsx
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import * as THREE from "three";
 
-interface JellyfishProps {
-  scrollProgress: number;
-}
-
-export function Jellyfish({ scrollProgress }: JellyfishProps) {
-  const { scene, animations } = useGLTF("/models/jellyfish.glb");
+export function Jellyfish({ scrollProgress }: { scrollProgress: number }) {
+  const { scene, animations } = useGLTF("/models/jellyfish2.glb");
   const { actions } = useAnimations(animations, scene);
   const groupRef = useRef<THREE.Group>(null);
 
   // Plage de visibilité (profondeur)
-  const START_SCROLL = 0.3; // Apparition beaucoup plus tôt
-  const END_SCROLL = 0.9;
+  const START_SCROLL = 0.6; // Apparition plus tard
+  const END_SCROLL = 0.95;
 
   useEffect(() => {
     // Force l'animation du fichier GLB
@@ -84,31 +79,29 @@ export function Jellyfish({ scrollProgress }: JellyfishProps) {
 
     const t = state.clock.elapsedTime;
 
-    // ✅ MOUVEMENT AUTONOME BOOSTÉ
+    // ✅ MOUVEMENT NATUREL ET FLUIDE (basé sur le TEMPS)
+    const floatY = Math.sin(t * 0.2) * 10 + Math.sin(t * 0.1) * 5;
+    const floatX = Math.sin(t * 0.1) * 8;
+    const floatZ = Math.cos(t * 0.1) * 5;
 
-    // Mouvement sinusoïdal complexe - AMPLITUDE AUGMENTÉE
-    const floatY = Math.sin(t * 0.4) * 25 + Math.sin(t * 0.15) * 15; // Plus ample et un peu plus rapide
-    const floatX = Math.sin(t * 0.25) * 30; // Plus large
-    const floatZ = Math.cos(t * 0.2) * 15;
-
-    // Position de base (profondeur fixe)
-    const BASE_DEPTH = -60;
-
-    // Offset X fixe (plus d'entrée latérale artificielle)
+    // Position de base
+    const BASE_DEPTH = -70; // Ajusté pour être visible avec cameraY
     const OFFSET_X = -25;
+    const cameraY = scrollProgress * 100; // RESTAURÉ pour suivre le scroll
 
-    const cameraY = scrollProgress * 100;
+    // DÉPLACEMENT VERTICAL LENT basé sur le temps
+    // Elle monte et descend lentement de façon continue
+    const verticalCycle = Math.sin(t * 0.08) * 15; // Cycle lent de montée/descente
 
-    // Position finale
-    // CORRECTION: On lock la position Y à la caméra pour qu'elle ne soit jamais perdue
-    // On ajoute juste le flottement autonome par dessus
+    // Position finale avec flottement ET cycle vertical
+    // MEDUSE 1 (Principale)
     groupRef.current.position.set(
       floatX + OFFSET_X,
-      BASE_DEPTH + cameraY + floatY * 0.3, // On garde 30% du mouvement vertical
+      BASE_DEPTH + cameraY + floatY * 0.3 + verticalCycle,
       -40 + floatZ
     );
 
-    // ✅ ORIENTATION
+    // Rotation douce
     const targetRotationY = Math.cos(t * 0.2) * 0.5;
     const targetRotationX = Math.cos(t * 0.3) * 0.2;
     const targetRotationZ = Math.sin(t * 0.2) * 0.1;
@@ -118,19 +111,67 @@ export function Jellyfish({ scrollProgress }: JellyfishProps) {
     groupRef.current.rotation.z = THREE.MathUtils.lerp(groupRef.current.rotation.z, targetRotationZ, 0.05);
 
     // Pulsation rythmique (scale)
-    const pulse = Math.sin(t * 2);
-    const squish = pulse * 0.02; // Très léger
+    const pulse = Math.sin(t * 1.5);
+    const squish = pulse * 0.05;
 
-    const baseScale = 3; // Réduit de 5 à 3 pour être plus naturel
+    const baseScale = 2.0; // Taille ajustée
     groupRef.current.scale.set(baseScale - squish, baseScale + squish, baseScale - squish);
   });
 
+  // Clone pour la 2ème méduse
+  const secondJellyfish = useMemo(() => scene.clone(), [scene]);
+
+  // Ref pour la 2ème méduse
+  const secondRef = useRef<THREE.Group>(null);
+
+  useFrame((state) => {
+    if (!secondRef.current) return;
+    const t = state.clock.elapsedTime + 2.5; // Décalage de temps
+
+    // Mouvement décalé
+    const floatY = Math.sin(t * 0.15) * 12 + Math.sin(t * 0.1) * 6;
+    const floatX = Math.sin(t * 0.12) * 9;
+    const floatZ = Math.cos(t * 0.12) * 6;
+
+    const BASE_DEPTH = -60; // Un peu plus haut
+    const OFFSET_X = 15; // À droite
+    const cameraY = scrollProgress * 100;
+
+    const verticalCycle = Math.sin(t * 0.07) * 18;
+
+    secondRef.current.position.set(
+      floatX + OFFSET_X,
+      BASE_DEPTH + cameraY + floatY * 0.3 + verticalCycle,
+      -50 + floatZ // Plus loin
+    );
+
+    // Rotation
+    secondRef.current.rotation.y = Math.cos(t * 0.2) * 0.5;
+
+    // Scale un peu plus petit
+    const pulse = Math.sin(t * 1.4);
+    const squish = pulse * 0.05;
+    const baseScale = 1.6;
+    secondRef.current.scale.set(baseScale - squish, baseScale + squish, baseScale - squish);
+
+    // Visibilité (même logique)
+    const START_SCROLL = 0.6;
+    const END_SCROLL = 0.95;
+    const isVisibleRange = scrollProgress > START_SCROLL - 0.1 && scrollProgress < END_SCROLL + 0.1;
+    secondRef.current.visible = isVisibleRange;
+  });
+
   return (
-    <group ref={groupRef}>
-      <primitive object={scene} />
-      <pointLight color="#aa44ff" intensity={5} distance={25} decay={2} />
-    </group>
+    <>
+      <group ref={groupRef}>
+        <primitive object={scene} />
+        <pointLight color="#aa44ff" intensity={5} distance={25} decay={2} />
+      </group>
+      <group ref={secondRef}>
+        <primitive object={secondJellyfish} />
+      </group>
+    </>
   );
 }
 
-useGLTF.preload("/models/jellyfish.glb");
+useGLTF.preload("/models/jellyfish2.glb");

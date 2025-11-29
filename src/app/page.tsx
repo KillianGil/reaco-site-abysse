@@ -22,6 +22,11 @@ const Scene = dynamic(
 function PageContent() {
   const scrollProgress = useScrollProgress();
 
+  // Scroll to top on page load/refresh
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   useEffect(() => {
     ScrollTrigger.refresh();
     const handleResize = () => ScrollTrigger.refresh();
@@ -39,7 +44,7 @@ function PageContent() {
       <DepthGauge scrollProgress={scrollProgress} />
       <OceanDecorations scrollProgress={scrollProgress} />
       <Overlay />
-      
+
       {/* Grain overlay for texture */}
       <div className="grain-overlay" />
     </>

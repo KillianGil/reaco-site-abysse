@@ -21,6 +21,12 @@ export function OceanEnvironment({ scrollProgress }: OceanEnvironmentProps) {
     hadal: new THREE.Color("#010c14"),       // Noir presque total (fosse océanique)
   }), []);
 
+  // FIX FLASH: Set initial background immediately on mount
+  useMemo(() => {
+    scene.background = colors.surface.clone();
+    return null;
+  }, [scene, colors.surface]);
+
   useFrame(() => {
     const t = Math.min(scrollProgress, 1);
 
