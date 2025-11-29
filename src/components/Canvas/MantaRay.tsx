@@ -49,7 +49,8 @@ export function MantaRay({ scrollProgress }: MantaRayProps) {
             // MOUVEMENT AUTONOME basé sur le TEMPS
             // Ajustement pour qu'elle commence HORS ÉCRAN quand on entre dans la plage
             const timeOffset = START_SCROLL * 50; // Offset basé sur le scroll start
-            const swimProgress = ((t + timeOffset) * 0.03) % 1; // Cycle de 33 secondes
+            // Vitesse augmentée pour qu'elle soit visible rapidement (0.08 au lieu de 0.03)
+            const swimProgress = ((t + timeOffset) * 0.08) % 1;
 
             // Traverse de droite à gauche de façon autonome
             const floatX = 50 - swimProgress * 90; // De 50 (hors écran droite) à -40 (hors écran gauche)

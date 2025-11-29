@@ -65,6 +65,18 @@ button {
   width: 0px;
 }
 
+body,
+html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  /* Prevent native scroll */
+  background-color: #006994;
+  /* Match surface color */
+}
+
 .canvas-container {
   position: fixed;
   top: 0;

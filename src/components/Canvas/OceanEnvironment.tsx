@@ -13,12 +13,12 @@ export function OceanEnvironment({ scrollProgress }: OceanEnvironmentProps) {
 
   // ✅ COULEURS OCÉAN RÉALISTES avec vraie progression de profondeur
   const colors = useMemo(() => ({
-    surface: new THREE.Color("#2d9cbc"),     // Bleu cyan surface (ensoleillé)
-    shallow: new THREE.Color("#1a7a9a"),     // Bleu moyen (zone lumineuse)
-    mid: new THREE.Color("#0e5a78"),         // Bleu-vert foncé (zone crépusculaire)
-    deep: new THREE.Color("#042838"),        // Bleu très foncé (zone bathypélagique)
-    abyss: new THREE.Color("#021520"),       // Noir bleuté (zone abyssale)
-    hadal: new THREE.Color("#010c14"),       // Noir presque total (fosse océanique)
+    surface: new THREE.Color("#006994"),     // Bleu océan profond (plus élégant)
+    shallow: new THREE.Color("#005b82"),     // Bleu légèrement plus sombre
+    mid: new THREE.Color("#004e70"),         // Bleu-gris profond
+    deep: new THREE.Color("#00334d"),        // Bleu nuit
+    abyss: new THREE.Color("#001a29"),       // Presque noir
+    hadal: new THREE.Color("#000d14"),       // Noir total
   }), []);
 
   // FIX FLASH: Set initial background immediately on mount
@@ -33,25 +33,25 @@ export function OceanEnvironment({ scrollProgress }: OceanEnvironmentProps) {
     // ✅ INTERPOLATION PAR ÉTAPES pour des transitions réalistes
     let bgColor;
 
-    if (t < 0.2) {
-      // Surface → Peu profond (0-30m)
-      const localT = t / 0.2;
+    if (t < 0.15) {
+      // Surface → Peu profond (0-15m) - Transition plus rapide
+      const localT = t / 0.15;
       bgColor = colors.surface.clone().lerp(colors.shallow, localT);
-    } else if (t < 0.4) {
-      // Peu profond → Zone crépusculaire (30-200m)
-      const localT = (t - 0.2) / 0.2;
+    } else if (t < 0.3) {
+      // Peu profond → Zone crépusculaire (15-30m) - Arrive plus vite
+      const localT = (t - 0.15) / 0.15;
       bgColor = colors.shallow.clone().lerp(colors.mid, localT);
-    } else if (t < 0.7) {
-      // Zone crépusculaire → Profondeur (200-1000m)
-      const localT = (t - 0.4) / 0.3;
+    } else if (t < 0.5) {
+      // Zone crépusculaire → Profondeur (30-50m) - Sombre dès la moitié
+      const localT = (t - 0.3) / 0.2;
       bgColor = colors.mid.clone().lerp(colors.deep, localT);
-    } else if (t < 0.9) {
-      // Profondeur → Abysses (1000-4000m)
-      const localT = (t - 0.7) / 0.2;
+    } else if (t < 0.8) {
+      // Profondeur → Abysses (50-80m)
+      const localT = (t - 0.5) / 0.3;
       bgColor = colors.deep.clone().lerp(colors.abyss, localT);
     } else {
-      // Abysses → Hadal (4000m+)
-      const localT = (t - 0.9) / 0.1;
+      // Abysses → Hadal (80m+)
+      const localT = (t - 0.8) / 0.2;
       bgColor = colors.abyss.clone().lerp(colors.hadal, localT);
     }
 

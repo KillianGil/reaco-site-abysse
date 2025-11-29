@@ -1,134 +1,111 @@
 "use client";
 
-import { useRef, useEffect, useMemo } from "react";
+import { useRef, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
-import { useGLTF } from "@react-three/drei";
+import { useGLTF, useAnimations } from "@react-three/drei";
 import * as THREE from "three";
 
-interface AnglerfishProps {
-  scrollProgress: number;
-}
-
-interface AnglerfishInstance {
-  group: THREE.Group;
-  startTime: number;
-  startPos: THREE.Vector3;
-  endPos: THREE.Vector3;
-  duration: number;
-}
-
-export function Anglerfish({ scrollProgress }: AnglerfishProps) {
+export function Anglerfish({ scrollProgress }: { scrollProgress: number }) {
   const groupRef = useRef<THREE.Group>(null);
-  const { scene } = useGLTF("/models/anglerfish-final.glb");
+  const { scene, animations } = useGLTF("/models/anglerfish-final.glb");
+  const { actions } = useAnimations(animations, scene);
+  const lightRef = useRef<THREE.PointLight>(null);
 
-  // Modèle clonable
-  const fishModel = useMemo(() => scene, [scene]);
-
-  const instancesRef = useRef<AnglerfishInstance[]>([]);
-  const lastSpawnRef = useRef(0);
-
-  // Fonction pour faire apparaître un Anglerfish
-  const spawnFish = (time: number) => {
-    if (!groupRef.current) return;
-
-    // Apparaît seulement au fond (scroll > 0.8)
-    if (scrollProgress < 0.8) return;
-
-    const visibleY = -110 + (scrollProgress * 100); // Environ -20 à -10 sur l'écran
-
-    const trajectoryType = Math.random();
-    let startPos: THREE.Vector3;
-    let endPos: THREE.Vector3;
-
-    if (trajectoryType < 0.5) {
-      // Gauche -> Droite
-      startPos = new THREE.Vector3(-60, visibleY + (Math.random() - 0.5) * 10, -20);
-      endPos = new THREE.Vector3(60, visibleY + (Math.random() - 0.5) * 10, -20);
-    } else {
-      // Droite -> Gauche
-      startPos = new THREE.Vector3(60, visibleY + (Math.random() - 0.5) * 10, -20);
-      endPos = new THREE.Vector3(-60, visibleY + (Math.random() - 0.5) * 10, -20);
+  useEffect(() => {
+    // 1. Animation
+    if (actions) {
+      const actionKeys = Object.keys(actions);
+      actionKeys.forEach(key => {
+        const action = actions[key];
+        if (action) {
+          action.reset().fadeIn(0.5).play();
+          action.timeScale = 0.8;
+        }
+      });
     }
 
-    const fishGroup = new THREE.Group();
-    const clonedScene = fishModel.clone();
-
-    // Configuration du modèle
-    clonedScene.traverse((child) => {
+    // 2. Matériaux : Rendre le poisson visible dans le noir
+    scene.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
         const mesh = child as THREE.Mesh;
-        mesh.castShadow = true;
-        mesh.receiveShadow = true;
+        if (mesh.material) {
+          // On force un matériau qui réagit à la lumière mais qui a aussi sa propre lueur
+          const mat = mesh.material as THREE.MeshStandardMaterial;
+          mat.emissive = new THREE.Color("#224455"); // Lueur bleutée pour qu'on le voie
+          mat.emissiveIntensity = 0.4;
+          mat.roughness = 0.4;
+          mat.metalness = 0.6;
+        }
       }
     });
-
-    fishGroup.add(clonedScene);
-
-    // Échelle PETITE (comme demandé)
-    fishGroup.scale.setScalar(0.15);
-    fishGroup.position.copy(startPos);
-
-    // Ajout de la lumière
-    const light = new THREE.PointLight(0x88ff44, 5, 15, 2);
-    light.position.set(0, 2, 1);
-    fishGroup.add(light);
-
-    const duration = 20 + Math.random() * 10; // Nage lente (20-30s)
-
-    const instance: AnglerfishInstance = {
-      group: fishGroup,
-      startTime: time,
-      startPos,
-      endPos,
-      duration,
-    };
-
-    groupRef.current.add(fishGroup);
-    instancesRef.current.push(instance);
-  };
+  }, [actions, scene]);
 
   useFrame((state) => {
     if (!groupRef.current) return;
-    const time = state.clock.elapsedTime;
 
-    // Spawn rare (toutes les 5 secondes) si on est au fond
-    if (time - lastSpawnRef.current > 5 && scrollProgress > 0.85) {
-      spawnFish(time);
-      lastSpawnRef.current = time;
-    }
+    // Visible seulement au fond
+    const isVisible = scrollProgress > 0.8;
+    groupRef.current.visible = isVisible;
 
-    // Animation
-    instancesRef.current.forEach((instance, index) => {
-      const elapsed = time - instance.startTime;
-      const progress = Math.min(elapsed / instance.duration, 1);
+    if (isVisible) {
+      const t = state.clock.elapsedTime;
+      const cameraY = scrollProgress * 100;
 
-      if (progress >= 1) {
-        groupRef.current?.remove(instance.group);
-        instancesRef.current.splice(index, 1);
-        return;
-      }
+      // Position de base (un peu plus haut que les racines des plantes pour être visible)
+      const BASE_DEPTH = -120;
 
-      // Mouvement linéaire fluide
-      const currentPos = new THREE.Vector3().lerpVectors(
-        instance.startPos,
-        instance.endPos,
-        progress
+      // Animation de nage latérale (Ping-Pong)
+      const swimRange = 40;
+      const swimSpeed = 0.1;
+      const xPos = Math.sin(t * swimSpeed) * swimRange;
+
+      // Orientation
+      const direction = Math.cos(t * swimSpeed);
+      const targetRotationY = direction > 0 ? Math.PI / 2 : -Math.PI / 2;
+
+      // Rotation fluide
+      groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, targetRotationY, 0.1);
+
+      // Mouvement vertical (Bobbing)
+      const bobY = Math.sin(t * 0.5) * 2;
+
+      // Mouvement avant-arrière léger
+      const swimZ = Math.cos(t * 0.3) * 5;
+
+      groupRef.current.position.set(
+        xPos,
+        BASE_DEPTH + cameraY + bobY,
+        -20 + swimZ // Z = -20 (plus proche de la caméra que les plantes à -30)
       );
 
-      // Ajouter un petit mouvement de vague vertical (bobbing)
-      currentPos.y += Math.sin(time * 0.5 + index) * 0.5;
-
-      instance.group.position.copy(currentPos);
-
-      // Orientation : regarde vers la destination
-      instance.group.lookAt(instance.endPos);
-
       // Ondulation
-      instance.group.rotation.z = Math.sin(time * 2 + index) * 0.05;
-    });
+      groupRef.current.rotation.z = Math.sin(t * 2) * 0.05;
+      groupRef.current.rotation.x = Math.sin(t * 1) * 0.05;
+
+      // Échelle
+      groupRef.current.scale.setScalar(1.5);
+
+      // Lumière pulsante (Leurre)
+      if (lightRef.current) {
+        // Pulsation plus forte et plus rapide
+        lightRef.current.intensity = 8 + Math.sin(t * 4) * 4;
+      }
+    }
   });
 
-  return <group ref={groupRef} />;
+  return (
+    <group ref={groupRef}>
+      <primitive object={scene} />
+      <pointLight
+        ref={lightRef}
+        position={[0, 4, 8]}
+        color="#aaff44"
+        intensity={10} // Intensité de base augmentée
+        distance={35} // Portée augmentée
+        decay={2}
+      />
+    </group>
+  );
 }
 
 useGLTF.preload("/models/anglerfish-final.glb");
