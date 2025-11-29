@@ -5,7 +5,7 @@
 :root {
   --font-display: var(--font-glancyr), var(--font-manrope), system-ui, sans-serif;
   --font-body: var(--font-glancyr), var(--font-manrope), system-ui, sans-serif;
-  
+
   --accent: #4CBBD5;
   --accent-hover: #6CCCE5;
 }
@@ -48,7 +48,16 @@ html {
 }
 
 /* All text uses Glancyr */
-h1, h2, h3, h4, h5, h6, p, span, a, button {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+span,
+a,
+button {
   font-family: var(--font-display);
 }
 
@@ -76,12 +85,15 @@ h1, h2, h3, h4, h5, h6, p, span, a, button {
     transform: translateY(0) translateX(0);
     opacity: 0;
   }
+
   5% {
     opacity: 0.12;
   }
+
   95% {
     opacity: 0.12;
   }
+
   100% {
     transform: translateY(-110vh) translateX(10px);
     opacity: 0;
@@ -94,10 +106,13 @@ h1, h2, h3, h4, h5, h6, p, span, a, button {
 
 /* Very slow drift */
 @keyframes drift-slow {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translate(0, 0);
     opacity: 0.15;
   }
+
   50% {
     transform: translate(15px, -20px);
     opacity: 0.15;
@@ -110,18 +125,24 @@ h1, h2, h3, h4, h5, h6, p, span, a, button {
 
 /* Gentle seaweed sway */
 @keyframes sway-gentle {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: rotate(0deg);
   }
+
   50% {
     transform: rotate(2deg);
   }
 }
 
 @keyframes sway-gentle-reverse {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: rotate(0deg);
   }
+
   50% {
     transform: rotate(-2deg);
   }
@@ -137,13 +158,18 @@ h1, h2, h3, h4, h5, h6, p, span, a, button {
 
 /* Slow glow */
 @keyframes glow-slow {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0;
   }
-  30%, 70% {
+
+  30%,
+  70% {
     opacity: 0.3;
   }
 }
+
 .cursor-grab {
   cursor: grab;
 }

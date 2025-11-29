@@ -149,39 +149,57 @@ export function FastFish({ scrollProgress }: FastFishProps) {
       lastSpawnRef.current = time;
     }
 
-    const toRemove: number[] = [];
-
+    // ✅ Animation de la position + orientation
     instancesRef.current.forEach((instance, index) => {
       const elapsed = time - instance.startTime;
       const progress = Math.min(elapsed / instance.duration, 1);
 
       if (progress >= 1) {
-        toRemove.push(index);
+        // Supprimer et recycler
+        groupRef.current?.remove(instance.group);
+        instance.group.traverse((child) => {
+          if ((child as THREE.Mesh).isMesh) {
+            const mesh = child as THREE.Mesh;
+            mesh.geometry.dispose();
+            if (Array.isArray(mesh.material)) {
+              mesh.material.forEach(m => m.dispose());
+            } else {
+              mesh.material.dispose();
+            }
+          }
+        });
+        instancesRef.current.splice(index, 1);
         return;
       }
 
-      const currentPos = new THREE.Vector3().lerpVectors(instance.startPos, instance.endPos, progress);
-      currentPos.y += scrollProgress * 100 - instance.startPos.y + instance.startPos.y;
+      // Easing
+      const easeProgress = progress < 0.5
+        ? 2 * progress * progress
+        : 1 - Math.pow(-2 * progress + 2, 2) / 2;
 
+      // Position interpolée
+      const currentPos = new THREE.Vector3().lerpVectors(
+        instance.startPos,
+        instance.endPos,
+        easeProgress
+      );
       instance.group.position.copy(currentPos);
 
-      dummy.position.copy(currentPos);
-      dummy.lookAt(instance.endPos);
-      instance.group.quaternion.slerp(dummy.quaternion, 0.2);
-      instance.group.rotateZ(Math.sin(time * 20 + index) * 0.08);
-    });
+      // ✅ ORIENTATION CORRECTE : Le poisson regarde toujours vers sa destination
+      // On calcule la position juste après pour déterminer la direction
+      const nextProgress = Math.min(easeProgress + 0.01, 1);
+      const nextPos = new THREE.Vector3().lerpVectors(
+        instance.startPos,
+        instance.endPos,
+        nextProgress
+      );
 
-    toRemove.reverse().forEach((index) => {
-      const instance = instancesRef.current[index];
-      groupRef.current?.remove(instance.group);
-      instance.group.traverse((child) => {
-        if (child instanceof THREE.Mesh) {
-          child.geometry.dispose();
-          if (Array.isArray(child.material)) child.material.forEach(m => m.dispose());
-          else child.material.dispose();
-        }
-      });
-      instancesRef.current.splice(index, 1);
+      // Le poisson regarde vers la prochaine position
+      instance.group.lookAt(nextPos);
+
+      // Ondulation du corps pendant la nage
+      const wobble = Math.sin(time * 8 + index) * 0.1;
+      instance.group.rotation.z += wobble;
     });
   });
 

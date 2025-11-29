@@ -62,7 +62,7 @@ function Section1Surface() {
   const title = "ABYSSE";
 
   return (
-    <section ref={sectionRef} className="min-h-[130vh] flex items-center justify-center relative overflow-hidden">
+    <section ref={sectionRef} className="min-h-[130vh] flex items-center justify-center relative overflow-hidden snap-start">
       <div className="absolute inset-0 pointer-events-none opacity-50">
         <div className="absolute left-[10%] top-0 bottom-0 w-px bg-white/5" />
         <div className="absolute left-[90%] top-0 bottom-0 w-px bg-white/5" />
@@ -126,7 +126,7 @@ function Section2Histoire() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="min-h-[150vh] relative" id="histoire">
+    <section ref={sectionRef} className="min-h-[150vh] relative snap-start" id="histoire">
       <div className="absolute top-0 left-[10%] right-[10%] h-px bg-white/10" />
 
       <div className="min-h-[150vh] grid grid-cols-12 gap-6 px-6 md:px-12 lg:px-20 py-32">
@@ -203,7 +203,7 @@ function Section3Casabianca() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="min-h-[160vh] relative" id="musee">
+    <section ref={sectionRef} className="min-h-[160vh] relative snap-start" id="musee">
       <div className="absolute top-0 left-[10%] right-[10%] h-px bg-white/10" />
 
       <div className="min-h-[160vh] grid grid-cols-12 gap-6 px-6 md:px-12 lg:px-20 py-32">
@@ -293,7 +293,7 @@ function Section4Experience() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="min-h-[145vh] relative" id="experience">
+    <section ref={sectionRef} className="min-h-[145vh] relative snap-start" id="experience">
       <div className="absolute top-0 left-[10%] right-[10%] h-px bg-white/10" />
 
       <div className="min-h-[145vh] grid grid-cols-12 gap-6 px-6 md:px-12 lg:px-20 py-32">
@@ -374,7 +374,7 @@ function Section5Biodiversite() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="min-h-[150vh] relative">
+    <section ref={sectionRef} className="min-h-[150vh] relative snap-start">
       <div className="absolute top-0 left-[10%] right-[10%] h-px bg-white/10" />
 
       <div className="min-h-[150vh] grid grid-cols-12 gap-6 px-6 md:px-12 lg:px-20 py-32">
@@ -449,7 +449,7 @@ function Section6Contact() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="min-h-[140vh] flex flex-col items-center justify-center relative px-6 md:px-12" id="contact">
+    <section ref={sectionRef} className="min-h-[140vh] flex flex-col items-center justify-center relative px-6 md:px-12 snap-start" id="contact">
       <div className="absolute top-0 left-[10%] right-[10%] h-px bg-white/10" />
 
       <div className="text-center max-w-xl" id="partenaires">

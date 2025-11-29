@@ -121,7 +121,7 @@ export function Jellyfish({ scrollProgress }: JellyfishProps) {
     const pulse = Math.sin(t * 2);
     const squish = pulse * 0.02; // Très léger
 
-    const baseScale = 5;
+    const baseScale = 3; // Réduit de 5 à 3 pour être plus naturel
     groupRef.current.scale.set(baseScale - squish, baseScale + squish, baseScale - squish);
   });
 

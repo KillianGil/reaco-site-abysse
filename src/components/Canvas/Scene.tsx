@@ -104,7 +104,7 @@ function MarineSnow({ scrollProgress }: { scrollProgress: number }) {
   );
 }
 
-// ✅ WATER CAUSTICS (lumière qui danse)
+// ✅ CAUSTICS AMÉLIORÉS - Plus visibles et réalistes
 function WaterCaustics({ scrollProgress }: { scrollProgress: number }) {
   const meshRef = useRef<THREE.Mesh>(null);
 
@@ -126,23 +126,35 @@ function WaterCaustics({ scrollProgress }: { scrollProgress: number }) {
         uniform float uOpacity;
         varying vec2 vUv;
         
+        // Caustic pattern amélioré
         float caustic(vec2 uv, float time) {
-          vec2 p = mod(uv * 6.0 + vec2(time * 0.2, time * 0.15), 1.0) - 0.5;
+          vec2 p = mod(uv * 4.5 + vec2(time * 0.25, time * 0.18), 1.0) - 0.5;
           float d = length(p);
-          float c = sin(d * 15.0 - time * 2.0) * 0.5 + 0.5;
-          c *= 1.0 - smoothstep(0.3, 0.5, d);
-          return pow(c, 3.0);
+          
+          // Pattern ondulatoire plus prononcé
+          float c = sin(d * 18.0 - time * 2.5) * 0.5 + 0.5;
+          c += sin(d * 12.0 - time * 1.8) * 0.3;
+          
+          // Atténuation adoucie
+          c *= 1.0 - smoothstep(0.25, 0.6, d);
+          return pow(c, 2.5);
         }
         
         void main() {
+          // Plusieurs couches de caustics avec différentes vitesses
           float c1 = caustic(vUv, uTime);
-          float c2 = caustic(vUv * 1.3 + 0.5, uTime * 1.1);
-          float c3 = caustic(vUv * 0.8 + 0.25, uTime * 0.9);
+          float c2 = caustic(vUv * 1.5 + 0.5, uTime * 1.2);
+          float c3 = caustic(vUv * 0.9 + 0.25, uTime * 0.85);
+          float c4 = caustic(vUv * 1.8 + 0.7, uTime * 0.7);
           
-          float caustics = (c1 + c2 * 0.6 + c3 * 0.4) * 1.5;
+          // Combiner les couches avec intensité augmentée
+          float caustics = (c1 * 1.2 + c2 * 0.8 + c3 * 0.6 + c4 * 0.5) * 2.0;
           
-          vec3 color = vec3(0.7, 0.9, 1.0);
-          float alpha = caustics * uOpacity * 0.4;
+          // Couleur bleu-vert eau
+          vec3 color = vec3(0.6, 0.85, 1.0);
+          
+          // Opacité plus forte pour être visible
+          float alpha = caustics * uOpacity * 0.65;
           
           gl_FragColor = vec4(color, alpha);
         }
@@ -156,18 +168,20 @@ function WaterCaustics({ scrollProgress }: { scrollProgress: number }) {
   useFrame((state) => {
     if (meshRef.current) {
       material.uniforms.uTime.value = state.clock.elapsedTime;
-      material.uniforms.uOpacity.value = Math.max(0, 1 - scrollProgress * 1.5);
+      // Les caustics disparaissent progressivement avec la profondeur
+      material.uniforms.uOpacity.value = Math.max(0, 1 - scrollProgress * 1.2);
     }
   });
 
-  if (scrollProgress > 0.6) return null;
+  // Ne pas afficher trop profond
+  if (scrollProgress > 0.7) return null;
 
   return (
     <mesh
       ref={meshRef}
       position={[0, 35, 0]}
       rotation={[-Math.PI / 2, 0, 0]}
-      scale={[150, 150, 1]}
+      scale={[180, 180, 1]}
     >
       <planeGeometry args={[1, 1, 1, 1]} />
       <primitive object={material} attach="material" />
