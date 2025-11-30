@@ -209,7 +209,7 @@ export default function InformationsPage() {
                                 <ul className="space-y-3 text-white/80 text-sm mb-4">
                                     <li className="flex items-start gap-3">
                                         <span className="text-[#4CBBD5] mt-0.5 font-bold flex-shrink-0">→</span>
-                                        <span className="leading-relaxed">Arrêt "Port Marchand" ou "Mourillon"</span>
+                                        <span className="leading-relaxed">Arrêt &quot;Port Marchand&quot; ou &quot;Mourillon&quot;</span>
                                     </li>
                                 </ul>
                                 <div className="text-center">
@@ -297,7 +297,7 @@ export default function InformationsPage() {
                         <div className="absolute inset-0 bg-gradient-to-br from-[#4CBBD5]/20 via-[#006994]/10 to-transparent" />
                         <div className="absolute inset-0 flex flex-col items-center justify-center p-8">
                             <Clock className="w-32 h-32 text-[#4CBBD5]/30 mb-6 group-hover:scale-110 transition-transform duration-500" strokeWidth={1} />
-                            <p className="text-2xl font-serif italic text-white/90 text-center">"Accessible toute l'année"</p>
+                            <p className="text-2xl font-serif italic text-white/90 text-center">&quot;Accessible toute l&apos;année&quot;</p>
                             <p className="text-sm text-white/60 mt-4 text-center">Du lundi au dimanche</p>
                         </div>
                     </div>

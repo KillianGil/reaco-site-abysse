@@ -7,7 +7,7 @@ export default function ExpositionsPage() {
             <div className="max-w-7xl mx-auto">
                 <h1 className="text-4xl md:text-6xl font-light tracking-wider mb-8">Expositions</h1>
                 <p className="text-white/70 text-lg leading-relaxed max-w-2xl">
-                    Découvrez nos expositions temporaires et permanentes, plongeant au cœur de l'histoire sous-marine et de la biodiversité.
+                    Découvrez nos expositions temporaires et permanentes, plongeant au cœur de l&apos;histoire sous-marine et de la biodiversité.
                 </p>
             </div>
         </main>

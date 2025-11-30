@@ -1,16 +1,15 @@
 "use client";
 
 import { Navbar } from "@/components/UI";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Building2, FlaskConical, Cog, Anchor, Mail, ArrowRight, Microscope, Atom, Ship, Radio, Target } from "lucide-react";
+import { FlaskConical, Cog, Anchor, Mail, Microscope, Atom, Ship, Radio } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function PartenairesPage() {
     const containerRef = useRef<HTMLDivElement>(null);
-    const [activeInst, setActiveInst] = useState<number | null>(null);
 
     useEffect(() => {
         const ctx = gsap.context(() => {
@@ -133,8 +132,6 @@ export default function PartenairesPage() {
                             <div
                                 key={i}
                                 className="group relative border-b border-white/10 py-8 cursor-pointer transition-all duration-500 hover:border-[#4CBBD5] hover:pl-4"
-                                onMouseEnter={() => setActiveInst(i)}
-                                onMouseLeave={() => setActiveInst(null)}
                             >
                                 <div className="flex flex-col md:flex-row md:items-center justify-between relative z-10 gap-4">
                                     <div className="flex items-baseline gap-6">
@@ -167,7 +164,7 @@ export default function PartenairesPage() {
                             <span className="text-[#4CBBD5] text-xs font-bold tracking-[0.3em] uppercase block mb-4">02. SCIENCES</span>
                             <h3 className="text-4xl md:text-5xl font-light">Excellence Scientifique</h3>
                             <div className="h-1 w-24 bg-gradient-to-r from-[#4CBBD5] to-transparent mt-4" />
-                            <p className="text-white/60 mt-6 max-w-2xl mx-auto text-lg italic">"Un écosystème de recherche complet, des abysses à la surface"</p>
+                            <p className="text-white/60 mt-6 max-w-2xl mx-auto text-lg italic">&quot;Un écosystème de recherche complet, des abysses à la surface&quot;</p>
                         </div>
 
                         <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16">
@@ -179,7 +176,7 @@ export default function PartenairesPage() {
                                     <h4 className="text-2xl font-bold mb-2">Ifremer</h4>
                                     <div className="w-8 h-1 bg-[#4CBBD5] mb-4" />
                                     <p className="text-sm text-white/80">Expertise Océanique</p>
-                                    <p className="text-xs text-white/50 mt-2">"Des abysses à la surface"</p>
+                                    <p className="text-xs text-white/50 mt-2">&quot;Des abysses à la surface&quot;</p>
                                 </div>
                             </div>
 
@@ -261,7 +258,7 @@ export default function PartenairesPage() {
                                             <Cog className="w-5 h-5 text-[#4CBBD5]" />
                                             <h5 className="font-bold">Pôle Mer Méditerranée</h5>
                                         </div>
-                                        <p className="text-xs text-white/60">Cluster d'innovation maritime et économie bleue</p>
+                                        <p className="text-xs text-white/60">Cluster d&apos;innovation maritime et économie bleue</p>
                                     </div>
 
                                     <div className="group border border-white/10 p-4 hover:border-[#4CBBD5] transition-colors cursor-default">

@@ -9,7 +9,7 @@ interface GodRaysProps {
   scrollProgress: number;
 }
 
-export function Godrays({ scrollProgress }: GodRaysProps) {
+export function Godrays({ }: GodRaysProps) {
   // const groupRef = useRef<THREE.Group>(null);
 
   // Placeholder component
