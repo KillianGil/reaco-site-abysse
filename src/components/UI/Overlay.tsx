@@ -86,7 +86,7 @@ function Section1Surface() {
         </h1>
 
         <p className="surface-2 text-lg md:text-xl font-medium tracking-wide text-white/70 mb-5 drop-shadow-md">
-          Explorez l'ultime frontière.
+          Explorez l&apos;ultime frontière.
         </p>
 
         <p className="surface-3 text-sm font-medium leading-relaxed text-white/50 max-w-md mx-auto drop-shadow-sm">

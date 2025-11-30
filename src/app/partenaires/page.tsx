@@ -337,14 +337,14 @@ export default function PartenairesPage() {
                                     <div className="w-2 h-2 mt-2 rounded-full bg-[#4CBBD5]" />
                                     <div>
                                         <h5 className="font-bold text-white">Expertise Opérationnelle</h5>
-                                        <p className="text-sm text-white/60">Lien direct avec les unités d'intervention sous-marine.</p>
+                                        <p className="text-sm text-white/60">Lien direct avec les unités d&apos;intervention sous-marine.</p>
                                     </div>
                                 </div>
                                 <div className="flex items-start gap-4">
                                     <div className="w-2 h-2 mt-2 rounded-full bg-[#4CBBD5]" />
                                     <div>
                                         <h5 className="font-bold text-white">Patrimoine Unique</h5>
-                                        <p className="text-sm text-white/60">Valorisation de l'histoire des sous-marins nucléaires.</p>
+                                        <p className="text-sm text-white/60">Valorisation de l&apos;histoire des sous-marins nucléaires.</p>
                                     </div>
                                 </div>
                             </div>
@@ -362,7 +362,7 @@ export default function PartenairesPage() {
                                 <Mail className="w-10 h-10 text-[#4CBBD5]" strokeWidth={1.5} />
                             </div>
 
-                            <h3 className="text-4xl md:text-5xl font-light mb-6">Rejoignez l'Aventure</h3>
+                            <h3 className="text-4xl md:text-5xl font-light mb-6">Rejoignez l&apos;Aventure</h3>
                             <p className="text-xl text-white/70 mb-10">
                                 Associez votre image à un projet porteur de sens, alliant innovation, écologie et patrimoine maritime.
                             </p>

@@ -33,7 +33,7 @@ export function FastFish({ scrollProgress }: FastFishProps) {
 
   const instancesRef = useRef<FastFishInstance[]>([]);
   const lastSpawnRef = useRef(0);
-  const dummy = useMemo(() => new THREE.Object3D(), []);
+  // Removed unused dummy variable
 
   // Fonction pour faire apparaître UN poisson (avec un offset optionnel pour les bancs)
   const spawnSingleFish = (time: number, offset = { x: 0, y: 0, z: 0 }) => {
