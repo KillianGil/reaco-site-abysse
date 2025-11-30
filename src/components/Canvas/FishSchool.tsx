@@ -229,3 +229,10 @@ export function FishSchool({ scrollProgress }: FishSchoolProps) {
     </group>
   );
 }
+
+// ✅ Preload des assets pour éviter le pop-in
+useFBX.preload("/models/poisson/Emperor Angelfish/EmperorAngelfish_FBX.fbx");
+useFBX.preload("/models/poisson/Fish-3/source/fish_1_5.fbx");
+useTexture.preload("/models/poisson/Emperor Angelfish/Emperor-Angelfish-A.png");
+useTexture.preload("/models/poisson/Emperor Angelfish/Emperor-Angelfish-N.png");
+useTexture.preload("/models/poisson/Fish-3/textures/fish_1_diffuse.jpeg");

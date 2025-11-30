@@ -6,7 +6,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import { useScrollProgress } from "@/hooks/useScrollProgress";
-import { Overlay, DepthGauge, Navbar, OceanDecorations } from "@/components/UI";
+import { Overlay, DepthGauge, Navbar, OceanDecorations, Loader } from "@/components/UI";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -38,6 +38,7 @@ function PageContent() {
 
   return (
     <>
+      <Loader />
       <Scene scrollProgress={scrollProgress} />
       <Navbar />
       <DepthGauge scrollProgress={scrollProgress} />
