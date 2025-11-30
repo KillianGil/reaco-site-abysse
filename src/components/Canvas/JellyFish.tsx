@@ -10,16 +10,13 @@ export function Jellyfish({ scrollProgress }: { scrollProgress: number }) {
   const { actions } = useAnimations(animations, scene);
   const groupRef = useRef<THREE.Group>(null);
 
-  // Plage de visibilité (profondeur)
-  const START_SCROLL = 0.6; // Apparition plus tard
+  const START_SCROLL = 0.6; 
   const END_SCROLL = 0.95;
 
   useEffect(() => {
-    // Force l'animation du fichier GLB
     if (actions) {
       const actionKeys = Object.keys(actions);
       if (actionKeys.length > 0) {
-        // On joue toutes les animations trouvées pour être sûr
         actionKeys.forEach(key => {
           const action = actions[key];
           if (action) {
@@ -30,7 +27,6 @@ export function Jellyfish({ scrollProgress }: { scrollProgress: number }) {
       }
     }
 
-    // NOTE: On ne touche plus aux matériaux pour garder la texture originale
     scene.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
         const mesh = child as THREE.Mesh;
@@ -64,7 +60,6 @@ export function Jellyfish({ scrollProgress }: { scrollProgress: number }) {
       targetOpacity = Math.max(0, Math.min(1.0, fade));
     }
 
-    // Appliquer l'opacité progressivement
     scene.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
         const mesh = child as THREE.Mesh;
@@ -79,7 +74,6 @@ export function Jellyfish({ scrollProgress }: { scrollProgress: number }) {
 
     const t = state.clock.elapsedTime;
 
-    // ✅ MOUVEMENT NATUREL ET FLUIDE (basé sur le TEMPS)
     const floatY = Math.sin(t * 0.2) * 10 + Math.sin(t * 0.1) * 5;
     const floatX = Math.sin(t * 0.1) * 8;
     const floatZ = Math.cos(t * 0.1) * 5;
@@ -90,10 +84,7 @@ export function Jellyfish({ scrollProgress }: { scrollProgress: number }) {
     const cameraY = scrollProgress * 100; // RESTAURÉ pour suivre le scroll
 
     // DÉPLACEMENT VERTICAL LENT basé sur le temps
-    // Elle monte et descend lentement de façon continue
     const verticalCycle = Math.sin(t * 0.08) * 15; // Cycle lent de montée/descente
-
-    // Position finale avec flottement ET cycle vertical
     // MEDUSE 1 (Principale)
     groupRef.current.position.set(
       floatX + OFFSET_X,
@@ -148,13 +139,11 @@ export function Jellyfish({ scrollProgress }: { scrollProgress: number }) {
     // Rotation
     secondRef.current.rotation.y = Math.cos(t * 0.2) * 0.5;
 
-    // Scale un peu plus petit
     const pulse = Math.sin(t * 1.4);
     const squish = pulse * 0.05;
     const baseScale = 1.6;
     secondRef.current.scale.set(baseScale - squish, baseScale + squish, baseScale - squish);
 
-    // Visibilité (même logique)
     const START_SCROLL = 0.6;
     const END_SCROLL = 0.95;
     const isVisibleRange = scrollProgress > START_SCROLL - 0.1 && scrollProgress < END_SCROLL + 0.1;
