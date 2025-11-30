@@ -1,29 +1,31 @@
 // components/Canvas/Submarine.tsx
 "use client";
 
-import { useRef, useEffect, useMemo } from "react";
+import { useRef, useEffect, useMemo, memo } from "react";
 import { useFrame } from "@react-three/fiber";
-import { useGLTF } from "@react-three/drei";
-// import { useFBX } from "@react-three/drei"; // ✅ Pour FBX
+import { useGLTF, useAnimations } from "@react-three/drei";
 import * as THREE from "three";
 
-interface SubmarineProps {
-  scrollProgress: number;
-}
+// ✅ Composant Modèle (Memoized pour éviter les re-renders et restart d'animation)
+const SubmarineModel = memo(() => {
+  // ✅ Utilisation du bon fichier
+  const { scene, animations } = useGLTF("/models/submarinetest.glb");
 
-export function Submarine({ scrollProgress }: SubmarineProps) {
-  // ✅ VERSION GLB (plus léger)
-  const { scene } = useGLTF("/models/submarine.glb");
+  // Ref locale pour l'animation
+  const localRef = useRef<THREE.Group>(null);
+  const { actions } = useAnimations(animations, localRef);
 
-  // ✅ VERSION FBX (commentée - décommente si besoin)
-  // const fbx = useFBX("/models/submarine.fbx");
-  // const scene = fbx;
+  // ✅ Jouer l'animation de l'hélice (une seule fois)
+  useEffect(() => {
+    if (actions) {
+      const actionName = Object.keys(actions)[0];
+      if (actionName && actions[actionName]) {
+        actions[actionName].reset().play();
+      }
+    }
+  }, [actions]);
 
-  const groupRef = useRef<THREE.Group>(null);
-  const innerGroupRef = useRef<THREE.Group>(null);
-  const initialized = useRef(false);
-
-  // ✅ NE PAS TOUCHER AUX MATÉRIAUX - Utiliser exactement ce qui vient du GLB
+  // ✅ Matériaux
   useEffect(() => {
     if (scene) {
       scene.traverse((child) => {
@@ -32,11 +34,32 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
           mesh.castShadow = true;
           mesh.receiveShadow = true;
           mesh.renderOrder = 10;
-          // ✅ Ne rien modifier d'autre - garder les matériaux tels quels
         }
       });
     }
   }, [scene]);
+
+  return (
+    <group ref={localRef}>
+      <primitive
+        object={scene}
+        scale={0.045} // ✅ Taille ajustée (plus grand)
+        rotation={[0, -Math.PI / 2, 0]} // ✅ Retour à la rotation d'origine (alignement)
+      />
+    </group>
+  );
+});
+
+SubmarineModel.displayName = "SubmarineModel";
+
+interface SubmarineProps {
+  scrollProgress: number;
+}
+
+export function Submarine({ scrollProgress }: SubmarineProps) {
+  const groupRef = useRef<THREE.Group>(null);
+  const innerGroupRef = useRef<THREE.Group>(null);
+  const initialized = useRef(false);
 
   const keyframes = useMemo(
     () => [
@@ -83,12 +106,12 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
   const current = useRef({
     x: 0,
     y: 2,
-    z: -80, // Commence loin
+    z: -80,
     rotX: 0,
-    rotY: Math.PI, // Face caméra
+    rotY: Math.PI,
     rotZ: 0,
     facing: 0,
-    scale: 0.1, // Tout petit
+    scale: 0.4,
   });
 
   useFrame((state) => {
@@ -97,11 +120,10 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
     const time = state.clock.elapsedTime;
 
     if (!initialized.current && time < 1) {
-      // POSITION INITIALE (HORS CHAMP - PROFOND)
       groupRef.current.position.set(0, 2, -60);
       groupRef.current.rotation.set(0, Math.PI, 0);
       innerGroupRef.current.rotation.y = 0;
-      groupRef.current.scale.setScalar(0.4 * 1.2); // Scale * baseScale
+      groupRef.current.scale.setScalar(0.4);
       initialized.current = true;
       return;
     }
@@ -141,7 +163,6 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
     const targetRotY = THREE.MathUtils.lerp(start.rot[1], end.rot[1], easeT);
     const targetRotZ = THREE.MathUtils.lerp(start.rot[2], end.rot[2], easeT);
     const targetFacing = THREE.MathUtils.lerp(start.facing, end.facing, easeT);
-    // scale property added dynamically
     const targetScale = THREE.MathUtils.lerp(start.scale || 1, end.scale || 1, easeT);
 
     const inertia = scrollProgress < 0.1 ? 0.03 : 0.05;
@@ -152,7 +173,6 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
     current.current.rotY += (targetRotY - current.current.rotY) * inertia;
     current.current.rotZ += (targetRotZ - current.current.rotZ) * inertia;
     current.current.facing += (targetFacing - current.current.facing) * inertia;
-    // scale property added dynamically
     current.current.scale += (targetScale - current.current.scale) * inertia;
 
     const idleIntensity = Math.max(0, 1 - scrollProgress * 2);
@@ -178,28 +198,24 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
     innerGroupRef.current.rotation.y =
       current.current.facing + current.current.rotY + floatRotY;
 
-    // scale property added dynamically
-    const finalScale = current.current.scale * 1.2; // 1.2 is base scale (increased)
+    const finalScale = current.current.scale;
     groupRef.current.scale.setScalar(finalScale);
   });
 
   return (
     <>
       <ambientLight intensity={0.3} color="#6da8c8" />
-
       <directionalLight
         position={[10, 60, 15]}
         intensity={1.8}
         color="#c8e4f5"
         castShadow
       />
-
       <directionalLight
         position={[-8, 40, 10]}
         intensity={0.8}
         color="#a8cce0"
       />
-
       <spotLight
         position={[15, 8, 5]}
         angle={0.5}
@@ -218,7 +234,6 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
         distance={60}
         castShadow
       />
-
       <spotLight
         position={[0, -2, 0]}
         angle={0.3}
@@ -231,20 +246,7 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
 
       <group ref={groupRef}>
         <group ref={innerGroupRef}>
-          {/* ✅ GLB VERSION - Taille normale, rotation originale */}
-          <primitive
-            object={scene}
-            scale={0.012}  // ✅ Taille d'origine
-            rotation={[0, -Math.PI / 2, 0]}  // ✅ Rotation d'origine
-          />
-
-          {/* ✅ FBX VERSION (commenté - décommente si tu veux l'utiliser)
-          <primitive 
-            object={scene} 
-            scale={0.012} 
-            rotation={[0, -Math.PI / 2, 0]} 
-          />
-          */}
+          <SubmarineModel />
         </group>
       </group>
     </>
@@ -252,7 +254,4 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
 }
 
 // ✅ Preload le modèle
-useGLTF.preload("/models/submarine.glb");
-
-// ✅ Pour FBX (décommente si besoin)
-// useFBX.preload("/models/submarine.fbx");
+useGLTF.preload("/models/submarinetest.glb");

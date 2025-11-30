@@ -75,7 +75,7 @@ export default function InformationsPage() {
                     opacity: 0,
                     rotateX: -15,
                     duration: 0.8,
-                    delay: i * 0.1,
+                    delay: (i % 3) * 0.1, // Use modulo to prevent huge delays on lower elements
                     ease: "back.out(1.5)"
                 });
             });
@@ -398,7 +398,7 @@ export default function InformationsPage() {
                         <div className="space-y-6">
                             <div className="info-card p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-[#4CBBD5]/30 transition-colors">
                                 <h4 className="text-lg font-bold mb-2 flex items-center gap-3">
-                                    <span className="text-2xl">🌍</span> Trilingue
+                                    <span className="text-2xl">🌍</span> International
                                 </h4>
                                 <p className="text-white/70 text-sm">Français, Anglais, Allemand</p>
                             </div>
