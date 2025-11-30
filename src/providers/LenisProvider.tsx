@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, ReactNode } from "react";
+import { usePathname } from "next/navigation";
 import Lenis from "@studio-freight/lenis";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -13,18 +14,19 @@ interface LenisProviderProps {
 
 export function LenisProvider({ children }: LenisProviderProps) {
   const lenisRef = useRef<Lenis | null>(null);
+  const pathname = usePathname();
 
   useEffect(() => {
     // Initialize Lenis for buttery smooth scrolling
     const lenis = new Lenis({
-      duration: 1.8, // ⚡ Plus lent = moins de recalculs (était 1.4)
+      duration: 1.8,
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: "vertical",
       gestureOrientation: "vertical",
       smoothWheel: true,
-      touchMultiplier: 1.5, // ⚡ Réduit (était 2)
+      touchMultiplier: 1.5,
       infinite: false,
-      wheelMultiplier: 0.8, // ⚡ NOUVEAU : ralentit la molette
+      wheelMultiplier: 0.8,
     });
 
     lenisRef.current = lenis;
@@ -48,6 +50,13 @@ export function LenisProvider({ children }: LenisProviderProps) {
       document.documentElement.classList.remove("lenis", "lenis-smooth");
     };
   }, []);
+
+  // ✅ Reset scroll on route change
+  useEffect(() => {
+    if (lenisRef.current) {
+      lenisRef.current.scrollTo(0, { immediate: true });
+    }
+  }, [pathname]);
 
   return <>{children}</>;
 }
