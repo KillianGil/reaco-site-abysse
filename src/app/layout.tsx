@@ -46,9 +46,11 @@ const manrope = Manrope({
 export const metadata: Metadata = {
   title: "ABYSSE | Musée Sous-Marin de Toulon",
   description:
-    "Découvrez le premier musée sous-marin au monde. Une plongée unique dans l'histoire maritime et les profondeurs océaniques à Toulon.",
+    "ABYSSE : Explorez l'ultime frontière. Une plongée unique dans l'histoire maritime et les profondeurs océaniques à Toulon.",
   keywords: ["musée", "sous-marin", "Toulon", "océan", "Casabianca", "plongée"],
 };
+
+import { LenisProvider } from "@/providers/LenisProvider";
 
 export default function RootLayout({
   children,
@@ -57,7 +59,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" className={`${glancyr.variable} ${manrope.variable}`}>
-      <body>{children}</body>
+      <body>
+        <LenisProvider>
+          {children}
+        </LenisProvider>
+      </body>
     </html>
   );
 }

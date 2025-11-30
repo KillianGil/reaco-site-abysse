@@ -5,7 +5,6 @@ import dynamic from "next/dynamic";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-import { LenisProvider } from "@/providers/LenisProvider";
 import { useScrollProgress } from "@/hooks/useScrollProgress";
 import { Overlay, DepthGauge, Navbar, OceanDecorations } from "@/components/UI";
 
@@ -53,10 +52,8 @@ function PageContent() {
 
 export default function Home() {
   return (
-    <LenisProvider>
-      <main className="relative">
-        <PageContent />
-      </main>
-    </LenisProvider>
+    <main className="relative">
+      <PageContent />
+    </main>
   );
 }

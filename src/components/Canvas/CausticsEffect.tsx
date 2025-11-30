@@ -4,45 +4,31 @@ import { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
-interface CausticsEffectProps {
-  scrollProgress: number;
-}
-
-export function CausticsEffect({ scrollProgress }: CausticsEffectProps) {
+export function CausticsEffect({ scrollProgress }: { scrollProgress: number }) {
   const meshRef = useRef<THREE.Mesh>(null);
-  
-  // Caustics effect fades as we go deeper
-  const opacity = Math.max(0, 1 - scrollProgress * 1.5);
-  
-  const shaderMaterial = useMemo(() => {
+
+  const material = useMemo(() => {
     return new THREE.ShaderMaterial({
       uniforms: {
         uTime: { value: 0 },
-        uOpacity: { value: opacity },
-        uColor: { value: new THREE.Color("#87ceeb") },
+        uOpacity: { value: 0.5 },
       },
       vertexShader: `
         varying vec2 vUv;
-        varying vec3 vPosition;
-        
         void main() {
           vUv = uv;
-          vPosition = position;
           gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
         }
       `,
       fragmentShader: `
         uniform float uTime;
         uniform float uOpacity;
-        uniform vec3 uColor;
         varying vec2 vUv;
-        varying vec3 vPosition;
         
-        // Simplex noise function
+        // Simplex noise (simplifié)
         vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
         vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
         vec3 permute(vec3 x) { return mod289(((x*34.0)+1.0)*x); }
-        
         float snoise(vec2 v) {
           const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
           vec2 i  = floor(v + dot(v, C.yy));
@@ -66,48 +52,62 @@ export function CausticsEffect({ scrollProgress }: CausticsEffectProps) {
           g.yz = a0.yz * x12.xz + h.yz * x12.yw;
           return 130.0 * dot(m, g);
         }
-        
+
         void main() {
-          vec2 uv = vUv * 3.0;
+          float noise1 = snoise(vUv * 15.0 + uTime * 0.5);
+          float noise2 = snoise(vUv * 25.0 - uTime * 0.3);
           
-          float noise1 = snoise(uv + uTime * 0.1);
-          float noise2 = snoise(uv * 2.0 - uTime * 0.15);
-          float noise3 = snoise(uv * 0.5 + uTime * 0.05);
+          float c1 = smoothstep(0.4, 0.45, noise1);
+          float c2 = smoothstep(0.4, 0.45, noise2);
           
-          float caustics = (noise1 + noise2 * 0.5 + noise3 * 0.25) * 0.5 + 0.5;
-          caustics = pow(caustics, 2.0);
+          // Lignes de caustiques
+          float c3 = snoise(vUv * 8.0 + uTime * 0.2);
+          c3 = 1.0 - abs(c3);
+          c3 = pow(c3, 8.0);
           
-          float alpha = caustics * uOpacity * 0.3;
+          // Plus de détails
+          float c4 = snoise(vUv * 30.0 - uTime * 0.4);
+          c4 = 1.0 - abs(c4);
+          c4 = pow(c4, 4.0);
           
-          gl_FragColor = vec4(uColor, alpha);
+          // Combiner les couches avec intensité augmentée
+          float caustics = (c1 * 1.2 + c2 * 0.8 + c3 * 0.6 + c4 * 0.5) * 2.0;
+          
+          // Couleur bleu-vert eau
+          vec3 color = vec3(0.6, 0.85, 1.0);
+          
+          // Opacité plus forte pour être visible
+          float alpha = caustics * uOpacity * 0.65;
+          
+          gl_FragColor = vec4(color, alpha);
         }
       `,
       transparent: true,
-      side: THREE.DoubleSide,
-      depthWrite: false,
       blending: THREE.AdditiveBlending,
+      depthWrite: false,
     });
-  }, [opacity]);
+  }, []);
 
   useFrame((state) => {
     if (meshRef.current) {
-      shaderMaterial.uniforms.uTime.value = state.clock.elapsedTime;
-      shaderMaterial.uniforms.uOpacity.value = Math.max(0, 1 - scrollProgress * 1.5);
+      material.uniforms.uTime.value = state.clock.elapsedTime;
+      // Les caustics disparaissent progressivement avec la profondeur
+      material.uniforms.uOpacity.value = Math.max(0, 1 - scrollProgress * 1.2);
     }
   });
 
+  // Ne pas afficher trop profond
   if (scrollProgress > 0.7) return null;
 
   return (
     <mesh
       ref={meshRef}
-      position={[0, 30, 0]}
+      position={[0, 35, 0]}
       rotation={[-Math.PI / 2, 0, 0]}
-      scale={[100, 100, 1]}
+      scale={[180, 180, 1]}
     >
       <planeGeometry args={[1, 1, 1, 1]} />
-      <primitive object={shaderMaterial} attach="material" />
+      <primitive object={material} attach="material" />
     </mesh>
   );
 }
-

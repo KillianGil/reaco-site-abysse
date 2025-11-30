@@ -4,11 +4,7 @@ import { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
-interface VolumetricLightProps {
-  scrollProgress: number;
-}
-
-export function VolumetricLight({ scrollProgress }: VolumetricLightProps) {
+export function VolumetricLight({ scrollProgress }: { scrollProgress: number }) {
   const meshRef = useRef<THREE.Mesh>(null);
 
   const shaderMaterial = useMemo(() => {
@@ -20,7 +16,6 @@ export function VolumetricLight({ scrollProgress }: VolumetricLightProps) {
       vertexShader: `
         varying vec2 vUv;
         varying vec3 vPosition;
-        
         void main() {
           vUv = uv;
           vPosition = position;
@@ -34,16 +29,14 @@ export function VolumetricLight({ scrollProgress }: VolumetricLightProps) {
         varying vec3 vPosition;
         
         void main() {
-          // God rays effect
           float rays = sin(vPosition.x * 0.2 + uTime * 0.3) * 0.5 + 0.5;
           rays *= sin(vPosition.z * 0.15 - uTime * 0.2) * 0.5 + 0.5;
           
-          // Fade with depth
           float fade = 1.0 - vUv.y;
           fade = pow(fade, 2.0);
           
           vec3 color = vec3(0.6, 0.8, 1.0);
-          float alpha = rays * fade * uOpacity * 0.12;
+          float alpha = rays * fade * uOpacity * 0.15;
           
           gl_FragColor = vec4(color, alpha);
         }

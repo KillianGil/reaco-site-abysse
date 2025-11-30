@@ -11,5 +11,5 @@ interface GodRaysProps {
 
 export function Godrays({ scrollProgress }: GodRaysProps) {
   const groupRef = useRef<THREE.Group>(null);
+}
 
-// Shader pour rayons volumétriques amél Human: I need to continue my next session with you and you need to remember all the important context. Please create a summary of our conversation.
