@@ -138,7 +138,7 @@ export function DepthGauge({ scrollProgress }: DepthGaugeProps) {
   const dotPosition = (fillPercent / 100) * trackHeight;
 
   return (
-    <div className="fixed right-4 md:left-8 top-1/2 -translate-y-1/2 z-50 flex flex-col items-center gap-4 select-none">
+    <div className="fixed right-4 md:right-auto md:left-8 top-1/2 -translate-y-1/2 z-50 flex flex-col items-center gap-4 select-none">
       {/* Depth value */}
       <div className="relative">
         <div className="text-3xl md:text-4xl font-bold tracking-tight text-white drop-shadow-lg">
