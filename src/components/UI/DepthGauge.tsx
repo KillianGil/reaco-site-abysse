@@ -31,7 +31,7 @@ export function DepthGauge({ scrollProgress }: DepthGaugeProps) {
       });
       animationRef.current = requestAnimationFrame(animate);
     };
-    
+
     animationRef.current = requestAnimationFrame(animate);
     return () => {
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
@@ -112,7 +112,7 @@ export function DepthGauge({ scrollProgress }: DepthGaugeProps) {
   // ✅ CLICK SUR LA TRACK pour jump
   const handleTrackClick = useCallback((e: React.MouseEvent) => {
     if (!trackRef.current) return;
-    
+
     const rect = trackRef.current.getBoundingClientRect();
     const y = e.clientY - rect.top;
     const progress = Math.max(0, Math.min(1, y / rect.height));
@@ -138,7 +138,7 @@ export function DepthGauge({ scrollProgress }: DepthGaugeProps) {
   const dotPosition = (fillPercent / 100) * trackHeight;
 
   return (
-    <div className="fixed left-5 top-1/2 -translate-y-1/2 z-50 flex flex-col items-center gap-4 select-none">
+    <div className="fixed right-4 md:left-8 top-1/2 -translate-y-1/2 z-50 flex flex-col items-center gap-4 select-none">
       {/* Depth value */}
       <div className="relative">
         <div className="text-3xl md:text-4xl font-bold tracking-tight text-white drop-shadow-lg">
@@ -150,7 +150,7 @@ export function DepthGauge({ scrollProgress }: DepthGaugeProps) {
       {/* Track container */}
       <div className="relative flex items-start gap-3">
         {/* Main track - CLICKABLE */}
-        <div 
+        <div
           ref={trackRef}
           className="relative w-2 h-44 bg-white/20 rounded-full overflow-hidden shadow-inner cursor-pointer"
           onClick={handleTrackClick}
@@ -158,12 +158,12 @@ export function DepthGauge({ scrollProgress }: DepthGaugeProps) {
           {/* Fill */}
           <div
             className="absolute top-0 left-0 w-full rounded-full pointer-events-none"
-            style={{ 
+            style={{
               height: `${fillPercent}%`,
               background: "linear-gradient(to bottom, #4CBBD5, #1a8aaa, #0a6080)",
             }}
           />
-          
+
           {/* Tick marks */}
           <div className="absolute inset-0 flex flex-col justify-between py-1 pointer-events-none">
             {[0, 1, 2, 3, 4].map((i) => (
@@ -174,14 +174,13 @@ export function DepthGauge({ scrollProgress }: DepthGaugeProps) {
 
         {/* Current position indicator - DRAGGABLE */}
         <div
-          className={`absolute w-4 h-4 rounded-full bg-white shadow-lg -left-1 transition-transform ${
-            isDragging ? 'scale-125 cursor-grabbing' : 'cursor-grab'
-          }`}
-          style={{ 
+          className={`absolute w-4 h-4 rounded-full bg-white shadow-lg -left-1 transition-transform ${isDragging ? 'scale-125 cursor-grabbing' : 'cursor-grab'
+            }`}
+          style={{
             top: `${dotPosition}px`,
             transform: `translateY(-50%) ${isDragging ? 'scale(1.25)' : ''}`,
-            boxShadow: isDragging 
-              ? "0 0 12px #fff, 0 0 24px #4CBBD5" 
+            boxShadow: isDragging
+              ? "0 0 12px #fff, 0 0 24px #4CBBD5"
               : "0 0 8px #fff, 0 0 16px #4CBBD5"
           }}
           onMouseDown={handleDragStart}

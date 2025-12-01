@@ -1,7 +1,7 @@
 // components/Canvas/Submarine.tsx
 "use client";
 
-import { useRef, useEffect, useMemo, memo } from "react";
+import { useRef, useEffect, useMemo, memo, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import * as THREE from "three";
@@ -61,38 +61,45 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
   const innerGroupRef = useRef<THREE.Group>(null);
   const initialized = useRef(false);
 
-  const keyframes = useMemo(
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  const desktopKeyframes = useMemo(
     () => [
       // SURFACE - DÉPART PROFOND (Z-AXIS ENTRY)
-      // Au début (0), il est loin au fond (Z=-60), plus visible (Scale=0.4), face caméra (RotY=PI)
       { progress: 0, pos: [0, 2, -60], rot: [0, Math.PI, 0], facing: 0, scale: 0.4 },
 
       // ARRIVÉE DANS LA SCÈNE (ZOOM AVANT)
-      // À 0.1, il arrive à sa position de "base" (Z=-8), taille normale, et se tourne de profil
       { progress: 0.1, pos: [5, 2, -8], rot: [0.05, 0, 0.02], facing: 0, scale: 1 },
 
-      // SECTION 1 "HISTOIRE" - Reste à droite (0.12 - 0.22)
+      // SECTION 1 "HISTOIRE" - Reste à droite
       { progress: 0.12, pos: [10, 1, -12], rot: [0.06, -0.15, 0.02], facing: 0.3, scale: 1 },
       { progress: 0.22, pos: [14, -0.5, -14], rot: [0.05, -0.2, 0.01], facing: 0.5, scale: 1 },
 
       // TOURNE VERS GAUCHE
       { progress: 0.30, pos: [8, -1.5, -15], rot: [0.04, 0.1, 0.01], facing: 1.2, scale: 1 },
 
-      // SECTION 2 "CASABIANCA" - À GAUCHE (0.38 - 0.48)
+      // SECTION 2 "CASABIANCA" - À GAUCHE
       { progress: 0.38, pos: [-10, -2.5, -16], rot: [0.05, 0.4, -0.01], facing: 2.0, scale: 1 },
       { progress: 0.48, pos: [-12, -3.5, -17], rot: [0.06, 0.3, 0], facing: 2.2, scale: 1 },
 
       // TOURNE VERS DROITE
       { progress: 0.53, pos: [-2, -4.0, -17.5], rot: [0.06, 0.15, 0], facing: 2.5, scale: 1 },
 
-      // SECTION 3 "EXPÉRIENCE" - À DROITE (0.58 - 0.68)
+      // SECTION 3 "EXPÉRIENCE" - À DROITE
       { progress: 0.58, pos: [8, -5, -18], rot: [0.07, -0.1, 0.01], facing: 3.0, scale: 1 },
       { progress: 0.68, pos: [10, -5.5, -19], rot: [0.08, -0.15, 0.01], facing: 3.1, scale: 1 },
 
       // TRANSITION VERS GAUCHE
       { progress: 0.73, pos: [0, -6.5, -20], rot: [0.09, 0.15, 0], facing: 3.6, scale: 1 },
 
-      // SECTION 4 "BIODIVERSITÉ" - À GAUCHE (0.78 - 0.88)
+      // SECTION 4 "BIODIVERSITÉ" - À GAUCHE
       { progress: 0.78, pos: [-10, -8, -22], rot: [0.11, 0.3, -0.01], facing: 4.0, scale: 1 },
       { progress: 0.88, pos: [-14, -10, -25], rot: [0.13, 0.2, 0], facing: 4.1, scale: 1 },
 
@@ -102,6 +109,46 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
     ],
     []
   );
+
+  const mobileKeyframes = useMemo(
+    () => [
+      // MOBILE: Trajectoire plus centrée et moins large
+      { progress: 0, pos: [0, 2, -60], rot: [0, Math.PI, 0], facing: 0, scale: 0.4 },
+      { progress: 0.1, pos: [0, 2, -12], rot: [0.05, 0, 0.02], facing: 0, scale: 0.8 }, // Plus loin (-12 vs -8)
+
+      // S1: Légèrement à droite
+      { progress: 0.12, pos: [2, 1, -14], rot: [0.06, -0.1, 0.02], facing: 0.2, scale: 0.8 },
+      { progress: 0.22, pos: [3, -0.5, -15], rot: [0.05, -0.15, 0.01], facing: 0.3, scale: 0.8 },
+
+      // Tourne
+      { progress: 0.30, pos: [1, -1.5, -16], rot: [0.04, 0.1, 0.01], facing: 1.0, scale: 0.8 },
+
+      // S2: Légèrement à gauche
+      { progress: 0.38, pos: [-2, -2.5, -17], rot: [0.05, 0.3, -0.01], facing: 1.8, scale: 0.8 },
+      { progress: 0.48, pos: [-3, -3.5, -18], rot: [0.06, 0.2, 0], facing: 2.0, scale: 0.8 },
+
+      // Tourne
+      { progress: 0.53, pos: [-1, -4.0, -18.5], rot: [0.06, 0.1, 0], facing: 2.3, scale: 0.8 },
+
+      // S3: Légèrement à droite
+      { progress: 0.58, pos: [2, -5, -19], rot: [0.07, -0.1, 0.01], facing: 2.8, scale: 0.8 },
+      { progress: 0.68, pos: [3, -5.5, -20], rot: [0.08, -0.15, 0.01], facing: 2.9, scale: 0.8 },
+
+      // Transition
+      { progress: 0.73, pos: [0, -6.5, -21], rot: [0.09, 0.1, 0], facing: 3.4, scale: 0.8 },
+
+      // S4: Légèrement à gauche
+      { progress: 0.78, pos: [-2, -8, -23], rot: [0.11, 0.2, -0.01], facing: 3.8, scale: 0.8 },
+      { progress: 0.88, pos: [-4, -10, -26], rot: [0.13, 0.15, 0], facing: 3.9, scale: 0.8 },
+
+      // Abysse
+      { progress: 0.96, pos: [-2, -12, -29], rot: [0.15, 0.1, 0], facing: 4.0, scale: 0.8 },
+      { progress: 1, pos: [0, -15, -35], rot: [0.18, 0, 0], facing: 4.1, scale: 0.8 },
+    ],
+    []
+  );
+
+  const keyframes = isMobile ? mobileKeyframes : desktopKeyframes;
 
   const current = useRef({
     x: 0,

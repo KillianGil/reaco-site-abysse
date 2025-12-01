@@ -62,20 +62,20 @@ function Section1Surface() {
   const title = "ABYSSE";
 
   return (
-    <section ref={sectionRef} className="min-h-[130vh] flex items-center justify-center relative overflow-hidden snap-start">
+    <section ref={sectionRef} className="min-h-screen md:min-h-[130vh] flex items-center justify-center relative overflow-hidden snap-start">
       <div className="absolute inset-0 pointer-events-none opacity-50">
         <div className="absolute left-[10%] top-0 bottom-0 w-px bg-white/5" />
         <div className="absolute left-[90%] top-0 bottom-0 w-px bg-white/5" />
       </div>
 
-      <div className="text-center px-8 max-w-3xl -mt-64">
-        <p className="surface-1 text-[10px] uppercase tracking-[0.5em] text-white/50 mb-6 drop-shadow-md font-medium">
+      <div className="text-center px-4 md:px-8 max-w-3xl -mt-32 md:-mt-64">
+        <p className="surface-1 text-[8px] md:text-[10px] uppercase tracking-[0.5em] text-white/50 mb-4 md:mb-6 drop-shadow-md font-medium">
           Musée Sous-Marin • Toulon
         </p>
 
         <h1
           ref={titleRef}
-          className="text-[clamp(3.5rem,14vw,10rem)] font-light tracking-wide leading-[0.9] text-white mb-8 drop-shadow-lg"
+          className="text-[clamp(3rem,12vw,10rem)] font-light tracking-wide leading-[0.9] text-white mb-6 md:mb-8 drop-shadow-lg"
           style={{ perspective: "800px" }}
         >
           {title.split("").map((char, i) => (
@@ -85,18 +85,18 @@ function Section1Surface() {
           ))}
         </h1>
 
-        <p className="surface-2 text-lg md:text-xl font-medium tracking-wide text-white/70 mb-5 drop-shadow-md">
+        <p className="surface-2 text-base md:text-xl font-medium tracking-wide text-white/70 mb-4 md:mb-5 drop-shadow-md">
           Explorez l&apos;ultime frontière.
         </p>
 
-        <p className="surface-3 text-sm font-medium leading-relaxed text-white/50 max-w-md mx-auto drop-shadow-sm">
+        <p className="surface-3 text-xs md:text-sm font-medium leading-relaxed text-white/50 max-w-xs md:max-w-md mx-auto drop-shadow-sm">
           Une expérience immersive unique pour découvrir les mystères des profondeurs océaniques.
         </p>
 
-        <div className="surface-3 mt-14 flex items-center justify-center gap-3">
-          <div className="w-10 h-px bg-white/30" />
-          <span className="text-[9px] uppercase tracking-[0.25em] text-white/50 font-medium">Découvrir</span>
-          <div className="w-10 h-px bg-white/30" />
+        <div className="surface-3 mt-10 md:mt-14 flex items-center justify-center gap-3">
+          <div className="w-8 md:w-10 h-px bg-white/30" />
+          <span className="text-[8px] md:text-[9px] uppercase tracking-[0.25em] text-white/50 font-medium">Découvrir</span>
+          <div className="w-8 md:w-10 h-px bg-white/30" />
         </div>
       </div>
     </section>
