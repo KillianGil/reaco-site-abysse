@@ -1,7 +1,7 @@
 // components/Canvas/FishSchool.tsx
 "use client";
 
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useFBX, useTexture } from "@react-three/drei";
 import * as THREE from "three";
@@ -23,6 +23,47 @@ interface FishData {
   scale: number;
   pathType: string;
 }
+
+// Suppress FBXLoader warnings globally
+const originalWarn = console.warn;
+console.warn = (...args) => {
+  if (typeof args[0] === 'string' && args[0].includes('THREE.FBXLoader')) return;
+  originalWarn(...args);
+};
+
+const cleanGeometry = (child: THREE.Mesh) => {
+  const geo = child.geometry.clone();
+
+  // 1. Sanitize Attributes: Keep only essential ones
+  const keepAttributes = ['position', 'normal', 'uv'];
+  Object.keys(geo.attributes).forEach((key) => {
+    if (!keepAttributes.includes(key)) {
+      geo.deleteAttribute(key);
+    }
+  });
+
+  // 2. Fix NaNs in Position Attribute
+  const posAttr = geo.attributes.position;
+  if (posAttr) {
+    const array = posAttr.array as Float32Array;
+    let hasNaN = false;
+    for (let i = 0; i < array.length; i++) {
+      if (isNaN(array[i])) {
+        array[i] = 0;
+        hasNaN = true;
+      }
+    }
+    if (hasNaN) posAttr.needsUpdate = true;
+  }
+
+  // 3. Compute Bounding Sphere
+  geo.computeBoundingSphere();
+  if (isNaN(geo.boundingSphere?.radius || NaN)) {
+    geo.boundingSphere = new THREE.Sphere(new THREE.Vector3(), 5);
+  }
+
+  return geo;
+};
 
 export function FishSchool({ scrollProgress }: FishSchoolProps) {
   const groupRef = useRef<THREE.Group>(null);
@@ -98,7 +139,9 @@ export function FishSchool({ scrollProgress }: FishSchoolProps) {
   const emperorGeo = useMemo(() => {
     let geo: THREE.BufferGeometry | null = null;
     emperorFbx.traverse((child) => {
-      if ((child as THREE.Mesh).isMesh && !geo) geo = (child as THREE.Mesh).geometry;
+      if ((child as THREE.Mesh).isMesh && !geo) {
+        geo = cleanGeometry(child as THREE.Mesh);
+      }
     });
     return geo;
   }, [emperorFbx]);
@@ -106,7 +149,9 @@ export function FishSchool({ scrollProgress }: FishSchoolProps) {
   const fish3Geo = useMemo(() => {
     let geo: THREE.BufferGeometry | null = null;
     fish3Fbx.traverse((child) => {
-      if ((child as THREE.Mesh).isMesh && !geo) geo = (child as THREE.Mesh).geometry;
+      if ((child as THREE.Mesh).isMesh && !geo) {
+        geo = cleanGeometry(child as THREE.Mesh);
+      }
     });
     return geo;
   }, [fish3Fbx]);
