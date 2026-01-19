@@ -6,7 +6,8 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import { useScrollProgress } from "@/hooks/useScrollProgress";
-import { Overlay, DepthGauge, Navbar, OceanDecorations, Loader } from "@/components/UI";
+import { Overlay, DepthGauge, Navbar, OceanDecorations, Loader, CalmModeToggle } from "@/components/UI";
+import { AccessibilityProvider } from "@/contexts/AccessibilityContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -44,6 +45,7 @@ function PageContent() {
       <DepthGauge scrollProgress={scrollProgress} />
       <OceanDecorations scrollProgress={scrollProgress} />
       <Overlay />
+      <CalmModeToggle />
 
       {/* Grain overlay for texture */}
       <div className="grain-overlay" />
@@ -53,8 +55,10 @@ function PageContent() {
 
 export default function Home() {
   return (
-    <main className="relative">
-      <PageContent />
-    </main>
+    <AccessibilityProvider>
+      <main className="relative">
+        <PageContent />
+      </main>
+    </AccessibilityProvider>
   );
 }

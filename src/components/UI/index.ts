@@ -3,4 +3,5 @@ export { DepthGauge } from "./DepthGauge";
 export { Navbar } from "./Navbar";
 export { OceanDecorations } from "./OceanDecorations";
 export { Footer } from "./Footer";
+export { CalmModeToggle } from "./CalmModeToggle";
 export * from "./Loader";

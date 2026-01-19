@@ -5,7 +5,12 @@ import { useFrame } from "@react-three/fiber";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import * as THREE from "three";
 
-export function Jellyfish({ scrollProgress }: { scrollProgress: number }) {
+interface JellyfishProps {
+  scrollProgress: number;
+  reducedMotion?: boolean;
+}
+
+export function Jellyfish({ scrollProgress, reducedMotion = false }: JellyfishProps) {
   const { scene, animations } = useGLTF("/models/jellyfish2.glb", true);
   const { actions } = useAnimations(animations, scene);
   const groupRef = useRef<THREE.Group>(null);

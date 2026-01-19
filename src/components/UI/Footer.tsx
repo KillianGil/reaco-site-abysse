@@ -5,7 +5,7 @@ import { Mail, MapPin, Phone, Instagram, Linkedin, Youtube } from "lucide-react"
 
 export function Footer() {
     return (
-        <footer className="relative bg-[#020A19] border-t border-white/10">
+        <footer className="relative bg-[#031525] border-t border-white/10">
             {/* Background effects */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <div className="absolute bottom-0 left-1/4 w-[400px] h-[200px] bg-[#4CBBD5]/5 rounded-full blur-[100px]" />

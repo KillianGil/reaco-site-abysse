@@ -9,9 +9,10 @@ import * as THREE from "three";
 
 interface MantaRayProps {
     scrollProgress: number;
+    reducedMotion?: boolean;
 }
 
-export function MantaRay({ scrollProgress }: MantaRayProps) {
+export function MantaRay({ scrollProgress, reducedMotion = false }: MantaRayProps) {
     // RETOUR AUX SOURCES : On charge la scène brute, sans clonage ni modification de matériau
     // Cela devrait garantir que la texture originale s'affiche correctement
     const { scene, animations } = useGLTF("/models/manta-final.glb", true);
@@ -39,6 +40,13 @@ export function MantaRay({ scrollProgress }: MantaRayProps) {
 
     useFrame(({ clock }) => {
         if (!groupRef.current) return;
+
+        // En mode calme, cacher la raie manta
+        if (reducedMotion) {
+            groupRef.current.visible = false;
+            return;
+        }
+
         const t = clock.getElapsedTime();
 
         // Visible UNIQUEMENT pendant la plage de scroll (comme une "fenêtre")

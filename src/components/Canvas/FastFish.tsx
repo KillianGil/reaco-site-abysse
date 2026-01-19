@@ -8,6 +8,7 @@ import * as THREE from "three";
 
 interface FastFishProps {
   scrollProgress: number;
+  reducedMotion?: boolean;
 }
 
 interface FastFishInstance {
@@ -18,7 +19,7 @@ interface FastFishInstance {
   duration: number;
 }
 
-export function FastFish({ scrollProgress }: FastFishProps) {
+export function FastFish({ scrollProgress, reducedMotion = false }: FastFishProps) {
   const groupRef = useRef<THREE.Group>(null);
 
   const fish1Gltf = useGLTF("/models/poisson/fish1.glb", true);
@@ -126,16 +127,17 @@ export function FastFish({ scrollProgress }: FastFishProps) {
     }
   };
 
-  // Spawn initial au chargement
+  // Spawn initial au chargement (seulement si pas en mode calme)
   useEffect(() => {
+    if (reducedMotion) return;
     // Lance quelques poissons pour commencer, mais moins agressif
     spawnSchool(0);
     spawnSingleFish(0.5);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [reducedMotion]);
 
   useFrame((state) => {
-    if (!groupRef.current) return;
+    if (!groupRef.current || reducedMotion) return;
     const time = state.clock.elapsedTime;
 
     // ✅ SPAWN DE GROUPES : Plus calme
@@ -203,7 +205,7 @@ export function FastFish({ scrollProgress }: FastFishProps) {
     });
   });
 
-  return <group ref={groupRef} />;
+  return <group ref={groupRef} visible={!reducedMotion} />;
 }
 
 useGLTF.preload("/models/poisson/fish1.glb", true);
