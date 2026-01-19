@@ -21,9 +21,9 @@ interface FastFishInstance {
 export function FastFish({ scrollProgress }: FastFishProps) {
   const groupRef = useRef<THREE.Group>(null);
 
-  const fish1Gltf = useGLTF("/models/poisson/fish1.glb");
-  const fish2Gltf = useGLTF("/models/poisson/fish2.glb");
-  const fish3Gltf = useGLTF("/models/poisson/fish3.glb");
+  const fish1Gltf = useGLTF("/models/poisson/fish1.glb", true);
+  const fish2Gltf = useGLTF("/models/poisson/fish2.glb", true);
+  const fish3Gltf = useGLTF("/models/poisson/fish3.glb", true);
 
   const fishModels = useMemo(() => [
     fish1Gltf.scene,
@@ -206,6 +206,6 @@ export function FastFish({ scrollProgress }: FastFishProps) {
   return <group ref={groupRef} />;
 }
 
-useGLTF.preload("/models/poisson/fish1.glb");
-useGLTF.preload("/models/poisson/fish2.glb");
-useGLTF.preload("/models/poisson/fish3.glb");
+useGLTF.preload("/models/poisson/fish1.glb", true);
+useGLTF.preload("/models/poisson/fish2.glb", true);
+useGLTF.preload("/models/poisson/fish3.glb", true);

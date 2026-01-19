@@ -14,7 +14,7 @@ interface MantaRayProps {
 export function MantaRay({ scrollProgress }: MantaRayProps) {
     // RETOUR AUX SOURCES : On charge la scène brute, sans clonage ni modification de matériau
     // Cela devrait garantir que la texture originale s'affiche correctement
-    const { scene, animations } = useGLTF("/models/manta-final.glb");
+    const { scene, animations } = useGLTF("/models/manta-final.glb", true);
     const { actions } = useAnimations(animations, scene);
     const groupRef = useRef<THREE.Group>(null);
 
@@ -88,4 +88,4 @@ export function MantaRay({ scrollProgress }: MantaRayProps) {
     );
 }
 
-useGLTF.preload("/models/manta-final.glb");
+useGLTF.preload("/models/manta-final.glb", true);

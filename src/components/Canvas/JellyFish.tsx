@@ -6,11 +6,12 @@ import { useGLTF, useAnimations } from "@react-three/drei";
 import * as THREE from "three";
 
 export function Jellyfish({ scrollProgress }: { scrollProgress: number }) {
-  const { scene, animations } = useGLTF("/models/jellyfish2.glb");
+  const { scene, animations } = useGLTF("/models/jellyfish2.glb", true);
   const { actions } = useAnimations(animations, scene);
   const groupRef = useRef<THREE.Group>(null);
+  const materialsRef = useRef<THREE.MeshStandardMaterial[]>([]);
 
-  const START_SCROLL = 0.6; 
+  const START_SCROLL = 0.6;
   const END_SCROLL = 0.95;
 
   useEffect(() => {
@@ -21,54 +22,48 @@ export function Jellyfish({ scrollProgress }: { scrollProgress: number }) {
           const action = actions[key];
           if (action) {
             action.reset().fadeIn(0.5).play();
-            action.timeScale = 0.8; // Un peu plus rapide pour voir les tentacules bouger
+            action.timeScale = 0.8;
           }
         });
       }
     }
 
+    // Cache materials once instead of traversing every frame
+    const materials: THREE.MeshStandardMaterial[] = [];
     scene.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
         const mesh = child as THREE.Mesh;
         if (mesh.material) {
           const mat = mesh.material as THREE.MeshStandardMaterial;
           mat.transparent = true;
-          mat.opacity = 0; // Commence invisible pour le fade-in
-          mat.emissiveIntensity = 0.6; // Beaucoup plus lumineux (était 0.3)
+          mat.opacity = 0;
+          mat.emissiveIntensity = 0.6;
           mat.roughness = 0.1;
           mat.metalness = 0.1;
+          materials.push(mat);
         }
       }
     });
+    materialsRef.current = materials;
   }, [scene, actions]);
 
   useFrame((state) => {
     if (!groupRef.current) return;
 
-    // Gestion visibilité avec FADE (plus doux)
     const isVisibleRange = scrollProgress > START_SCROLL - 0.1 && scrollProgress < END_SCROLL + 0.1;
 
-    // Calcul de l'opacité cible
     let targetOpacity = 0;
     if (isVisibleRange) {
-      // Fade in/out basé sur la distance aux bords de la zone
       const distFromStart = scrollProgress - (START_SCROLL - 0.1);
       const distFromEnd = (END_SCROLL + 0.1) - scrollProgress;
-
-      // FADE PLUS RAPIDE (x8 au lieu de x4)
       const fade = Math.min(distFromStart, distFromEnd) * 8;
       targetOpacity = Math.max(0, Math.min(1.0, fade));
     }
 
-    scene.traverse((child) => {
-      if ((child as THREE.Mesh).isMesh) {
-        const mesh = child as THREE.Mesh;
-        if (mesh.material) {
-          const mat = mesh.material as THREE.MeshStandardMaterial;
-          mat.opacity = THREE.MathUtils.lerp(mat.opacity, targetOpacity, 0.1);
-        }
-      }
-    });
+    // Use cached materials instead of traversing scene every frame
+    for (const mat of materialsRef.current) {
+      mat.opacity = THREE.MathUtils.lerp(mat.opacity, targetOpacity, 0.1);
+    }
 
     groupRef.current.visible = true;
 
@@ -163,4 +158,4 @@ export function Jellyfish({ scrollProgress }: { scrollProgress: number }) {
   );
 }
 
-useGLTF.preload("/models/jellyfish2.glb");
+useGLTF.preload("/models/jellyfish2.glb", true);

@@ -13,7 +13,7 @@ interface SeaweedProps {
 export function Seaweed({ scrollProgress }: SeaweedProps) {
   const groupRef = useRef<THREE.Group>(null);
 
-  const seaweed = useGLTF("/models/seaweed2.glb");
+  const seaweed = useGLTF("/models/seaweed2.glb", true);
 
   // ✅ Réduction à 80 pour les performances (au lieu de 160)
   const seaweedData = useRef(
@@ -136,4 +136,4 @@ export function Seaweed({ scrollProgress }: SeaweedProps) {
   );
 }
 
-useGLTF.preload("/models/seaweed2.glb");
+useGLTF.preload("/models/seaweed2.glb", true);

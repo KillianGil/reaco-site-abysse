@@ -9,7 +9,7 @@ import * as THREE from "three";
 // ✅ Composant Modèle (Memoized pour éviter les re-renders et restart d'animation)
 const SubmarineModel = memo(() => {
   // ✅ Utilisation du bon fichier
-  const { scene, animations } = useGLTF("/models/submarinetest.glb");
+  const { scene, animations } = useGLTF("/models/submarinetest.glb", true);
 
   // Ref locale pour l'animation
   const localRef = useRef<THREE.Group>(null);
@@ -251,44 +251,34 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
 
   return (
     <>
-      <ambientLight intensity={0.3} color="#6da8c8" />
+      <ambientLight intensity={0.4} color="#6da8c8" />
       <directionalLight
         position={[10, 60, 15]}
-        intensity={1.8}
+        intensity={2.0}
         color="#c8e4f5"
         castShadow
       />
       <directionalLight
         position={[-8, 40, 10]}
-        intensity={0.8}
+        intensity={0.9}
         color="#a8cce0"
       />
+      {/* Reduced from 3 spotlights to 2, removed castShadow from spotlights for performance */}
       <spotLight
         position={[15, 8, 5]}
         angle={0.5}
         penumbra={0.8}
-        intensity={3}
+        intensity={3.5}
         color="#7ac8e8"
         distance={60}
-        castShadow
       />
       <spotLight
         position={[-15, 8, 5]}
         angle={0.5}
         penumbra={0.8}
-        intensity={3}
+        intensity={3.5}
         color="#68b8d8"
         distance={60}
-        castShadow
-      />
-      <spotLight
-        position={[0, -2, 0]}
-        angle={0.3}
-        penumbra={0.5}
-        intensity={2}
-        color="#ffffff"
-        distance={30}
-        target={groupRef.current || undefined}
       />
 
       <group ref={groupRef}>
@@ -301,4 +291,4 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
 }
 
 // ✅ Preload le modèle
-useGLTF.preload("/models/submarinetest.glb");
+useGLTF.preload("/models/submarinetest.glb", true);

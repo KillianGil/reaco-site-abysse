@@ -3,6 +3,7 @@
 import { Canvas } from "@react-three/fiber";
 import { Suspense, useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
+import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 import { Submarine } from "./Submarine";
 import { OceanEnvironment } from "./OceanEnvironment";
@@ -13,6 +14,10 @@ import { FastFish } from "./FastFish";
 import { Seaweed } from "./SeaWeed";
 import { Jellyfish } from "./JellyFish";
 import { MantaRay } from "./MantaRay";
+
+// Configure Draco decoder globally for all GLTF models
+// MeshOpt decoder is loaded automatically by drei when meshoptimizer package is installed
+useGLTF.setDecoderPath("https://www.gstatic.com/draco/versioned/decoders/1.5.6/");
 
 interface SceneProps {
   scrollProgress: number;
@@ -37,12 +42,23 @@ function createCircleTexture() {
   return texture;
 }
 
+// Texture cache - created once outside component
+let circleTextureCache: THREE.CanvasTexture | null = null;
+function getCircleTexture() {
+  if (circleTextureCache) return circleTextureCache;
+  circleTextureCache = createCircleTexture();
+  return circleTextureCache;
+}
+
 // ✅ MARINE SNOW OPTIMISÉ
 function MarineSnow({ scrollProgress }: { scrollProgress: number }) {
   const ref = useRef<THREE.Points>(null);
 
+  // Cache texture in useMemo
+  const circleTexture = useMemo(() => getCircleTexture(), []);
+
   const { positions, velocities } = useMemo(() => {
-    const count = 800; // Augmenté pour plus de réalisme
+    const count = 600; // Réduit de 800 à 600 pour la performance
     const pos = new Float32Array(count * 3);
     const vel = new Float32Array(count * 3);
 
@@ -63,16 +79,18 @@ function MarineSnow({ scrollProgress }: { scrollProgress: number }) {
     if (!ref.current) return;
 
     const posArray = ref.current.geometry.attributes.position.array as Float32Array;
+    const count = posArray.length / 3;
 
-    for (let i = 0; i < posArray.length / 3; i++) {
-      posArray[i * 3] += velocities[i * 3];
-      posArray[i * 3 + 1] += velocities[i * 3 + 1];
-      posArray[i * 3 + 2] += velocities[i * 3 + 2];
+    for (let i = 0; i < count; i++) {
+      const i3 = i * 3;
+      posArray[i3] += velocities[i3];
+      posArray[i3 + 1] += velocities[i3 + 1];
+      posArray[i3 + 2] += velocities[i3 + 2];
 
       // Reset si trop bas
-      if (posArray[i * 3 + 1] < -175) {
-        posArray[i * 3 + 1] = 175;
-        posArray[i * 3] = (Math.random() - 0.5) * 120;
+      if (posArray[i3 + 1] < -175) {
+        posArray[i3 + 1] = 175;
+        posArray[i3] = (Math.random() - 0.5) * 120;
       }
     }
 
@@ -85,7 +103,7 @@ function MarineSnow({ scrollProgress }: { scrollProgress: number }) {
       <bufferGeometry>
         <bufferAttribute
           attach="attributes-position"
-          count={800}
+          count={600}
           array={positions}
           itemSize={3}
         />
@@ -98,7 +116,7 @@ function MarineSnow({ scrollProgress }: { scrollProgress: number }) {
         sizeAttenuation
         depthWrite={false}
         alphaTest={0.01}
-        map={createCircleTexture()}
+        map={circleTexture}
       />
     </points>
   );

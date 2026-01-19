@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -8,48 +8,44 @@ gsap.registerPlugin(ScrollTrigger);
 
 export function useScrollProgress(): number {
   const [progress, setProgress] = useState(0);
+  const targetRef = useRef(0);
+  const currentRef = useRef(0);
+  const rafIdRef = useRef<number | null>(null);
 
-  const updateProgress = useCallback(() => {
+  const updateTarget = useCallback(() => {
     const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
     if (scrollHeight <= 0) return;
-
-    const scrollTop = window.scrollY;
-    const newProgress = Math.min(Math.max(scrollTop / scrollHeight, 0), 1);
-    
-    // Smooth the progress value slightly
-    setProgress((prev) => prev + (newProgress - prev) * 0.1 || newProgress);
+    targetRef.current = Math.min(Math.max(window.scrollY / scrollHeight, 0), 1);
   }, []);
 
   useEffect(() => {
-    // Initial calculation
-    updateProgress();
+    updateTarget();
 
-    // Create ScrollTrigger for updates
     const trigger = ScrollTrigger.create({
       start: 0,
       end: "max",
-      onUpdate: updateProgress,
+      onUpdate: updateTarget,
     });
 
-    // Backup listeners
-    window.addEventListener("scroll", updateProgress, { passive: true });
-    window.addEventListener("resize", updateProgress, { passive: true });
+    window.addEventListener("resize", updateTarget, { passive: true });
 
-    // RAF loop for smooth updates
-    let rafId: number;
+    // Single RAF loop - uses ref for diff check to avoid stale closure
     const tick = () => {
-      updateProgress();
-      rafId = requestAnimationFrame(tick);
+      const diff = targetRef.current - currentRef.current;
+      if (Math.abs(diff) > 0.0005) {
+        currentRef.current += diff * 0.12;
+        setProgress(currentRef.current);
+      }
+      rafIdRef.current = requestAnimationFrame(tick);
     };
-    rafId = requestAnimationFrame(tick);
+    rafIdRef.current = requestAnimationFrame(tick);
 
     return () => {
       trigger.kill();
-      window.removeEventListener("scroll", updateProgress);
-      window.removeEventListener("resize", updateProgress);
-      cancelAnimationFrame(rafId);
+      window.removeEventListener("resize", updateTarget);
+      if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
     };
-  }, [updateProgress]);
+  }, [updateTarget]);
 
   return progress;
 }

@@ -19,14 +19,14 @@ export function LenisProvider({ children }: LenisProviderProps) {
   useEffect(() => {
     // Initialize Lenis for buttery smooth scrolling
     const lenis = new Lenis({
-      duration: 1.8,
+      duration: 1.2, // Réduit de 1.8 à 1.2 pour plus de réactivité
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: "vertical",
       gestureOrientation: "vertical",
       smoothWheel: true,
-      touchMultiplier: 1.5,
+      touchMultiplier: 1.8, // Augmenté pour meilleure réponse tactile
       infinite: false,
-      wheelMultiplier: 0.8,
+      wheelMultiplier: 1.0, // Augmenté de 0.8 pour réponse plus directe
     });
 
     lenisRef.current = lenis;

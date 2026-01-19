@@ -7,7 +7,7 @@ import * as THREE from "three";
 
 export function Anglerfish({ scrollProgress }: { scrollProgress: number }) {
   const groupRef = useRef<THREE.Group>(null);
-  const { scene, animations } = useGLTF("/models/anglerfish-final.glb");
+  const { scene, animations } = useGLTF("/models/anglerfish-final.glb", true);
   const { actions } = useAnimations(animations, scene);
   const lightRef = useRef<THREE.PointLight>(null);
 
@@ -108,4 +108,4 @@ export function Anglerfish({ scrollProgress }: { scrollProgress: number }) {
   );
 }
 
-useGLTF.preload("/models/anglerfish-final.glb");
+useGLTF.preload("/models/anglerfish-final.glb", true);

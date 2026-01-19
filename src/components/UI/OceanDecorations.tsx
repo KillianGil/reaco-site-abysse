@@ -1,13 +1,51 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 interface OceanDecorationsProps {
   scrollProgress: number;
 }
 
+// Generate random values once
+function generateBubbles(count: number) {
+  return Array.from({ length: count }, (_, i) => ({
+    id: i,
+    size: Math.random() * 3 + 2,
+    left: Math.random() * 100,
+    duration: 25 + Math.random() * 30,
+    delay: Math.random() * 20,
+  }));
+}
+
+function generatePlankton(count: number) {
+  return Array.from({ length: count }, (_, i) => ({
+    id: i,
+    size: 1 + Math.random() * 2,
+    left: Math.random() * 100,
+    top: Math.random() * 100,
+    duration: 40 + Math.random() * 40,
+    delay: Math.random() * 20,
+  }));
+}
+
+function generateBio(count: number) {
+  return Array.from({ length: count }, (_, i) => ({
+    id: i,
+    size: 3 + Math.random() * 2,
+    left: 15 + Math.random() * 70,
+    top: 15 + Math.random() * 70,
+    duration: 8 + Math.random() * 6,
+    delay: Math.random() * 8,
+  }));
+}
+
 export function OceanDecorations({ scrollProgress }: OceanDecorationsProps) {
   const [mounted, setMounted] = useState(false);
+
+  // Memoize random values - generated once
+  const bubbles = useMemo(() => generateBubbles(12), []);
+  const plankton = useMemo(() => generatePlankton(15), []);
+  const bioLights = useMemo(() => generateBio(6), []);
 
   useEffect(() => {
     setMounted(true);
@@ -19,17 +57,17 @@ export function OceanDecorations({ scrollProgress }: OceanDecorationsProps) {
     <>
       {/* Bulles flottantes */}
       <div className="fixed inset-0 pointer-events-none z-[5] overflow-hidden">
-        {[...Array(12)].map((_, i) => (
+        {bubbles.map((b) => (
           <div
-            key={`bubble-${i}`}
+            key={`bubble-${b.id}`}
             className="absolute rounded-full animate-float-up"
             style={{
-              width: `${Math.random() * 3 + 2}px`,
-              height: `${Math.random() * 3 + 2}px`,
-              left: `${Math.random() * 100}%`,
+              width: `${b.size}px`,
+              height: `${b.size}px`,
+              left: `${b.left}%`,
               bottom: `-5%`,
-              animationDuration: `${25 + Math.random() * 30}s`,
-              animationDelay: `${Math.random() * 20}s`,
+              animationDuration: `${b.duration}s`,
+              animationDelay: `${b.delay}s`,
               background: "rgba(255,255,255,0.12)",
             }}
           />
@@ -38,18 +76,18 @@ export function OceanDecorations({ scrollProgress }: OceanDecorationsProps) {
 
       {/* Plancton bioluminescent */}
       <div className="fixed inset-0 pointer-events-none z-[5] overflow-hidden">
-        {[...Array(15)].map((_, i) => (
+        {plankton.map((p) => (
           <div
-            key={`plankton-${i}`}
+            key={`plankton-${p.id}`}
             className="absolute rounded-full animate-drift-slow"
             style={{
-              width: `${1 + Math.random() * 2}px`,
-              height: `${1 + Math.random() * 2}px`,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              width: `${p.size}px`,
+              height: `${p.size}px`,
+              left: `${p.left}%`,
+              top: `${p.top}%`,
               background: "rgba(255,255,255,0.15)",
-              animationDuration: `${40 + Math.random() * 40}s`,
-              animationDelay: `${Math.random() * 20}s`,
+              animationDuration: `${p.duration}s`,
+              animationDelay: `${p.delay}s`,
             }}
           />
         ))}
@@ -58,19 +96,19 @@ export function OceanDecorations({ scrollProgress }: OceanDecorationsProps) {
       {/* Bioluminescence dans les profondeurs */}
       {scrollProgress > 0.55 && (
         <div className="fixed inset-0 pointer-events-none z-[5]">
-          {[...Array(6)].map((_, i) => (
+          {bioLights.map((bio) => (
             <div
-              key={`bio-${i}`}
+              key={`bio-${bio.id}`}
               className="absolute rounded-full animate-glow-slow"
               style={{
-                width: `${3 + Math.random() * 2}px`,
-                height: `${3 + Math.random() * 2}px`,
-                left: `${15 + Math.random() * 70}%`,
-                top: `${15 + Math.random() * 70}%`,
+                width: `${bio.size}px`,
+                height: `${bio.size}px`,
+                left: `${bio.left}%`,
+                top: `${bio.top}%`,
                 background: "rgba(120,255,200,0.3)",
                 boxShadow: "0 0 8px rgba(120,255,200,0.2)",
-                animationDuration: `${8 + Math.random() * 6}s`,
-                animationDelay: `${Math.random() * 8}s`,
+                animationDuration: `${bio.duration}s`,
+                animationDelay: `${bio.delay}s`,
               }}
             />
           ))}
