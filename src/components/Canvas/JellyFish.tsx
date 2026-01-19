@@ -10,7 +10,7 @@ interface JellyfishProps {
   reducedMotion?: boolean;
 }
 
-export function Jellyfish({ scrollProgress }: JellyfishProps) {
+export function Jellyfish({ scrollProgress, reducedMotion = false }: JellyfishProps) {
   const { scene, animations } = useGLTF("/models/jellyfish2.glb", true);
   const { actions } = useAnimations(animations, scene);
   const groupRef = useRef<THREE.Group>(null);
@@ -26,8 +26,16 @@ export function Jellyfish({ scrollProgress }: JellyfishProps) {
         actionKeys.forEach(key => {
           const action = actions[key];
           if (action) {
-            action.reset().fadeIn(0.5).play();
-            action.timeScale = 0.8;
+            if (reducedMotion) {
+              // En mode calme, mettre en pause l'animation
+              action.paused = true;
+            } else {
+              action.paused = false;
+              if (!action.isRunning()) {
+                action.reset().fadeIn(0.5).play();
+              }
+              action.timeScale = 0.8;
+            }
           }
         });
       }
@@ -50,7 +58,12 @@ export function Jellyfish({ scrollProgress }: JellyfishProps) {
       }
     });
     materialsRef.current = materials;
-  }, [scene, actions]);
+  }, [scene, actions, reducedMotion]);
+
+  // Temps figé et offset pour reprise fluide
+  const frozenTimeRef = useRef<number>(0);
+  const timeOffsetRef = useRef<number>(0);
+  const wasReducedRef = useRef<boolean>(false);
 
   useFrame((state) => {
     if (!groupRef.current) return;
@@ -72,19 +85,31 @@ export function Jellyfish({ scrollProgress }: JellyfishProps) {
 
     groupRef.current.visible = true;
 
-    const t = state.clock.elapsedTime;
+    const realTime = state.clock.elapsedTime;
 
-    const floatY = Math.sin(t * 0.2) * 10 + Math.sin(t * 0.1) * 5;
-    const floatX = Math.sin(t * 0.1) * 8;
-    const floatZ = Math.cos(t * 0.1) * 5;
+    // Détection du changement de mode pour reprise fluide
+    if (reducedMotion && !wasReducedRef.current) {
+      frozenTimeRef.current = realTime - timeOffsetRef.current;
+    } else if (!reducedMotion && wasReducedRef.current) {
+      timeOffsetRef.current = realTime - frozenTimeRef.current;
+    }
+    wasReducedRef.current = reducedMotion;
+
+    // Temps d'animation avec reprise fluide
+    const t = reducedMotion ? frozenTimeRef.current : realTime - timeOffsetRef.current;
+
+    // Mouvement figé en mode calme
+    const floatY = reducedMotion ? 0 : Math.sin(t * 0.2) * 10 + Math.sin(t * 0.1) * 5;
+    const floatX = reducedMotion ? 0 : Math.sin(t * 0.1) * 8;
+    const floatZ = reducedMotion ? 0 : Math.cos(t * 0.1) * 5;
 
     // Position de base
-    const BASE_DEPTH = -70; // Ajusté pour être visible avec cameraY
+    const BASE_DEPTH = -70;
     const OFFSET_X = -25;
-    const cameraY = scrollProgress * 100; // RESTAURÉ pour suivre le scroll
+    const cameraY = scrollProgress * 100;
 
-    // DÉPLACEMENT VERTICAL LENT basé sur le temps
-    const verticalCycle = Math.sin(t * 0.08) * 15; // Cycle lent de montée/descente
+    // DÉPLACEMENT VERTICAL LENT - figé en mode calme
+    const verticalCycle = reducedMotion ? 0 : Math.sin(t * 0.08) * 15;
     // MEDUSE 1 (Principale)
     groupRef.current.position.set(
       floatX + OFFSET_X,
@@ -92,20 +117,20 @@ export function Jellyfish({ scrollProgress }: JellyfishProps) {
       -40 + floatZ
     );
 
-    // Rotation douce
-    const targetRotationY = Math.cos(t * 0.2) * 0.5;
-    const targetRotationX = Math.cos(t * 0.3) * 0.2;
-    const targetRotationZ = Math.sin(t * 0.2) * 0.1;
+    // Rotation douce - figée en mode calme
+    const targetRotationY = reducedMotion ? 0 : Math.cos(t * 0.2) * 0.5;
+    const targetRotationX = reducedMotion ? 0 : Math.cos(t * 0.3) * 0.2;
+    const targetRotationZ = reducedMotion ? 0 : Math.sin(t * 0.2) * 0.1;
 
     groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, targetRotationY, 0.05);
     groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, targetRotationX, 0.05);
     groupRef.current.rotation.z = THREE.MathUtils.lerp(groupRef.current.rotation.z, targetRotationZ, 0.05);
 
-    // Pulsation rythmique (scale)
-    const pulse = Math.sin(t * 1.5);
+    // Pulsation rythmique (scale) - figée en mode calme
+    const pulse = reducedMotion ? 0 : Math.sin(t * 1.5);
     const squish = pulse * 0.05;
 
-    const baseScale = 2.0; // Taille ajustée
+    const baseScale = 2.0;
     groupRef.current.scale.set(baseScale - squish, baseScale + squish, baseScale - squish);
   });
 
@@ -115,31 +140,49 @@ export function Jellyfish({ scrollProgress }: JellyfishProps) {
   // Ref pour la 2ème méduse
   const secondRef = useRef<THREE.Group>(null);
 
+  // Temps figé et offset pour la 2ème méduse (reprise fluide)
+  const frozenTimeRef2 = useRef<number>(2.5);
+  const timeOffsetRef2 = useRef<number>(0);
+  const wasReducedRef2 = useRef<boolean>(false);
+
   useFrame((state) => {
     if (!secondRef.current) return;
-    const t = state.clock.elapsedTime + 2.5; // Décalage de temps
 
-    // Mouvement décalé
-    const floatY = Math.sin(t * 0.15) * 12 + Math.sin(t * 0.1) * 6;
-    const floatX = Math.sin(t * 0.12) * 9;
-    const floatZ = Math.cos(t * 0.12) * 6;
+    const realTime = state.clock.elapsedTime + 2.5; // Décalage de base
 
-    const BASE_DEPTH = -60; // Un peu plus haut
-    const OFFSET_X = 15; // À droite
+    // Détection du changement de mode pour reprise fluide
+    if (reducedMotion && !wasReducedRef2.current) {
+      frozenTimeRef2.current = realTime - timeOffsetRef2.current;
+    } else if (!reducedMotion && wasReducedRef2.current) {
+      timeOffsetRef2.current = realTime - frozenTimeRef2.current;
+    }
+    wasReducedRef2.current = reducedMotion;
+
+    // Temps d'animation avec reprise fluide
+    const t = reducedMotion ? frozenTimeRef2.current : realTime - timeOffsetRef2.current;
+
+    // Mouvement décalé - figé en mode calme
+    const floatY = reducedMotion ? 0 : Math.sin(t * 0.15) * 12 + Math.sin(t * 0.1) * 6;
+    const floatX = reducedMotion ? 0 : Math.sin(t * 0.12) * 9;
+    const floatZ = reducedMotion ? 0 : Math.cos(t * 0.12) * 6;
+
+    const BASE_DEPTH = -60;
+    const OFFSET_X = 15;
     const cameraY = scrollProgress * 100;
 
-    const verticalCycle = Math.sin(t * 0.07) * 18;
+    const verticalCycle = reducedMotion ? 0 : Math.sin(t * 0.07) * 18;
 
     secondRef.current.position.set(
       floatX + OFFSET_X,
       BASE_DEPTH + cameraY + floatY * 0.3 + verticalCycle,
-      -50 + floatZ // Plus loin
+      -50 + floatZ
     );
 
-    // Rotation
-    secondRef.current.rotation.y = Math.cos(t * 0.2) * 0.5;
+    // Rotation - figée en mode calme
+    secondRef.current.rotation.y = reducedMotion ? 0 : Math.cos(t * 0.2) * 0.5;
 
-    const pulse = Math.sin(t * 1.4);
+    // Pulsation - figée en mode calme
+    const pulse = reducedMotion ? 0 : Math.sin(t * 1.4);
     const squish = pulse * 0.05;
     const baseScale = 1.6;
     secondRef.current.scale.set(baseScale - squish, baseScale + squish, baseScale - squish);

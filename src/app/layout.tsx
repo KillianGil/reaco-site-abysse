@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { Manrope } from "next/font/google";
 import "./globals.css";
 
-// Custom font Glancyr
+// Custom font Glancyr (local - no external requests)
 const glancyr = localFont({
   src: [
     {
@@ -34,13 +33,8 @@ const glancyr = localFont({
   ],
   variable: "--font-glancyr",
   display: "swap",
-});
-
-// Fallback font
-const manrope = Manrope({
-  subsets: ["latin"],
-  variable: "--font-manrope",
-  display: "swap",
+  // Fallback to system fonts - no external Google Fonts request
+  fallback: ["system-ui", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
 });
 
 export const metadata: Metadata = {
@@ -58,7 +52,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" className={`${glancyr.variable} ${manrope.variable}`}>
+    <html lang="fr" className={glancyr.variable}>
       <body>
         <LenisProvider>
           {children}

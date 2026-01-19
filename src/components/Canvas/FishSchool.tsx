@@ -8,6 +8,7 @@ import * as THREE from "three";
 
 interface FishSchoolProps {
   scrollProgress: number;
+  reducedMotion?: boolean;
 }
 
 interface FishData {
@@ -65,7 +66,7 @@ const cleanGeometry = (child: THREE.Mesh) => {
   return geo;
 };
 
-export function FishSchool({ scrollProgress }: FishSchoolProps) {
+export function FishSchool({ scrollProgress, reducedMotion = false }: FishSchoolProps) {
   const groupRef = useRef<THREE.Group>(null);
   const emperorRef = useRef<THREE.InstancedMesh>(null);
   const fish3Ref = useRef<THREE.InstancedMesh>(null);
@@ -201,8 +202,26 @@ export function FishSchool({ scrollProgress }: FishSchoolProps) {
     };
   };
 
+  // Stocker le temps figé et l'offset pour reprise fluide
+  const frozenTimeRef = useRef<number>(0);
+  const timeOffsetRef = useRef<number>(0);
+  const wasReducedRef = useRef<boolean>(false);
+
   useFrame(({ clock }) => {
-    const t = clock.getElapsedTime();
+    const realTime = clock.getElapsedTime();
+
+    // Détection du changement de mode
+    if (reducedMotion && !wasReducedRef.current) {
+      // On vient d'activer le mode calme - mémoriser le temps
+      frozenTimeRef.current = realTime - timeOffsetRef.current;
+    } else if (!reducedMotion && wasReducedRef.current) {
+      // On vient de désactiver le mode calme - calculer l'offset pour reprise fluide
+      timeOffsetRef.current = realTime - frozenTimeRef.current;
+    }
+    wasReducedRef.current = reducedMotion;
+
+    // Temps d'animation : figé ou avec offset pour reprise fluide
+    const t = reducedMotion ? frozenTimeRef.current : realTime - timeOffsetRef.current;
 
     // Update Emperor instances
     if (emperorRef.current) {
@@ -212,14 +231,14 @@ export function FishSchool({ scrollProgress }: FishSchoolProps) {
 
         dummy.position.set(pos.x, y, pos.z);
 
-        // Rotation
+        // Rotation - figée en mode calme
         const baseRotationY = fish.pathType === 'curve-right' ? Math.PI : 0;
-        const bodyUndulation = Math.sin(t * 5 + fish.phase * 4) * 0.15;
+        const bodyUndulation = reducedMotion ? 0 : Math.sin(t * 5 + fish.phase * 4) * 0.15;
 
         dummy.rotation.set(
-          Math.sin(t * 3 + fish.phase) * 0.03,
+          reducedMotion ? 0 : Math.sin(t * 3 + fish.phase) * 0.03,
           baseRotationY + bodyUndulation,
-          Math.sin(t * 4 + fish.phase * 2) * 0.04
+          reducedMotion ? 0 : Math.sin(t * 4 + fish.phase * 2) * 0.04
         );
 
         dummy.scale.set(fish.scale, fish.scale, fish.scale);
@@ -238,14 +257,14 @@ export function FishSchool({ scrollProgress }: FishSchoolProps) {
 
         dummy.position.set(pos.x, y, pos.z);
 
-        // Rotation (Fish3 est orienté différemment de base)
+        // Rotation (Fish3 est orienté différemment de base) - figée en mode calme
         const baseRotationY = fish.pathType === 'curve-right' ? -Math.PI / 2 : Math.PI / 2;
-        const bodyUndulation = Math.sin(t * 5 + fish.phase * 4) * 0.15;
+        const bodyUndulation = reducedMotion ? 0 : Math.sin(t * 5 + fish.phase * 4) * 0.15;
 
         dummy.rotation.set(
-          Math.sin(t * 3 + fish.phase) * 0.03,
+          reducedMotion ? 0 : Math.sin(t * 3 + fish.phase) * 0.03,
           baseRotationY + bodyUndulation,
-          Math.sin(t * 4 + fish.phase * 2) * 0.04
+          reducedMotion ? 0 : Math.sin(t * 4 + fish.phase * 2) * 0.04
         );
 
         dummy.scale.set(fish.scale, fish.scale, fish.scale);

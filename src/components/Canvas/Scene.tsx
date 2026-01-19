@@ -14,6 +14,7 @@ import { FastFish } from "./FastFish";
 import { Seaweed } from "./SeaWeed";
 import { Jellyfish } from "./JellyFish";
 import { MantaRay } from "./MantaRay";
+import { useAccessibility } from "@/contexts/AccessibilityContext";
 
 // Configure Draco decoder globally for all GLTF models
 // MeshOpt decoder is loaded automatically by drei when meshoptimizer package is installed
@@ -275,6 +276,8 @@ function VolumetricLight({ scrollProgress }: { scrollProgress: number }) {
 }
 
 export function Scene({ scrollProgress }: SceneProps) {
+  const { reducedMotion } = useAccessibility();
+
   return (
     <div className="canvas-container">
       <Canvas
@@ -300,20 +303,20 @@ export function Scene({ scrollProgress }: SceneProps) {
         <Suspense fallback={null}>
           <OceanEnvironment scrollProgress={scrollProgress} />
 
-          {/* ✅ Effets visuels */}
-          <WaterCaustics scrollProgress={scrollProgress} />
-          <VolumetricLight scrollProgress={scrollProgress} />
-          <MarineSnow scrollProgress={scrollProgress} />
+          {/* ✅ Effets visuels - désactivés en mode calme pour performance */}
+          {!reducedMotion && <WaterCaustics scrollProgress={scrollProgress} />}
+          {!reducedMotion && <VolumetricLight scrollProgress={scrollProgress} />}
+          {!reducedMotion && <MarineSnow scrollProgress={scrollProgress} />}
 
           <OceanDecorations scrollProgress={scrollProgress} />
-          {/* ✅ Créatures */}
+          {/* ✅ Créatures - figées en mode calme */}
           <Submarine scrollProgress={scrollProgress} />
-          <Jellyfish scrollProgress={scrollProgress} />
-          <FishSchool scrollProgress={scrollProgress} />
-          <FastFish scrollProgress={scrollProgress} />
+          <Jellyfish scrollProgress={scrollProgress} reducedMotion={reducedMotion} />
+          <FishSchool scrollProgress={scrollProgress} reducedMotion={reducedMotion} />
+          <FastFish scrollProgress={scrollProgress} reducedMotion={reducedMotion} />
           <Seaweed scrollProgress={scrollProgress} />
-          <MantaRay scrollProgress={scrollProgress} />
-          <Anglerfish scrollProgress={scrollProgress} />
+          <MantaRay scrollProgress={scrollProgress} reducedMotion={reducedMotion} />
+          <Anglerfish scrollProgress={scrollProgress} reducedMotion={reducedMotion} />
         </Suspense>
       </Canvas>
     </div>

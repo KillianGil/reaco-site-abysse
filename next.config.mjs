@@ -13,7 +13,18 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: '/:all*(svg|jpg|jpeg|png|gif|ico|webp|avif|woff|woff2)',
+        // Images et polices web
+        source: '/:all*(svg|jpg|jpeg|png|gif|ico|webp|avif|woff|woff2|otf|ttf|eot)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        // Modèles 3D et assets
+        source: '/:all*(glb|gltf|fbx|bin|hdr)',
         headers: [
           {
             key: 'Cache-Control',
@@ -23,6 +34,24 @@ const nextConfig = {
       },
       {
         source: '/_next/static/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/models/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/fonts/:path*',
         headers: [
           {
             key: 'Cache-Control',

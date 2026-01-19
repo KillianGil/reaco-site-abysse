@@ -5,21 +5,33 @@ import { useFrame } from "@react-three/fiber";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import * as THREE from "three";
 
-export function Anglerfish({ scrollProgress }: { scrollProgress: number }) {
+interface AnglerfishProps {
+  scrollProgress: number;
+  reducedMotion?: boolean;
+}
+
+export function Anglerfish({ scrollProgress, reducedMotion = false }: AnglerfishProps) {
   const groupRef = useRef<THREE.Group>(null);
   const { scene, animations } = useGLTF("/models/anglerfish-final.glb", true);
   const { actions } = useAnimations(animations, scene);
   const lightRef = useRef<THREE.PointLight>(null);
 
   useEffect(() => {
-    // 1. Animation
+    // 1. Animation - contrôlée par reducedMotion
     if (actions) {
       const actionKeys = Object.keys(actions);
       actionKeys.forEach(key => {
         const action = actions[key];
         if (action) {
-          action.reset().fadeIn(0.5).play();
-          action.timeScale = 0.8;
+          if (reducedMotion) {
+            action.paused = true;
+          } else {
+            action.paused = false;
+            if (!action.isRunning()) {
+              action.reset().fadeIn(0.5).play();
+            }
+            action.timeScale = 0.8;
+          }
         }
       });
     }
@@ -38,7 +50,12 @@ export function Anglerfish({ scrollProgress }: { scrollProgress: number }) {
         }
       }
     });
-  }, [actions, scene]);
+  }, [actions, scene, reducedMotion]);
+
+  // Temps figé et offset pour reprise fluide
+  const frozenTimeRef = useRef<number>(0);
+  const timeOffsetRef = useRef<number>(0);
+  const wasReducedRef = useRef<boolean>(false);
 
   useFrame((state) => {
     if (!groupRef.current) return;
@@ -48,29 +65,41 @@ export function Anglerfish({ scrollProgress }: { scrollProgress: number }) {
     groupRef.current.visible = isVisible;
 
     if (isVisible) {
-      const t = state.clock.elapsedTime;
+      const realTime = state.clock.elapsedTime;
+
+      // Détection du changement de mode pour reprise fluide
+      if (reducedMotion && !wasReducedRef.current) {
+        frozenTimeRef.current = realTime - timeOffsetRef.current;
+      } else if (!reducedMotion && wasReducedRef.current) {
+        timeOffsetRef.current = realTime - frozenTimeRef.current;
+      }
+      wasReducedRef.current = reducedMotion;
+
+      // Temps d'animation avec reprise fluide
+      const t = reducedMotion ? frozenTimeRef.current : realTime - timeOffsetRef.current;
+
       const cameraY = scrollProgress * 100;
 
       // Position de base (un peu plus haut que les racines des plantes pour être visible)
       const BASE_DEPTH = -120;
 
-      // Animation de nage latérale (Ping-Pong)
+      // Animation de nage latérale (Ping-Pong) - figée en mode calme
       const swimRange = 40;
       const swimSpeed = 0.1;
-      const xPos = Math.sin(t * swimSpeed) * swimRange;
+      const xPos = reducedMotion ? 0 : Math.sin(t * swimSpeed) * swimRange;
 
-      // Orientation
+      // Orientation - figée en mode calme
       const direction = Math.cos(t * swimSpeed);
-      const targetRotationY = direction > 0 ? Math.PI / 2 : -Math.PI / 2;
+      const targetRotationY = reducedMotion ? Math.PI / 2 : (direction > 0 ? Math.PI / 2 : -Math.PI / 2);
 
       // Rotation fluide
       groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, targetRotationY, 0.1);
 
-      // Mouvement vertical (Bobbing)
-      const bobY = Math.sin(t * 0.5) * 2;
+      // Mouvement vertical (Bobbing) - figé en mode calme
+      const bobY = reducedMotion ? 0 : Math.sin(t * 0.5) * 2;
 
-      // Mouvement avant-arrière léger
-      const swimZ = Math.cos(t * 0.3) * 5;
+      // Mouvement avant-arrière léger - figé en mode calme
+      const swimZ = reducedMotion ? 0 : Math.cos(t * 0.3) * 5;
 
       groupRef.current.position.set(
         xPos,
@@ -78,17 +107,16 @@ export function Anglerfish({ scrollProgress }: { scrollProgress: number }) {
         -20 + swimZ // Z = -20 (plus proche de la caméra que les plantes à -30)
       );
 
-      // Ondulation
-      groupRef.current.rotation.z = Math.sin(t * 2) * 0.05;
-      groupRef.current.rotation.x = Math.sin(t * 1) * 0.05;
+      // Ondulation - figée en mode calme
+      groupRef.current.rotation.z = reducedMotion ? 0 : Math.sin(t * 2) * 0.05;
+      groupRef.current.rotation.x = reducedMotion ? 0 : Math.sin(t * 1) * 0.05;
 
       // Échelle
       groupRef.current.scale.setScalar(1.5);
 
-      // Lumière pulsante (Leurre)
+      // Lumière pulsante (Leurre) - fixe en mode calme
       if (lightRef.current) {
-        // Pulsation plus forte et plus rapide
-        lightRef.current.intensity = 8 + Math.sin(t * 4) * 4;
+        lightRef.current.intensity = reducedMotion ? 8 : 8 + Math.sin(t * 4) * 4;
       }
     }
   });
