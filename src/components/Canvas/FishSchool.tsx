@@ -75,8 +75,8 @@ export function FishSchool({ scrollProgress, reducedMotion = false }: FishSchool
   const fish3Fbx = useFBX("/models/poisson/Fish-3/source/fish_1_5.fbx");
 
   const emperorTextures = useTexture({
-    map: "/models/poisson/Emperor Angelfish/Emperor-Angelfish-A.png",
-    normalMap: "/models/poisson/Emperor Angelfish/Emperor-Angelfish-N.png",
+    map: "/models/poisson/Emperor Angelfish/Emperor-Angelfish-A.jpg",
+    normalMap: "/models/poisson/Emperor Angelfish/Emperor-Angelfish-N.jpg",
   });
 
   const fish3Textures = useTexture({
