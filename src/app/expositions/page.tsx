@@ -14,7 +14,7 @@ export default function ExpositionsPage() {
     useEffect(() => {
         const ctx = gsap.context(() => {
             // Hero Animations
-            gsap.from(".hero-badge", { y: 20, opacity: 0, duration: 1, ease: "power3.out" });
+
             gsap.from(".hero-title", { y: 100, opacity: 0, duration: 1.2, delay: 0.2, ease: "power4.out" });
             gsap.from(".hero-subtitle", { y: 50, opacity: 0, duration: 1, delay: 0.4, ease: "power3.out" });
 
@@ -77,18 +77,18 @@ export default function ExpositionsPage() {
 
     const techItems = [
         {
+            name: "Casabianca",
+            year: "1935",
+            depth: "80m",
+            desc: "Sous-marin légendaire de la Seconde Guerre mondiale. Symbole de la résistance française en Méditerranée.",
+            icon: Ship
+        },
+        {
             name: "Bathyscaphe FNRS III",
             year: "1953",
             depth: "4050m",
             desc: "Le pionnier absolu. Détenteur du record historique, objet d'un projet de restauration majeur.",
             icon: Anchor
-        },
-        {
-            name: "Archimède",
-            year: "1961",
-            depth: "11000m",
-            desc: "Le successeur légendaire. Conçu pour atteindre les points les plus profonds du globe.",
-            icon: Ship
         },
         {
             name: "Drones & ROV",
@@ -100,20 +100,20 @@ export default function ExpositionsPage() {
     ];
 
     return (
-        <main ref={containerRef} className="min-h-screen bg-[#020A19] text-white selection:bg-[#4CBBD5] selection:text-[#020A19] overflow-x-hidden">
+        <main ref={containerRef} className="min-h-screen bg-[#041C30] text-white selection:bg-[#4CBBD5] selection:text-[#020A19] overflow-x-hidden">
             <Navbar />
 
             {/* Hero Section */}
             <section className="relative min-h-[80vh] md:min-h-[90vh] flex flex-col justify-center items-center text-center px-4 md:px-6 z-10 pt-20">
-                <div className="absolute inset-0 bg-gradient-to-b from-[#006994]/20 to-[#020A19] pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-b from-[#006994]/30 to-[#041C30] pointer-events-none" />
+
+                {/* Ambient light effects */}
+                <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-[#4CBBD5]/12 rounded-full blur-[100px] pointer-events-none" />
+                <div className="absolute bottom-[20%] left-[-10%] w-[400px] h-[400px] bg-[#006994]/15 rounded-full blur-[80px] pointer-events-none" />
+                <div className="absolute top-[30%] left-[20%] w-[300px] h-[300px] bg-[#4CBBD5]/8 rounded-full blur-[60px] pointer-events-none" />
 
                 <div className="relative z-10 space-y-6 md:space-y-10 max-w-5xl mx-auto">
-                    <div className="hero-badge inline-flex items-center gap-2 px-4 md:px-6 py-2 md:py-3 bg-[#4CBBD5]/10 border border-[#4CBBD5]/30 rounded-full backdrop-blur-sm">
-                        <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-[#4CBBD5] animate-pulse" />
-                        <span className="text-[#4CBBD5] text-[10px] md:text-sm font-bold tracking-[0.3em] uppercase">
-                            Parcours & Collections
-                        </span>
-                    </div>
+
 
                     <h1 className="hero-title text-5xl md:text-8xl lg:text-9xl font-light tracking-tighter text-white leading-[0.9]">
                         VOYAGE<br />
@@ -129,8 +129,7 @@ export default function ExpositionsPage() {
                 </div>
             </section>
 
-            {/* Global Museum Path Line */}
-            <div className="fixed left-6 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-[#4CBBD5]/20 to-transparent pointer-events-none z-0 hidden md:block" />
+
 
             <div className="space-y-20 md:space-y-32 pb-20 md:pb-32 relative z-10">
 
@@ -151,24 +150,13 @@ export default function ExpositionsPage() {
                                 </p>
                             </div>
 
-                            {/* Interactive Simulation CTA */}
-                            <div className="group cursor-pointer border border-[#4CBBD5]/30 bg-[#4CBBD5]/5 p-4 md:p-5 hover:bg-[#4CBBD5]/10 transition-all duration-300 rounded-lg">
-                                <div className="flex items-center justify-between mb-2 md:mb-3">
-                                    <span className="text-[#4CBBD5] text-[9px] md:text-[10px] font-bold tracking-widest uppercase">Simulation</span>
-                                    <Navigation className="w-4 h-4 text-[#4CBBD5]" />
-                                </div>
-                                <h4 className="text-lg md:text-xl font-bold mb-1 md:mb-2">PILOTE D&apos;ÉLITE</h4>
-                                <div className="flex items-center gap-2 text-xs text-white/60 group-hover:text-white transition-colors">
-                                    <span>Prendre les commandes</span>
-                                    <div className="w-6 h-px bg-[#4CBBD5] group-hover:w-10 transition-all" />
-                                </div>
-                            </div>
+
                         </div>
 
                         {/* Right: The Exhibits */}
                         <div className="w-full lg:w-2/3 space-y-3 md:space-y-4">
                             {techItems.map((item, i) => (
-                                <div key={i} className="group relative bg-[#020A19] border border-white/10 hover:border-[#4CBBD5] transition-all duration-500 p-4 md:p-6 flex flex-col md:flex-row gap-4 md:gap-6 items-start md:items-center rounded-xl overflow-hidden">
+                                <div key={i} className="group relative bg-[#031525] border border-white/10 hover:border-[#4CBBD5] transition-all duration-500 p-4 md:p-6 flex flex-col md:flex-row gap-4 md:gap-6 items-start md:items-center rounded-xl overflow-hidden">
                                     <div className="absolute inset-0 bg-gradient-to-r from-[#4CBBD5]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                                     {/* Tech Visual */}
@@ -244,21 +232,15 @@ export default function ExpositionsPage() {
                 </section>
 
                 {/* ZONE 3: GÉOPOLITIQUE & STRATÉGIE */}
-                <section className="w-full bg-[#020A19] relative overflow-hidden py-16 md:py-24 border-y border-[#4CBBD5]/10">
-                    {/* Radar Background */}
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-10 overflow-hidden">
-                        <div className="w-[300px] md:w-[800px] h-[300px] md:h-[800px] border border-[#4CBBD5] rounded-full absolute radar-scan" />
-                        <div className="w-[200px] md:w-[600px] h-[200px] md:h-[600px] border border-[#4CBBD5] rounded-full absolute" />
-                        <div className="w-[100px] md:w-[400px] h-[100px] md:h-[400px] border border-[#4CBBD5] rounded-full absolute" />
-                        <div className="w-full h-px bg-[#4CBBD5]/50 absolute top-1/2 left-0" />
-                        <div className="h-full w-px bg-[#4CBBD5]/50 absolute top-0 left-1/2" />
-                    </div>
+                <section className="w-full relative overflow-hidden py-16 md:py-24">
+                    {/* Simple gradient background */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-[#4CBBD5]/5 to-transparent pointer-events-none" />
 
                     <div className="px-4 md:px-20 max-w-7xl mx-auto relative z-10">
                         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 md:mb-16 gap-6 md:gap-8">
                             <div className="section-header">
-                                <span className="text-[#4CBBD5] text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase block mb-3 md:mb-4">03. SOUVERAINETÉ</span>
-                                <h3 className="text-3xl md:text-5xl font-light uppercase">Espions des Océans</h3>
+                                <span className="text-[#4CBBD5] text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase block mb-3 md:mb-4">03. ENJEUX</span>
+                                <h3 className="text-3xl md:text-5xl font-light uppercase">Enjeux Maritimes</h3>
                                 <div className="h-1 w-16 md:w-24 bg-gradient-to-r from-[#4CBBD5] to-transparent mt-3 md:mt-4" />
                             </div>
                             <div className="text-left md:text-right">
@@ -270,18 +252,18 @@ export default function ExpositionsPage() {
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
                             {[
                                 { icon: Globe, title: "Géant Maritime", desc: "Comprendre les enjeux de la 2ème Zone Économique Exclusive mondiale.", status: "STRATÉGIQUE" },
-                                { icon: ShieldAlert, title: "Guerre des Câbles", desc: "Protection des infrastructures vitales et prévention des exploitations illégales.", status: "MENACE ACTIVE", alert: true },
+                                { icon: ShieldAlert, title: "Guerre des Câbles", desc: "Protection des infrastructures vitales et prévention des exploitations illégales.", status: "CRITIQUE" },
                                 { icon: Database, title: "Ressources Minérales", desc: "Convoitises autour des grands fonds et choix stratégiques pour leur exploitation.", status: "EN ANALYSE" }
                             ].map((card, i) => (
-                                <div key={i} className={`bg-[#020A19]/90 backdrop-blur border p-5 md:p-6 transition-all duration-300 group relative overflow-hidden rounded-lg ${card.alert ? 'border-red-500/30 hover:border-red-500' : 'border-white/10 hover:border-[#4CBBD5]'}`}>
-                                    <div className={`absolute top-0 right-0 px-2 py-1 text-[9px] md:text-[10px] font-bold uppercase rounded-bl-lg ${card.alert ? 'bg-red-500/20 text-red-500' : 'bg-[#4CBBD5]/10 text-[#4CBBD5]'}`}>
+                                <div key={i} className="bg-[#031525]/95 backdrop-blur border border-white/10 hover:border-[#4CBBD5] p-5 md:p-6 transition-all duration-300 group relative overflow-hidden rounded-lg">
+                                    <div className="absolute top-0 right-0 px-2 py-1 text-[9px] md:text-[10px] font-bold uppercase rounded-bl-lg bg-[#4CBBD5]/10 text-[#4CBBD5]">
                                         {card.status}
                                     </div>
-                                    <card.icon className={`w-6 h-6 md:w-8 md:h-8 mb-4 md:mb-6 ${card.alert ? 'text-red-500' : 'text-[#4CBBD5]'}`} />
+                                    <card.icon className="w-6 h-6 md:w-8 md:h-8 mb-4 md:mb-6 text-[#4CBBD5]" />
                                     <h4 className="font-bold text-lg md:text-xl mb-2 md:mb-3">{card.title}</h4>
                                     <p className="text-white/60 text-xs md:text-sm leading-relaxed mb-4">{card.desc}</p>
 
-                                    <div className={`h-px w-full ${card.alert ? 'bg-red-500/20' : 'bg-[#4CBBD5]/20'}`} />
+                                    <div className="h-px w-full bg-[#4CBBD5]/20" />
                                 </div>
                             ))}
                         </div>
@@ -314,7 +296,7 @@ export default function ExpositionsPage() {
 
                                     {/* Date */}
                                     <div className={`w-full ${i % 2 === 0 ? 'md:text-right md:pr-0' : 'md:order-2 md:text-left'}`}>
-                                        <span className="text-4xl md:text-8xl font-serif font-bold text-white/20 block leading-none mb-1 md:mb-0">{item.year}</span>
+                                        <span className="text-4xl md:text-8xl font-serif font-bold text-[#4CBBD5]/40 block leading-none mb-1 md:mb-0">{item.year}</span>
                                     </div>
 
                                     {/* Content */}

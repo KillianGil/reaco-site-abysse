@@ -14,7 +14,7 @@ export default function PartenairesPage() {
     useEffect(() => {
         const ctx = gsap.context(() => {
             // Hero animations (Restored)
-            gsap.from(".hero-badge", { y: 20, opacity: 0, duration: 1, ease: "power3.out" });
+
             gsap.from(".hero-title", { y: 100, opacity: 0, duration: 1.2, delay: 0.2, ease: "power4.out" });
 
             // Section headers slide in (Added)
@@ -84,27 +84,25 @@ export default function PartenairesPage() {
     ];
 
     return (
-        <main ref={containerRef} className="min-h-screen bg-[#020A19] text-white selection:bg-[#4CBBD5] selection:text-[#020A19] overflow-x-hidden">
+        <main ref={containerRef} className="min-h-screen bg-[#041C30] text-white selection:bg-[#4CBBD5] selection:text-[#020A19] overflow-x-hidden">
             <Navbar />
 
             {/* Animated background */}
             <div className="fixed inset-0 pointer-events-none overflow-hidden">
-                <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-[#4CBBD5]/5 rounded-full blur-[120px] animate-pulse" />
-                <div className="absolute bottom-[-20%] left-[-10%] w-[600px] h-[600px] bg-[#006994]/10 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '1s' }} />
+                <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-[#4CBBD5]/12 rounded-full blur-[120px] animate-pulse" />
+                <div className="absolute bottom-[-20%] left-[-10%] w-[600px] h-[600px] bg-[#006994]/20 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '1s' }} />
+                <div className="absolute top-[50%] right-[20%] w-[300px] h-[300px] bg-[#4CBBD5]/8 rounded-full blur-[60px]" />
+                <div className="absolute top-[30%] left-[40%] w-[250px] h-[250px] bg-[#006994]/10 rounded-full blur-[50px]" />
             </div>
 
             {/* Hero Section (Restored) */}
             <section className="relative h-[50vh] md:h-[60vh] flex flex-col justify-center items-center text-center px-4 md:px-6 z-10">
                 {/* Extended Gradient Background */}
-                <div className="absolute inset-0 bg-gradient-to-b from-[#006994]/20 to-[#020A19]" />
+                <div className="absolute inset-0 bg-gradient-to-b from-[#006994]/30 to-[#041C30]" />
 
 
                 <div className="relative z-10 space-y-4 md:space-y-6 max-w-4xl">
-                    <div className="hero-badge inline-block px-4 md:px-6 py-2 bg-[#4CBBD5]/10 border border-[#4CBBD5]/30 rounded-full">
-                        <span className="text-[#4CBBD5] text-xs md:text-sm font-bold tracking-[0.3em] uppercase">
-                            Partenaires & Soutiens
-                        </span>
-                    </div>
+
 
                     <h1 className="hero-title text-4xl md:text-7xl lg:text-8xl font-light tracking-tight text-white leading-tight">
                         Une Ambition<br />
@@ -218,7 +216,7 @@ export default function PartenairesPage() {
                             <div className="h-1 w-16 md:w-24 bg-gradient-to-r from-[#4CBBD5] to-transparent mt-3 md:mt-4" />
                         </div>
 
-                        <div className="relative z-10 border border-[#4CBBD5]/30 bg-[#020A19]/90 backdrop-blur-md p-6 md:p-12">
+                        <div className="relative z-10 border border-[#4CBBD5]/30 bg-[#031525]/95 backdrop-blur-md p-6 md:p-12">
                             {/* Technical Markers */}
                             <div className="absolute top-0 left-0 w-4 h-4 border-t border-l border-[#4CBBD5]" />
                             <div className="absolute top-0 right-0 w-4 h-4 border-t border-r border-[#4CBBD5]" />
@@ -351,11 +349,11 @@ export default function PartenairesPage() {
 
                 {/* 5. CTA (Restored & Enhanced) */}
                 <section className="px-4 md:px-6 pb-20 max-w-7xl mx-auto">
-                    <div className="relative p-8 md:p-16 rounded-3xl bg-[#020A19] border border-[#4CBBD5]/30 overflow-hidden text-center group hover:border-[#4CBBD5]/60 transition-all duration-500">
+                    <div className="relative p-8 md:p-16 rounded-3xl bg-[#031525] border border-[#4CBBD5]/30 overflow-hidden text-center group hover:border-[#4CBBD5]/60 transition-all duration-500">
                         {/* Darker Premium Background */}
-                        <div className="absolute inset-0 bg-[linear-gradient(rgba(76,187,213,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(76,187,213,0.03)_1px,transparent_1px)] bg-[size:40px_40px] opacity-50" />
-                        <div className="absolute top-0 right-0 w-96 h-96 bg-[#4CBBD5]/5 rounded-full blur-[100px] group-hover:bg-[#4CBBD5]/10 transition-all duration-700" />
-                        <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#006994]/10 rounded-full blur-[80px]" />
+                        <div className="absolute inset-0 bg-[linear-gradient(rgba(76,187,213,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(76,187,213,0.05)_1px,transparent_1px)] bg-[size:40px_40px] opacity-50" />
+                        <div className="absolute top-0 right-0 w-96 h-96 bg-[#4CBBD5]/8 rounded-full blur-[100px] group-hover:bg-[#4CBBD5]/15 transition-all duration-700" />
+                        <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#006994]/15 rounded-full blur-[80px]" />
 
                         <div className="relative z-10 max-w-3xl mx-auto">
                             <div className="w-16 h-16 md:w-20 md:h-20 mx-auto mb-6 md:mb-8 bg-[#4CBBD5]/10 rounded-2xl flex items-center justify-center border border-[#4CBBD5]/20 group-hover:scale-110 transition-transform duration-500 shadow-[0_0_20px_rgba(76,187,213,0.1)]">

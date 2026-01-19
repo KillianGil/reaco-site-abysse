@@ -48,12 +48,6 @@ export default function InformationsPage() {
     useEffect(() => {
         const ctx = gsap.context(() => {
             // Hero - Simple fade-in animations
-            gsap.from(".hero-badge", {
-                y: 20,
-                opacity: 0,
-                duration: 1,
-                ease: "power3.out"
-            });
 
             gsap.from(".hero-title", {
                 y: 100,
@@ -141,25 +135,22 @@ export default function InformationsPage() {
     }, []);
 
     return (
-        <main ref={containerRef} className="min-h-screen bg-[#020A19] text-white selection:bg-[#4CBBD5] selection:text-[#020A19]">
+        <main ref={containerRef} className="min-h-screen bg-[#041C30] text-white selection:bg-[#4CBBD5] selection:text-[#020A19]">
             <Navbar />
 
             {/* Animated background */}
             <div className="fixed inset-0 pointer-events-none overflow-hidden">
-                <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-[#4CBBD5]/5 rounded-full blur-[120px] animate-pulse" />
-                <div className="absolute bottom-[-20%] left-[-10%] w-[600px] h-[600px] bg-[#006994]/10 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '1s' }} />
+                <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-[#4CBBD5]/12 rounded-full blur-[120px] animate-pulse" />
+                <div className="absolute bottom-[-20%] left-[-10%] w-[600px] h-[600px] bg-[#006994]/20 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '1s' }} />
+                <div className="absolute top-[40%] left-[30%] w-[400px] h-[400px] bg-[#4CBBD5]/8 rounded-full blur-[80px]" />
+                <div className="absolute top-[20%] right-[20%] w-[300px] h-[300px] bg-[#006994]/10 rounded-full blur-[60px]" />
             </div>
 
             {/* Hero Section */}
             <section className="relative h-[50vh] md:h-[60vh] flex flex-col justify-center items-center text-center px-4 md:px-6 z-10">
-                <div className="absolute inset-0 bg-gradient-to-b from-[#006994]/20 to-[#020A19]" />
+                <div className="absolute inset-0 bg-gradient-to-b from-[#006994]/30 to-[#041C30]" />
 
                 <div className="relative z-10 space-y-4 md:space-y-6 max-w-4xl">
-                    <div className="hero-badge inline-block px-4 md:px-6 py-2 bg-[#4CBBD5]/10 border border-[#4CBBD5]/30 rounded-full">
-                        <span className="text-[#4CBBD5] text-xs md:text-sm font-bold tracking-[0.3em] uppercase">
-                            Informations Pratiques
-                        </span>
-                    </div>
 
                     <h1 className="hero-title text-4xl md:text-7xl lg:text-8xl font-light tracking-tight text-white leading-tight">
                         Préparez Votre<br />
@@ -294,12 +285,13 @@ export default function InformationsPage() {
                     </div>
 
                     <div className="info-card relative rounded-3xl overflow-hidden border border-white/10 aspect-square group">
-                        <div className="absolute inset-0 bg-gradient-to-br from-[#4CBBD5]/20 via-[#006994]/10 to-transparent" />
-                        <div className="absolute inset-0 flex flex-col items-center justify-center p-6 md:p-8">
-                            <Clock className="w-24 h-24 md:w-32 md:h-32 text-[#4CBBD5]/30 mb-4 md:mb-6 group-hover:scale-110 transition-transform duration-500" strokeWidth={1} />
-                            <p className="text-xl md:text-2xl font-serif italic text-white/90 text-center">&quot;Accessible toute l&apos;année&quot;</p>
-                            <p className="text-xs md:text-sm text-white/60 mt-3 md:mt-4 text-center">Du lundi au dimanche</p>
-                        </div>
+                        {/* IMAGE PLACEHOLDER - Remplacer le src par le path de votre image */}
+                        <img
+                            src="/assets/port-toulon.jpg"
+                            alt="Musée Abysse"
+                            className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#020A19]/80 via-transparent to-transparent" />
                     </div>
                 </section>
 
@@ -405,7 +397,7 @@ export default function InformationsPage() {
 
                             <div className="info-card p-5 md:p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-[#4CBBD5]/30 transition-colors">
                                 <h4 className="text-base md:text-lg font-bold mb-2 flex items-center gap-3">
-                                    <span className="text-xl md:text-2xl">♿</span> PMR 100%
+                                    <span className="text-xl md:text-2xl">♿</span> Accessibilité PMR
                                 </h4>
                                 <p className="text-white/70 text-xs md:text-sm">Ascenseurs & visite virtuelle</p>
                             </div>
@@ -417,7 +409,7 @@ export default function InformationsPage() {
                         <div className="space-y-4 md:space-y-6">
                             {[
                                 { icon: "🛍", title: "Boutique Abysse", desc: "Souvenirs maritimes" },
-                                { icon: "☕", title: "Café des Profondeurs", desc: "Vue panoramique" },
+                                { icon: "☕", title: "Cafétéria", desc: "Vue panoramique" },
                                 { icon: "📶", title: "Wi-Fi Gratuit", desc: "Haut débit" },
                                 { icon: "🛅", title: "Consignes", desc: "Espace sécurisé" }
                             ].map((service, i) => (
