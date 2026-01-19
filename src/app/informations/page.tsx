@@ -2,6 +2,7 @@
 
 import { Navbar, Footer } from "@/components/UI";
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Footprints, Bus, Car, Clock, Ticket, GraduationCap, Baby } from "lucide-react";
@@ -286,10 +287,11 @@ export default function InformationsPage() {
 
                     <div className="info-card relative rounded-3xl overflow-hidden border border-white/10 aspect-square group">
                         {/* IMAGE PLACEHOLDER - Remplacer le src par le path de votre image */}
-                        <img
+                        <Image
                             src="/assets/port-toulon.jpg"
                             alt="Musée Abysse"
-                            className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-700"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-[#020A19]/80 via-transparent to-transparent" />
                     </div>

@@ -10,7 +10,7 @@ interface JellyfishProps {
   reducedMotion?: boolean;
 }
 
-export function Jellyfish({ scrollProgress, reducedMotion = false }: JellyfishProps) {
+export function Jellyfish({ scrollProgress }: JellyfishProps) {
   const { scene, animations } = useGLTF("/models/jellyfish2.glb", true);
   const { actions } = useAnimations(animations, scene);
   const groupRef = useRef<THREE.Group>(null);
