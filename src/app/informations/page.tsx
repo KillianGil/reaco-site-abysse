@@ -1,6 +1,6 @@
 "use client";
 
-import { Navbar } from "@/components/UI";
+import { Navbar, Footer } from "@/components/UI";
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -428,6 +428,8 @@ export default function InformationsPage() {
                 </section>
 
             </div>
+
+            <Footer />
         </main>
     );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { Navbar } from "@/components/UI";
+import { Navbar, Footer } from "@/components/UI";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -380,6 +380,8 @@ export default function PartenairesPage() {
                 </section>
 
             </div>
+
+            <Footer />
 
             <style jsx>{`
         .clip-hex {
