@@ -140,14 +140,14 @@ export default function ActualitesPage() {
             });
 
             gsap.fromTo(".featured-card",
-                { y: 80, opacity: 0 },
+                { y: 40, opacity: 0 },
                 {
                     y: 0,
                     opacity: 1,
-                    duration: 1,
-                    stagger: 0.2,
-                    delay: 0.3,
-                    ease: "power3.out"
+                    duration: 0.7,
+                    stagger: 0.15,
+                    delay: 0.1,
+                    ease: "power2.out"
                 }
             );
 
@@ -205,8 +205,8 @@ export default function ActualitesPage() {
             </section>
 
             {/* Featured News - À la Une */}
-            <section className="max-w-7xl mx-auto px-4 md:px-6 -mt-8 relative z-20">
-                <div className="flex items-center gap-3 mb-6">
+            <section className="max-w-7xl mx-auto px-4 md:px-6 mt-4 md:mt-8 relative z-20">
+                <div className="flex items-center gap-3 mb-8">
                     <Sparkles className="w-5 h-5 text-[#4CBBD5]" />
                     <span className="text-sm font-semibold text-[#4CBBD5] uppercase tracking-wider">À la Une</span>
                 </div>
@@ -271,7 +271,10 @@ export default function ActualitesPage() {
                 {/* Section Header */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
                     <div>
-                        <span className="text-[#4CBBD5] text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase block mb-3">Explorer</span>
+                        <div className="flex items-center gap-3 mb-3">
+                            <Sparkles className="w-5 h-5 text-[#4CBBD5]" />
+                            <span className="text-[#4CBBD5] text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase">Explorer</span>
+                        </div>
                         <h2 className="text-2xl md:text-4xl font-light">Toutes nos actualités</h2>
                         <div className="h-1 w-16 bg-gradient-to-r from-[#4CBBD5] to-transparent mt-4" />
                     </div>
@@ -324,8 +327,8 @@ export default function ActualitesPage() {
 
                                 {/* Event badge */}
                                 {item.eventDate && (
-                                    <div className="absolute bottom-3 left-3 right-3">
-                                        <div className="flex items-center gap-2 text-[10px] px-3 py-1.5 bg-[#020A19]/80 backdrop-blur-sm rounded-lg border border-[#4CBBD5]/20">
+                                    <div className="absolute bottom-3 left-3">
+                                        <div className="inline-flex items-center gap-2 text-[10px] px-3 py-1.5 bg-[#020A19]/80 backdrop-blur-sm rounded-lg border border-[#4CBBD5]/20">
                                             <Calendar className="w-3 h-3 text-[#4CBBD5]" />
                                             <span className="text-[#4CBBD5] font-semibold">{item.eventDate}</span>
                                             {item.eventTime && (

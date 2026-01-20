@@ -36,14 +36,17 @@ export default function ContactPage() {
             });
 
             gsap.fromTo(".contact-block",
-                { y: 60, opacity: 0 },
+                { y: 30, opacity: 0 },
                 {
                     y: 0,
                     opacity: 1,
-                    duration: 0.8,
-                    stagger: 0.15,
-                    delay: 0.4,
-                    ease: "power3.out"
+                    duration: 0.5,
+                    stagger: {
+                        each: 0.1,
+                        from: "start"
+                    },
+                    delay: 0.15,
+                    ease: "power2.out"
                 }
             );
 
@@ -120,8 +123,8 @@ export default function ContactPage() {
             </section>
 
             {/* Contact Info Section - FIRST */}
-            <section className="max-w-6xl mx-auto px-4 md:px-6 relative z-10">
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            <section className="max-w-6xl mx-auto px-4 md:px-6 py-8 relative z-10">
+                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-8">
                     {/* Email */}
                     <a
                         href="mailto:contact@musee-abysse.fr"
@@ -350,39 +353,6 @@ export default function ContactPage() {
                 </div>
             </section>
 
-            {/* Map Section */}
-            <section className="relative h-[300px] md:h-[350px] overflow-hidden">
-                <div className="absolute inset-0 bg-[#031525]">
-                    {/* Grid pattern */}
-                    <div className="absolute inset-0 opacity-30">
-                        <div className="absolute inset-0 bg-[linear-gradient(rgba(76,187,213,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(76,187,213,0.08)_1px,transparent_1px)] bg-[size:40px_40px]" />
-                    </div>
-
-                    <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="text-center space-y-5">
-                            <div className="w-16 h-16 mx-auto bg-[#4CBBD5]/10 rounded-full flex items-center justify-center border border-[#4CBBD5]/30">
-                                <MapPin className="w-6 h-6 text-[#4CBBD5]" />
-                            </div>
-                            <div>
-                                <p className="text-xl font-semibold text-white mb-1">Musée ABYSSE</p>
-                                <p className="text-sm text-white/60">Port de Toulon, 83000 Toulon</p>
-                            </div>
-                            <a
-                                href="https://maps.google.com/?q=Port+de+Toulon"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#4CBBD5]/10 hover:bg-[#4CBBD5]/20 border border-[#4CBBD5]/30 rounded-full text-[#4CBBD5] text-xs uppercase tracking-wider transition-colors font-medium"
-                            >
-                                <span>Ouvrir dans Google Maps</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Gradient overlays */}
-                <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#041C30] to-transparent pointer-events-none" />
-                <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#041C30] to-transparent pointer-events-none" />
-            </section>
 
             <Footer />
         </main>
