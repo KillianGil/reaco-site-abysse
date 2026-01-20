@@ -1,11 +1,14 @@
 "use client";
 
-import { Navbar, Footer } from "@/components/UI";
+import { Footer } from "@/components/UI";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Calendar, Clock, ArrowRight, Users, Sparkles, Mail } from "lucide-react";
+import dynamic from "next/dynamic";
+
+const Navbar = dynamic(() => import("@/components/UI/Navbar").then(mod => mod.Navbar), { ssr: false });
 
 gsap.registerPlugin(ScrollTrigger);
 
