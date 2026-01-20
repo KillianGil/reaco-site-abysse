@@ -324,27 +324,36 @@ export default function ContactPage() {
                         </div>
                     </div>
 
-                    {/* Photo Container - Right Side */}
+                    {/* Map Container - Right Side */}
                     <div className="hidden lg:block relative rounded-3xl overflow-hidden border border-white/10 min-h-[500px]">
-                        {/* Placeholder pour votre photo - remplacez le src par votre image */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-[#031525] to-[#020A19] flex items-center justify-center">
-                            <div className="text-center space-y-4 p-8">
-                                <div className="w-20 h-20 mx-auto bg-[#4CBBD5]/10 rounded-full flex items-center justify-center border border-[#4CBBD5]/20">
-                                    <span className="text-3xl">📷</span>
+                        {/* Google Maps Embed */}
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2904.8538848853583!2d5.928!3d43.1167!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12c9c1234567890%3A0x1234567890abcdef!2sPort%20de%20Toulon!5e0!3m2!1sfr!2sfr!4v1234567890123!5m2!1sfr!2sfr"
+                            width="100%"
+                            height="100%"
+                            style={{ border: 0, filter: 'grayscale(0.3) brightness(0.8) contrast(1.1)' }}
+                            allowFullScreen
+                            loading="lazy"
+                            referrerPolicy="no-referrer-when-downgrade"
+                            className="absolute inset-0"
+                        />
+                        {/* Overlay gradient pour harmoniser avec le design */}
+                        <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-[#020A19]/40 via-transparent to-[#020A19]/20" />
+
+                        {/* Badge localisation */}
+                        <div className="absolute bottom-4 left-4 right-4 pointer-events-none">
+                            <div className="bg-[#020A19]/90 backdrop-blur-md border border-white/10 rounded-xl p-4">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 bg-[#4CBBD5]/10 rounded-full flex items-center justify-center">
+                                        <MapPin className="w-5 h-5 text-[#4CBBD5]" />
+                                    </div>
+                                    <div>
+                                        <p className="text-white font-medium text-sm">Musée ABYSSE</p>
+                                        <p className="text-white/50 text-xs">Port de Toulon, 83000 Toulon</p>
+                                    </div>
                                 </div>
-                                <p className="text-white/40 text-sm">Ajoutez votre photo ici</p>
-                                <p className="text-white/20 text-xs">Remplacez ce placeholder par une image</p>
                             </div>
                         </div>
-                        {/* Décommentez et modifiez le code ci-dessous pour ajouter votre image :
-                        <Image
-                            src="/assets/votre-image.jpg"
-                            alt="Description de l'image"
-                            fill
-                            className="object-cover"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#020A19]/60 via-transparent to-transparent" />
-                        */}
                     </div>
                 </div>
             </section>
