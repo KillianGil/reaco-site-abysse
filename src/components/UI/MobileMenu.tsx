@@ -40,9 +40,10 @@ const linkVariants = {
 };
 
 const links = [
-    { name: "Expositions", href: "/expositions" },
+    { name: "Visiter", href: "/visiter" },
     { name: "Informations", href: "/informations" },
-    { name: "Partenaires", href: "/partenaires" },
+    { name: "Actualités", href: "/actualites" },
+    { name: "Contact", href: "/contact" },
     { name: "Billetterie", href: "/billetterie", isCta: true },
 ];
 

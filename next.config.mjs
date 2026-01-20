@@ -7,6 +7,12 @@ const nextConfig = {
   images: {
     formats: ['image/avif', 'image/webp'],
     minimumCacheTTL: 31536000, // 1 year cache
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+    ],
   },
 
   // Add cache headers for static assets

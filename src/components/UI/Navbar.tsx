@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { MobileMenu } from "./MobileMenu";
@@ -13,22 +16,34 @@ export function Navbar() {
           {/* Logo */}
           <Link
             href="/"
-            className="text-white text-xl font-bold tracking-[0.2em] uppercase hover:text-[#4CBBD5] transition-colors relative z-[101]"
+            className="relative z-[101] hover:opacity-80 transition-opacity"
             onClick={() => setIsOpen(false)}
+            suppressHydrationWarning
           >
-            ABYSSE
+            <Image
+              src="/assets/logo-final.svg"
+              alt="ABYSSE"
+              width={180}
+              height={60}
+              className="h-12 md:h-14 w-auto"
+              unoptimized
+              priority
+            />
           </Link>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-8">
-            <Link href="/expositions" className="text-[11px] text-white/50 uppercase tracking-[0.15em] hover:text-white/90 transition-colors">
-              Expositions
+            <Link href="/visiter" className="text-[11px] text-white/50 uppercase tracking-[0.15em] hover:text-white/90 transition-colors">
+              Visiter
             </Link>
             <Link href="/informations" className="text-[11px] text-white/50 uppercase tracking-[0.15em] hover:text-white/90 transition-colors">
               Informations
             </Link>
-            <Link href="/partenaires" className="text-[11px] text-white/50 uppercase tracking-[0.15em] hover:text-white/90 transition-colors">
-              Partenaires
+            <Link href="/actualites" className="text-[11px] text-white/50 uppercase tracking-[0.15em] hover:text-white/90 transition-colors">
+              Actualités
+            </Link>
+            <Link href="/contact" className="text-[11px] text-white/50 uppercase tracking-[0.15em] hover:text-white/90 transition-colors">
+              Contact
             </Link>
           </div>
 

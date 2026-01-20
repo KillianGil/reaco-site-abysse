@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Mail, MapPin, Phone, Instagram, Linkedin, Youtube } from "lucide-react";
 
 export function Footer() {
@@ -19,9 +20,13 @@ export function Footer() {
                     <div className="lg:col-span-1">
                         <Link
                             href="/"
-                            className="text-white text-xl font-bold tracking-[0.2em] uppercase hover:text-[#4CBBD5] transition-colors inline-block mb-4"
+                            className="inline-block mb-4 hover:opacity-80 transition-opacity"
                         >
-                            ABYSSE
+                            <img
+                                src="/assets/logo-final.svg"
+                                alt="ABYSSE"
+                                className="h-10 w-auto"
+                            />
                         </Link>
                         <p className="text-sm text-white/50 leading-relaxed mb-6">
                             Le premier musée immersif dédié aux grandes profondeurs, au coeur de Toulon.

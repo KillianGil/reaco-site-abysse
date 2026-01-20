@@ -385,7 +385,7 @@ export default function InformationsPage() {
                     <div>
                         <div className="section-header mb-6 md:mb-8">
                             <span className="text-[#4CBBD5] text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase block mb-3 md:mb-4">04. CONFORT</span>
-                            <h3 className="text-3xl font-light">Services & Accessibilité</h3>
+                            <h3 className="text-3xl md:text-5xl font-light">Services & Accessibilité</h3>
                             <div className="h-1 w-16 md:w-24 bg-gradient-to-r from-[#4CBBD5] to-transparent mt-3 md:mt-4" />
                         </div>
 
