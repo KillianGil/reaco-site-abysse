@@ -40,12 +40,8 @@ export default function ContactPage() {
                 {
                     y: 0,
                     opacity: 1,
-                    duration: 0.5,
-                    stagger: {
-                        each: 0.1,
-                        from: "start"
-                    },
-                    delay: 0.15,
+                    duration: 0.6,
+                    delay: 0.2,
                     ease: "power2.out"
                 }
             );

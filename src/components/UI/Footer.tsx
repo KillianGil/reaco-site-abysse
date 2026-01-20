@@ -25,9 +25,9 @@ export function Footer() {
                             <Image
                                 src="/assets/logo-final.svg"
                                 alt="ABYSSE"
-                                width={300}
-                                height={100}
-                                className="h-16 w-auto"
+                                width={400}
+                                height={130}
+                                className="h-20 w-auto"
                                 unoptimized
                             />
                         </Link>

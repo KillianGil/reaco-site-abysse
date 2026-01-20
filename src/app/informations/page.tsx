@@ -302,10 +302,7 @@ export default function InformationsPage() {
                     <div className="section-header mb-10 md:mb-16">
                         <span className="text-[#4CBBD5] text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase block mb-3 md:mb-4">03. BILLETTERIE</span>
                         <h3 className="text-3xl md:text-5xl font-light mb-4">Tarifs & Offres</h3>
-                        <div className="h-1 w-16 md:w-24 bg-gradient-to-r from-[#4CBBD5] to-transparent mb-6 md:mb-8" />
-                        <a href="/billetterie" className="inline-block bg-gradient-to-r from-[#4CBBD5] to-[#006994] text-white px-8 py-4 md:px-10 md:py-5 rounded-full text-sm md:text-base font-bold tracking-widest uppercase hover:shadow-[0_0_40px_rgba(76,187,213,0.5)] hover:scale-105 transition-all duration-300">
-                            Réserver en ligne
-                        </a>
+                        <div className="h-1 w-16 md:w-24 bg-gradient-to-r from-[#4CBBD5] to-transparent" />
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-6 md:mb-8">
@@ -357,14 +354,14 @@ export default function InformationsPage() {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-8 md:mb-10">
                         <div className="price-card p-5 md:p-6 rounded-2xl bg-gradient-to-br from-white/10 to-white/5 border border-white/20 flex justify-between items-center hover:border-[#4CBBD5]/50 transition-all cursor-pointer overflow-hidden">
                             <div className="shimmer absolute top-0 left-[-100%] h-full w-1/3 bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-12" />
                             <div className="relative z-10 flex-1">
-                                <h4 className="text-lg md:text-xl font-bold text-[#4CBBD5]">Forfait Famille</h4>
+                                <h4 className="text-lg md:text-xl font-bold text-white">Forfait Famille</h4>
                                 <p className="text-xs md:text-sm text-white/60">2 Adultes + 2 Enfants</p>
                             </div>
-                            <div className="relative z-10 text-3xl md:text-4xl font-bold text-white">
+                            <div className="relative z-10 text-3xl md:text-4xl font-bold text-[#4CBBD5]">
                                 <AnimatedNumber target={42} suffix="€" />
                             </div>
                         </div>
@@ -377,6 +374,14 @@ export default function InformationsPage() {
                             </div>
                             <div className="relative z-10 text-base md:text-lg font-medium text-[#4CBBD5] uppercase tracking-wider">Sur devis</div>
                         </div>
+                    </div>
+
+                    {/* Bouton Réserver - plus discret, centré */}
+                    <div className="text-center">
+                        <a href="/billetterie" className="inline-flex items-center gap-2 px-6 py-3 bg-[#4CBBD5]/10 hover:bg-[#4CBBD5]/20 border border-[#4CBBD5]/30 hover:border-[#4CBBD5]/50 rounded-full text-[#4CBBD5] text-sm font-medium uppercase tracking-wider transition-all duration-300">
+                            <Ticket className="w-4 h-4" />
+                            <span>Réserver en ligne</span>
+                        </a>
                     </div>
                 </section>
 

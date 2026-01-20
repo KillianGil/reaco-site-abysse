@@ -23,9 +23,9 @@ export function Navbar() {
             <Image
               src="/assets/logo-final.svg"
               alt="ABYSSE"
-              width={400}
-              height={130}
-              className="h-20 md:h-24 w-auto"
+              width={800}
+              height={260}
+              className="h-40 md:h-48 w-auto"
               unoptimized
               priority
             />
