@@ -388,38 +388,36 @@ export default function ActualitesPage() {
                 )}
             </section>
 
-            {/* Newsletter CTA - Plus humain */}
+            {/* Newsletter CTA - Plus simple */}
             <section className="max-w-4xl mx-auto px-4 md:px-6 pb-16 md:pb-24 relative z-10">
-                <div className="relative bg-gradient-to-br from-[#031525] to-[#020A19] border border-white/10 rounded-3xl p-8 md:p-12 overflow-hidden">
-                    {/* Background */}
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-[#4CBBD5]/10 rounded-full blur-[80px] pointer-events-none" />
-
-                    <div className="relative z-10 text-center">
-                        <div className="w-16 h-16 mx-auto mb-6 bg-[#4CBBD5]/10 rounded-full flex items-center justify-center">
-                            <Mail className="w-7 h-7 text-[#4CBBD5]" />
+                <div className="relative border-t border-b border-white/10 py-12 md:py-16">
+                    <div className="text-center">
+                        <div className="flex items-center justify-center gap-3 mb-4">
+                            <Mail className="w-5 h-5 text-[#4CBBD5]" strokeWidth={1.5} />
+                            <span className="text-[#4CBBD5] text-xs font-medium uppercase tracking-[0.2em]">Newsletter</span>
                         </div>
 
-                        <h2 className="text-2xl md:text-3xl font-light mb-3">Restez connecté aux profondeurs</h2>
-                        <p className="text-white/60 text-sm max-w-md mx-auto mb-8 leading-relaxed">
-                            Recevez nos actualités, invitations aux événements et découvertes fascinantes directement dans votre boîte mail. Promis, pas de spam !
+                        <h2 className="text-2xl md:text-3xl font-light mb-3">Restez informé</h2>
+                        <p className="text-white/50 text-sm max-w-lg mx-auto mb-8 leading-relaxed">
+                            Actualités du musée, événements à venir et découvertes scientifiques. Une fois par mois, directement dans votre boîte mail.
                         </p>
 
                         <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
                             <input
                                 type="email"
                                 placeholder="votre@email.com"
-                                className="flex-1 bg-[#041C30] border border-white/10 focus:border-[#4CBBD5] rounded-xl px-5 py-3.5 text-sm text-white placeholder:text-white/30 outline-none transition-colors"
+                                className="flex-1 bg-transparent border border-white/20 focus:border-[#4CBBD5] rounded-lg px-5 py-3 text-sm text-white placeholder:text-white/40 outline-none transition-colors"
                             />
                             <button
                                 type="submit"
-                                className="px-6 py-3.5 bg-[#4CBBD5] hover:bg-[#5DCCE6] text-[#020A19] font-semibold text-sm uppercase tracking-wider rounded-xl transition-colors whitespace-nowrap"
+                                className="px-6 py-3 bg-[#4CBBD5] hover:bg-[#5DCCE6] text-[#020A19] font-semibold text-sm rounded-lg transition-colors whitespace-nowrap"
                             >
-                                Je m&apos;inscris
+                                S&apos;inscrire
                             </button>
                         </form>
 
                         <p className="text-[10px] text-white/30 mt-4">
-                            Désinscription en un clic, à tout moment.
+                            Désinscription possible à tout moment.
                         </p>
                     </div>
                 </div>

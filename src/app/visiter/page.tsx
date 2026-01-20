@@ -192,42 +192,91 @@ export default function ExpositionsPage() {
                 </section>
 
                 {/* ZONE 2: BIODIVERSITÉ & ABYSSES */}
-                <section className="px-4 md:px-20 max-w-7xl mx-auto w-full relative">
+                <section className="px-4 md:px-20 max-w-7xl mx-auto w-full relative py-8 md:py-12">
+                    {/* Organic wave decoration */}
+                    <div className="absolute inset-0 opacity-30 pointer-events-none overflow-hidden">
+                        <svg className="absolute -top-20 -right-20 w-[500px] h-[500px] text-[#4CBBD5]/10" viewBox="0 0 200 200">
+                            <path fill="currentColor" d="M44.5,-76.3C57.5,-69.2,67.7,-56.3,75.3,-42.1C82.9,-27.9,87.9,-12.4,86.8,2.4C85.7,17.2,78.5,31.3,69.1,43.3C59.7,55.3,48.1,65.1,34.8,71.8C21.5,78.5,6.5,82.1,-8.8,81.9C-24.1,81.7,-39.7,77.7,-52.1,69.5C-64.5,61.3,-73.7,48.9,-79.3,35C-84.9,21.1,-86.9,5.7,-84.4,-8.7C-81.9,-23.1,-74.9,-36.5,-64.8,-47.3C-54.7,-58.1,-41.5,-66.3,-27.7,-72.8C-13.9,-79.3,0.5,-84.1,14.4,-82.7C28.3,-81.3,31.5,-83.4,44.5,-76.3Z" transform="translate(100 100)" />
+                        </svg>
+                    </div>
+
                     <div className="section-header mb-10 md:mb-16 relative z-10 text-left md:text-right">
                         <span className="text-[#4CBBD5] text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase block mb-3 md:mb-4">02. BIODIVERSITÉ</span>
-                        <h3 className="text-3xl md:text-5xl font-light uppercase">La Vie dans le Noir</h3>
+                        <h3 className="text-3xl md:text-5xl font-light">
+                            <span className="font-serif italic text-white/80">Merveilles</span> des Profondeurs
+                        </h3>
                         <div className="h-1 w-16 md:w-24 bg-gradient-to-r md:bg-gradient-to-l from-[#4CBBD5] to-transparent mt-3 md:mt-4 md:ml-auto" />
-                        <p className="mt-4 md:mt-6 text-white/60 max-w-xl md:ml-auto leading-relaxed text-sm md:text-base">
-                            &quot;Un monde froid, obscur, bizarre... mais vivant.&quot; Plongez dans l&apos;écosystème le plus hostile de la planète.
+                        <p className="mt-4 md:mt-6 text-white/60 max-w-xl md:ml-auto leading-relaxed text-sm md:text-base font-light">
+                            Là où la lumière du soleil ne parvient plus, un monde extraordinaire s&apos;éveille.
+                            Des créatures bioluminescentes aux écosystèmes des sources hydrothermales,
+                            découvrez la vie qui défie l&apos;impossible.
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
                         {[
-                            { icon: Microscope, title: "La Preuve par 10 000", desc: "L'histoire du navire Galathéa et la découverte d'anémones vivantes à 10 000m de fond." },
-                            { icon: Droplets, title: "Ressources du Futur", desc: "Découverte des ressources biologiques abyssales et leur potentiel pour la pharmacie." },
-                            { icon: Fish, title: "Comprendre pour Protéger", desc: "Sensibilisation à la fragilité de ces écosystèmes extrêmes face aux enjeux environnementaux." }
+                            {
+                                icon: Microscope,
+                                title: "10 000 mètres de vie",
+                                subtitle: "L'expédition Galathéa",
+                                desc: "En 1951, le navire danois Galathéa révéla au monde que la vie existait dans les plus grandes profondeurs. Des anémones, des bactéries, des êtres vivants là où on pensait le vide absolu.",
+                                detail: "Un moment clé de l'histoire scientifique"
+                            },
+                            {
+                                icon: Droplets,
+                                title: "Trésors vivants",
+                                subtitle: "La pharmacie des abysses",
+                                desc: "Les organismes des profondeurs ont développé des molécules uniques pour survivre. Aujourd'hui, ces trésors inspirent la recherche médicale et pourraient soigner les maladies de demain.",
+                                detail: "Un espoir pour la médecine"
+                            },
+                            {
+                                icon: Fish,
+                                title: "Fragile équilibre",
+                                subtitle: "Protéger l'invisible",
+                                desc: "Ces écosystèmes, isolés pendant des millions d'années, sont menacés par l'exploitation minière et le changement climatique. Comprendre pour mieux préserver : c'est notre mission.",
+                                detail: "L'urgence de la protection"
+                            }
                         ].map((card, i) => (
-                            <div key={i} className="group relative rounded-2xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 transition-all duration-500 hover:-translate-y-2 h-full shadow-2xl">
-                                {/* Enhanced Backgrounds */}
-                                <div className="absolute inset-0 bg-gradient-to-b from-[#4CBBD5]/5 to-[#020A19] opacity-50" />
-                                <div className="absolute -top-20 -right-20 w-40 h-40 bg-[#4CBBD5]/20 rounded-full blur-3xl group-hover:bg-[#4CBBD5]/30 transition-colors duration-700" />
+                            <div key={i} className="group relative h-full">
+                                {/* Card with organic shape */}
+                                <div className="relative rounded-[2rem] overflow-hidden border border-white/10 bg-gradient-to-b from-[#062438] to-[#041C30] hover:border-[#4CBBD5]/30 transition-all duration-700 h-full">
+                                    {/* Soft glow effect */}
+                                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-32 bg-[#4CBBD5]/10 rounded-full blur-[50px] group-hover:bg-[#4CBBD5]/20 transition-all duration-700" />
 
-                                <div className="p-6 md:p-8 relative z-10 h-full flex flex-col">
-                                    <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-white/10 to-white/5 border border-white/10 rounded-xl flex items-center justify-center mb-4 md:mb-6 group-hover:border-[#4CBBD5]/50 group-hover:shadow-[0_0_15px_rgba(76,187,213,0.3)] transition-all duration-500">
-                                        <card.icon className="w-5 h-5 md:w-6 md:h-6 text-white group-hover:text-[#4CBBD5] transition-colors" />
-                                    </div>
-                                    <h3 className="text-lg md:text-xl font-bold mb-3 md:mb-4 leading-tight group-hover:text-[#4CBBD5] transition-colors">{card.title}</h3>
-                                    <p className="text-white/60 text-xs md:text-sm leading-relaxed mb-4 md:mb-6 flex-1 border-t border-white/5 pt-4">
-                                        {card.desc}
-                                    </p>
-                                    <div className="flex items-center gap-2 text-[#4CBBD5] text-[10px] md:text-xs font-bold uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0">
-                                        <span>Explorer</span>
-                                        <div className="w-4 h-px bg-[#4CBBD5]" />
+                                    <div className="p-6 md:p-8 relative z-10 h-full flex flex-col">
+                                        {/* Icon with organic container */}
+                                        <div className="w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-[#4CBBD5]/20 to-[#006994]/10 rounded-[1rem] flex items-center justify-center mb-5 md:mb-6 group-hover:scale-105 transition-transform duration-500 border border-[#4CBBD5]/20">
+                                            <card.icon className="w-6 h-6 md:w-7 md:h-7 text-[#4CBBD5]" strokeWidth={1.5} />
+                                        </div>
+
+                                        {/* Subtitle */}
+                                        <span className="text-[10px] md:text-xs text-[#4CBBD5]/70 uppercase tracking-wider mb-1">{card.subtitle}</span>
+
+                                        {/* Title */}
+                                        <h3 className="text-xl md:text-2xl font-light mb-4 leading-tight group-hover:text-[#4CBBD5] transition-colors">
+                                            {card.title}
+                                        </h3>
+
+                                        {/* Description */}
+                                        <p className="text-white/50 text-sm leading-relaxed mb-6 flex-1">
+                                            {card.desc}
+                                        </p>
+
+                                        {/* Bottom detail */}
+                                        <div className="pt-4 border-t border-white/5">
+                                            <span className="text-xs text-white/40 font-light italic">{card.detail}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         ))}
+                    </div>
+
+                    {/* Quote */}
+                    <div className="mt-12 md:mt-16 text-center">
+                        <blockquote className="text-lg md:text-xl text-white/40 font-serif italic max-w-2xl mx-auto">
+                            « L&apos;océan profond est le dernier territoire sauvage de notre planète. »
+                        </blockquote>
                     </div>
                 </section>
 

@@ -41,8 +41,8 @@ const linkVariants = {
 
 const links = [
     { name: "Visiter", href: "/visiter" },
-    { name: "Informations", href: "/informations" },
     { name: "Actualités", href: "/actualites" },
+    { name: "Informations", href: "/informations" },
     { name: "Contact", href: "/contact" },
     { name: "Billetterie", href: "/billetterie", isCta: true },
 ];

@@ -389,26 +389,56 @@ export default function InformationsPage() {
                 <section>
                     <div className="section-header mb-10 md:mb-16">
                         <span className="text-[#4CBBD5] text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase block mb-3 md:mb-4">04. CONFORT</span>
-                        <h3 className="text-3xl md:text-5xl font-light">Services & Accessibilité</h3>
+                        <h3 className="text-3xl md:text-5xl font-light">À Votre Service</h3>
                         <div className="h-1 w-16 md:w-24 bg-gradient-to-r from-[#4CBBD5] to-transparent mt-3 md:mt-4" />
+                        <p className="mt-4 md:mt-6 text-white/60 max-w-xl leading-relaxed text-sm md:text-base">
+                            Nous avons pensé à tout pour que votre visite soit aussi agréable que mémorable.
+                        </p>
                     </div>
 
-                    {/* Bento Grid Layout */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-                        {/* Grande carte - International */}
-                        <div className="col-span-2 row-span-2 group relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#006994]/20 to-[#041C30] border border-white/10 hover:border-[#4CBBD5]/40 transition-all duration-500 p-6 md:p-8">
+                    {/* Services Grid - Cleaner Design */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+
+                        {/* Accessibilité - Featured Card */}
+                        <div className="md:col-span-2 lg:col-span-1 lg:row-span-2 group relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#006994]/30 to-[#041C30] border border-white/10 hover:border-[#4CBBD5]/40 transition-all duration-500 p-6 md:p-8">
                             <div className="absolute top-0 right-0 w-48 h-48 bg-[#4CBBD5]/10 rounded-full blur-[60px] group-hover:bg-[#4CBBD5]/20 transition-all duration-700" />
                             <div className="relative z-10 h-full flex flex-col">
-                                <div className="w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-[#4CBBD5]/20 to-[#4CBBD5]/5 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 border border-[#4CBBD5]/20">
-                                    <Globe className="w-7 h-7 md:w-8 md:h-8 text-[#4CBBD5]" strokeWidth={1.5} />
+                                <div className="icon-wrapper w-14 h-14 md:w-16 md:h-16 bg-[#4CBBD5]/10 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 border border-[#4CBBD5]/20">
+                                    <Accessibility className="w-7 h-7 md:w-8 md:h-8 text-[#4CBBD5]" strokeWidth={1.5} />
                                 </div>
-                                <h4 className="text-xl md:text-2xl font-semibold mb-3 group-hover:text-[#4CBBD5] transition-colors">Multilingue</h4>
+                                <h4 className="text-xl md:text-2xl font-semibold mb-3 group-hover:text-[#4CBBD5] transition-colors">Accessible à tous</h4>
                                 <p className="text-white/60 text-sm md:text-base leading-relaxed mb-6 flex-1">
-                                    Parcours disponible en plusieurs langues pour accueillir tous nos visiteurs internationaux.
+                                    Le musée est entièrement accessible aux personnes à mobilité réduite. Ascenseurs panoramiques, rampes douces, et parcours adaptés vous attendent.
                                 </p>
-                                <div className="flex flex-wrap gap-2">
-                                    {['Français', 'English', 'Deutsch'].map((lang) => (
-                                        <span key={lang} className="px-3 py-1.5 bg-white/5 border border-white/10 rounded-full text-xs font-medium text-white/80 group-hover:border-[#4CBBD5]/30 transition-colors">
+                                <ul className="space-y-2 text-sm text-white/70">
+                                    <li className="flex items-center gap-2">
+                                        <span className="w-1.5 h-1.5 bg-[#4CBBD5] rounded-full" />
+                                        Fauteuils roulants disponibles
+                                    </li>
+                                    <li className="flex items-center gap-2">
+                                        <span className="w-1.5 h-1.5 bg-[#4CBBD5] rounded-full" />
+                                        Visite virtuelle du sous-marin
+                                    </li>
+                                    <li className="flex items-center gap-2">
+                                        <span className="w-1.5 h-1.5 bg-[#4CBBD5] rounded-full" />
+                                        Boucles magnétiques
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        {/* Multilingue */}
+                        <div className="info-card group relative overflow-hidden rounded-2xl bg-gradient-to-br from-white/10 to-white/5 border border-white/10 hover:border-[#4CBBD5]/40 transition-all duration-500 p-5 md:p-6 hover:-translate-y-1">
+                            <div className="absolute inset-0 bg-gradient-to-br from-[#4CBBD5]/0 to-[#4CBBD5]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                            <div className="relative z-10">
+                                <div className="icon-wrapper w-12 h-12 bg-[#4CBBD5]/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 border border-[#4CBBD5]/10">
+                                    <Globe className="w-6 h-6 text-[#4CBBD5]" strokeWidth={1.5} />
+                                </div>
+                                <h4 className="text-lg font-semibold mb-2 group-hover:text-[#4CBBD5] transition-colors">Multilingue</h4>
+                                <p className="text-white/60 text-sm leading-relaxed mb-3">Audioguides et panneaux en plusieurs langues.</p>
+                                <div className="flex flex-wrap gap-1.5">
+                                    {['FR', 'EN', 'DE', 'ES'].map((lang) => (
+                                        <span key={lang} className="px-2 py-1 bg-white/5 border border-white/10 rounded text-[10px] font-bold text-white/70">
                                             {lang}
                                         </span>
                                     ))}
@@ -416,54 +446,45 @@ export default function InformationsPage() {
                             </div>
                         </div>
 
-                        {/* Carte Accessibilité PMR */}
-                        <div className="col-span-2 group relative overflow-hidden rounded-3xl bg-gradient-to-br from-white/10 to-white/5 border border-white/10 hover:border-[#4CBBD5]/40 transition-all duration-500 p-5 md:p-6">
+                        {/* Cafétéria */}
+                        <div className="info-card group relative overflow-hidden rounded-2xl bg-gradient-to-br from-white/10 to-white/5 border border-white/10 hover:border-[#4CBBD5]/40 transition-all duration-500 p-5 md:p-6 hover:-translate-y-1">
                             <div className="absolute inset-0 bg-gradient-to-br from-[#4CBBD5]/0 to-[#4CBBD5]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                            <div className="relative z-10 flex items-start gap-4 md:gap-5">
-                                <div className="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-[#4CBBD5]/20 to-[#4CBBD5]/5 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-500 border border-[#4CBBD5]/20 shrink-0">
-                                    <Accessibility className="w-6 h-6 md:w-7 md:h-7 text-[#4CBBD5]" strokeWidth={1.5} />
+                            <div className="relative z-10">
+                                <div className="icon-wrapper w-12 h-12 bg-[#4CBBD5]/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 border border-[#4CBBD5]/10">
+                                    <Coffee className="w-6 h-6 text-[#4CBBD5]" strokeWidth={1.5} />
                                 </div>
-                                <div>
-                                    <h4 className="text-lg md:text-xl font-semibold mb-1.5 group-hover:text-[#4CBBD5] transition-colors">Accessibilité PMR</h4>
-                                    <p className="text-white/60 text-xs md:text-sm leading-relaxed">Ascenseurs, rampes d&apos;accès et parcours adaptés. Visite virtuelle disponible.</p>
-                                </div>
+                                <h4 className="text-lg font-semibold mb-2 group-hover:text-[#4CBBD5] transition-colors">Cafétéria Marine</h4>
+                                <p className="text-white/60 text-sm leading-relaxed">Pause gourmande avec vue sur la rade. Produits locaux et spécialités méditerranéennes.</p>
                             </div>
                         </div>
 
                         {/* Boutique */}
-                        <div className="group relative overflow-hidden rounded-2xl bg-white/5 border border-white/10 hover:border-[#4CBBD5]/40 transition-all duration-500 p-5 hover:-translate-y-1">
-                            <div className="w-10 h-10 md:w-11 md:h-11 bg-[#4CBBD5]/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-[#4CBBD5]/20 transition-all duration-300 border border-[#4CBBD5]/10">
-                                <ShoppingBag className="w-5 h-5 text-[#4CBBD5]" strokeWidth={1.5} />
+                        <div className="info-card group relative overflow-hidden rounded-2xl bg-gradient-to-br from-white/10 to-white/5 border border-white/10 hover:border-[#4CBBD5]/40 transition-all duration-500 p-5 md:p-6 hover:-translate-y-1">
+                            <div className="absolute inset-0 bg-gradient-to-br from-[#4CBBD5]/0 to-[#4CBBD5]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                            <div className="relative z-10">
+                                <div className="icon-wrapper w-12 h-12 bg-[#4CBBD5]/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 border border-[#4CBBD5]/10">
+                                    <ShoppingBag className="w-6 h-6 text-[#4CBBD5]" strokeWidth={1.5} />
+                                </div>
+                                <h4 className="text-lg font-semibold mb-2 group-hover:text-[#4CBBD5] transition-colors">Boutique</h4>
+                                <p className="text-white/60 text-sm leading-relaxed">Livres, maquettes, objets artisanaux... Repartez avec un souvenir des profondeurs.</p>
                             </div>
-                            <h5 className="font-semibold text-white text-sm md:text-base mb-1 group-hover:text-[#4CBBD5] transition-colors">Boutique</h5>
-                            <p className="text-xs text-white/50">Souvenirs marins</p>
                         </div>
 
-                        {/* Cafétéria */}
-                        <div className="group relative overflow-hidden rounded-2xl bg-white/5 border border-white/10 hover:border-[#4CBBD5]/40 transition-all duration-500 p-5 hover:-translate-y-1">
-                            <div className="w-10 h-10 md:w-11 md:h-11 bg-[#4CBBD5]/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-[#4CBBD5]/20 transition-all duration-300 border border-[#4CBBD5]/10">
-                                <Coffee className="w-5 h-5 text-[#4CBBD5]" strokeWidth={1.5} />
+                        {/* Wi-Fi & Consignes - Combined */}
+                        <div className="info-card group relative overflow-hidden rounded-2xl bg-gradient-to-br from-white/10 to-white/5 border border-white/10 hover:border-[#4CBBD5]/40 transition-all duration-500 p-5 md:p-6 hover:-translate-y-1">
+                            <div className="absolute inset-0 bg-gradient-to-br from-[#4CBBD5]/0 to-[#4CBBD5]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                            <div className="relative z-10">
+                                <div className="flex gap-3 mb-4">
+                                    <div className="icon-wrapper w-10 h-10 bg-[#4CBBD5]/10 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300 border border-[#4CBBD5]/10">
+                                        <Wifi className="w-5 h-5 text-[#4CBBD5]" strokeWidth={1.5} />
+                                    </div>
+                                    <div className="icon-wrapper w-10 h-10 bg-[#4CBBD5]/10 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300 border border-[#4CBBD5]/10">
+                                        <Lock className="w-5 h-5 text-[#4CBBD5]" strokeWidth={1.5} />
+                                    </div>
+                                </div>
+                                <h4 className="text-lg font-semibold mb-2 group-hover:text-[#4CBBD5] transition-colors">Confort & Sécurité</h4>
+                                <p className="text-white/60 text-sm leading-relaxed">Wi-Fi gratuit dans tout le musée. Casiers sécurisés pour vos affaires.</p>
                             </div>
-                            <h5 className="font-semibold text-white text-sm md:text-base mb-1 group-hover:text-[#4CBBD5] transition-colors">Cafétéria</h5>
-                            <p className="text-xs text-white/50">Vue panoramique</p>
-                        </div>
-
-                        {/* Wi-Fi */}
-                        <div className="group relative overflow-hidden rounded-2xl bg-white/5 border border-white/10 hover:border-[#4CBBD5]/40 transition-all duration-500 p-5 hover:-translate-y-1">
-                            <div className="w-10 h-10 md:w-11 md:h-11 bg-[#4CBBD5]/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-[#4CBBD5]/20 transition-all duration-300 border border-[#4CBBD5]/10">
-                                <Wifi className="w-5 h-5 text-[#4CBBD5]" strokeWidth={1.5} />
-                            </div>
-                            <h5 className="font-semibold text-white text-sm md:text-base mb-1 group-hover:text-[#4CBBD5] transition-colors">Wi-Fi Gratuit</h5>
-                            <p className="text-xs text-white/50">Haut débit</p>
-                        </div>
-
-                        {/* Consignes */}
-                        <div className="group relative overflow-hidden rounded-2xl bg-white/5 border border-white/10 hover:border-[#4CBBD5]/40 transition-all duration-500 p-5 hover:-translate-y-1">
-                            <div className="w-10 h-10 md:w-11 md:h-11 bg-[#4CBBD5]/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-[#4CBBD5]/20 transition-all duration-300 border border-[#4CBBD5]/10">
-                                <Lock className="w-5 h-5 text-[#4CBBD5]" strokeWidth={1.5} />
-                            </div>
-                            <h5 className="font-semibold text-white text-sm md:text-base mb-1 group-hover:text-[#4CBBD5] transition-colors">Consignes</h5>
-                            <p className="text-xs text-white/50">Espace sécurisé</p>
                         </div>
                     </div>
                 </section>
