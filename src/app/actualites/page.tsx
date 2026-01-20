@@ -34,10 +34,12 @@ const newsData: NewsItem[] = [
         categoryLabel: "Événement",
         date: "15 Jan 2026",
         title: "Nuit Européenne des Musées 2026",
-        excerpt: "Une soirée magique vous attend ! Plongez dans les abysses en nocturne avec nos guides passionnés. Au programme : visites guidées exclusives, projections immersives et rencontres avec des océanographes.",
-        image: "https://images.unsplash.com/photo-1551244072-5d12893278ab?w=800&q=80",
+        excerpt:
+            "Une soirée magique vous attend ! Plongez dans les abysses en nocturne avec nos guides passionnés. Au programme : visites guidées exclusives, projections immersives et rencontres avec des océanographes.",
+        image:
+            "https://images.unsplash.com/photo-1551244072-5d12893278ab?w=800&q=80",
         featured: true,
-        eventDate: "17 Mai 2026",
+        eventDate: "23 Mai 2026", // ajusté pour coller à la date annoncée
         eventTime: "19h - Minuit"
     },
     {
@@ -45,8 +47,9 @@ const newsData: NewsItem[] = [
         category: "decouverte",
         categoryLabel: "Découverte",
         date: "10 Jan 2026",
-        title: "Record battu : vie découverte à 8 336 mètres",
-        excerpt: "Une équipe internationale vient d'identifier un poisson vivant dans la fosse des Mariannes, pulvérisant le précédent record. Cette découverte bouleverse notre compréhension de la vie dans les conditions extrêmes.",
+        title: "ABYSSE & Ifremer : une année dédiée aux grands fonds",
+        excerpt:
+            "En 2026, le musée ABYSSE s'associe aux équipes de l'Ifremer pour mettre à l'honneur l'exploration des grands fonds : nouvelles images des abysses, rencontres avec des scientifiques et focus sur les enjeux de protection de ces milieux fragiles.",
         image: "/assets/fond-marin.jpg",
         featured: true
     },
@@ -56,7 +59,8 @@ const newsData: NewsItem[] = [
         categoryLabel: "Vie du Musée",
         date: "5 Jan 2026",
         title: "Le FNRS III renaît de ses cendres",
-        excerpt: "Après deux ans de restauration minutieuse, le légendaire bathyscaphe retrouve peu à peu sa splendeur d'origine. Nos équipes vous dévoilent les coulisses de ce travail d'orfèvre.",
+        excerpt:
+            "Après deux ans de restauration minutieuse, le légendaire bathyscaphe retrouve peu à peu sa splendeur d'origine. Nos équipes vous dévoilent les coulisses de ce travail d'orfèvre.",
         image: "/assets/fnrs_3_220307_043.jpg"
     },
     {
@@ -65,8 +69,10 @@ const newsData: NewsItem[] = [
         categoryLabel: "Événement",
         date: "28 Déc 2025",
         title: "Vacances de février : ateliers pour les petits explorateurs",
-        excerpt: "Vos enfants rêvent de devenir océanographes ? Pendant les vacances d'hiver, le musée propose des ateliers créatifs pour les 6-12 ans : construction de mini sous-marins, découverte des créatures bioluminescentes...",
-        image: "https://images.unsplash.com/photo-1596464716127-f2a82984de30?w=800&q=80",
+        excerpt:
+            "Vos enfants rêvent de devenir océanographes ? Pendant les vacances d'hiver, le musée propose des ateliers créatifs pour les 6-12 ans : construction de mini sous-marins, découverte des créatures bioluminescentes...",
+        image:
+            "https://images.unsplash.com/photo-1596464716127-f2a82984de30?w=800&q=80",
         eventDate: "10-21 Fév 2026",
         eventTime: "14h - 16h30"
     },
@@ -76,8 +82,10 @@ const newsData: NewsItem[] = [
         categoryLabel: "Découverte",
         date: "20 Déc 2025",
         title: "Un monde caché sous l'Atlantique",
-        excerpt: "Les chercheurs de l'IFREMER ont cartographié un nouveau champ de sources hydrothermales abritant un écosystème unique. Des images à couper le souffle qui nous rappellent combien l'océan recèle encore de mystères.",
-        image: "https://images.unsplash.com/photo-1682687982501-1e58ab814714?w=800&q=80"
+        excerpt:
+            "Les chercheurs de l'IFREMER ont cartographié un nouveau champ de sources hydrothermales abritant un écosystème unique. Des images à couper le souffle qui nous rappellent combien l'océan recèle encore de mystères.",
+        image:
+            "https://images.unsplash.com/photo-1682687982501-1e58ab814714?w=800&q=80"
     },
     {
         id: 6,
@@ -85,8 +93,10 @@ const newsData: NewsItem[] = [
         categoryLabel: "Vie du Musée",
         date: "15 Déc 2025",
         title: "Un mois déjà ! 25 000 visiteurs depuis l'ouverture",
-        excerpt: "Grâce à vous, le musée ABYSSE a accueilli plus de 25 000 curieux depuis son ouverture en novembre. Chaque visite nous rappelle pourquoi nous faisons ce métier : transmettre la passion de l'océan.",
-        image: "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=800&q=80"
+        excerpt:
+            "Grâce à vous, le musée ABYSSE a accueilli plus de 25 000 curieux depuis son ouverture en novembre. Chaque visite nous rappelle pourquoi nous faisons ce métier : transmettre la passion de l'océan.",
+        image:
+            "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=800&q=80"
     },
     {
         id: 7,
@@ -94,8 +104,9 @@ const newsData: NewsItem[] = [
         categoryLabel: "Événement",
         date: "1 Déc 2025",
         title: "Conférence : Les pionnières des profondeurs",
-        excerpt: "Rencontre exceptionnelle avec trois océanographes qui ont marqué l'histoire de l'exploration sous-marine. Un hommage émouvant aux femmes qui ont bravé les préjugés pour explorer l'inconnu.",
-        image: "https://images.unsplash.com/photo-1544717305-2782549b5136?w=800&q=80",
+        excerpt:
+            "Rencontre exceptionnelle avec trois océanographes qui ont marqué l'histoire de l'exploration sous-marine. Un hommage émouvant aux femmes qui ont bravé les préjugés pour explorer l'inconnu.",
+        image: "/assets/conference.jpg", // chemin corrigé
         eventDate: "8 Mars 2026",
         eventTime: "18h"
     },
@@ -105,10 +116,13 @@ const newsData: NewsItem[] = [
         categoryLabel: "Vie du Musée",
         date: "15 Nov 2025",
         title: "Ouverture du musée ABYSSE !",
-        excerpt: "C'est le grand jour ! Le musée ABYSSE ouvre enfin ses portes au public. Venez découvrir les mystères des profondeurs dans un parcours immersif unique en France.",
-        image: "https://images.unsplash.com/photo-1483683804023-6ccdb62f86ef?w=800&q=80"
+        excerpt:
+            "C'est le grand jour ! Le musée ABYSSE ouvre enfin ses portes au public. Venez découvrir les mystères des profondeurs dans un parcours immersif unique en France.",
+        image:
+            "https://images.unsplash.com/photo-1483683804023-6ccdb62f86ef?w=800&q=80"
     }
 ];
+
 
 export default function ActualitesPage() {
     const containerRef = useRef<HTMLDivElement>(null);

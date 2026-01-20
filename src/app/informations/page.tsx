@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Footprints, Bus, Car, Clock, Ticket, GraduationCap, Baby } from "lucide-react";
+import { Footprints, Bus, Car, Clock, Ticket, GraduationCap, Baby, Globe, Accessibility, ShoppingBag, Coffee, Wifi, Lock } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -288,7 +288,7 @@ export default function InformationsPage() {
                     <div className="info-card relative rounded-3xl overflow-hidden border border-white/10 aspect-square group">
                         {/* IMAGE PLACEHOLDER - Remplacer le src par le path de votre image */}
                         <Image
-                            src="/assets/port-toulon.jpg"
+                            src="/Users/killiangil/Desktop/reaco-site-abysse/public/assets/port-toulon.jpg"
                             alt="Musée Abysse"
                             fill
                             className="object-cover group-hover:scale-105 transition-transform duration-700"
@@ -386,50 +386,84 @@ export default function InformationsPage() {
                 </section>
 
                 {/* 4. Services */}
-                <section className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16">
-                    <div>
-                        <div className="section-header mb-6 md:mb-8">
-                            <span className="text-[#4CBBD5] text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase block mb-3 md:mb-4">04. CONFORT</span>
-                            <h3 className="text-3xl md:text-5xl font-light">Services & Accessibilité</h3>
-                            <div className="h-1 w-16 md:w-24 bg-gradient-to-r from-[#4CBBD5] to-transparent mt-3 md:mt-4" />
-                        </div>
-
-                        <div className="space-y-4 md:space-y-6">
-                            <div className="info-card p-5 md:p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-[#4CBBD5]/30 transition-colors">
-                                <h4 className="text-base md:text-lg font-bold mb-2 flex items-center gap-3">
-                                    <span className="text-xl md:text-2xl">🌍</span> International
-                                </h4>
-                                <p className="text-white/70 text-xs md:text-sm">Français, Anglais, Allemand</p>
-                            </div>
-
-                            <div className="info-card p-5 md:p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-[#4CBBD5]/30 transition-colors">
-                                <h4 className="text-base md:text-lg font-bold mb-2 flex items-center gap-3">
-                                    <span className="text-xl md:text-2xl">♿</span> Accessibilité PMR
-                                </h4>
-                                <p className="text-white/70 text-xs md:text-sm">Ascenseurs & visite virtuelle</p>
-                            </div>
-                        </div>
+                <section>
+                    <div className="section-header mb-10 md:mb-16">
+                        <span className="text-[#4CBBD5] text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase block mb-3 md:mb-4">04. CONFORT</span>
+                        <h3 className="text-3xl md:text-5xl font-light">Services & Accessibilité</h3>
+                        <div className="h-1 w-16 md:w-24 bg-gradient-to-r from-[#4CBBD5] to-transparent mt-3 md:mt-4" />
                     </div>
 
-                    <div className="info-card p-8 md:p-10 rounded-3xl bg-white/5 border border-white/10">
-                        <h3 className="text-xl md:text-2xl font-light mb-6 md:mb-8">Pour votre confort</h3>
-                        <div className="space-y-4 md:space-y-6">
-                            {[
-                                { icon: "🛍", title: "Boutique Abysse", desc: "Souvenirs maritimes" },
-                                { icon: "☕", title: "Cafétéria", desc: "Vue panoramique" },
-                                { icon: "📶", title: "Wi-Fi Gratuit", desc: "Haut débit" },
-                                { icon: "🛅", title: "Consignes", desc: "Espace sécurisé" }
-                            ].map((service, i) => (
-                                <div key={i} className="flex items-center gap-4 group cursor-pointer">
-                                    <div className="w-10 h-10 md:w-12 md:h-12 bg-[#4CBBD5]/10 rounded-xl flex items-center justify-center text-lg md:text-xl group-hover:scale-110 transition-transform">
-                                        {service.icon}
-                                    </div>
-                                    <div className="flex-1">
-                                        <h5 className="font-bold text-white text-sm md:text-base">{service.title}</h5>
-                                        <p className="text-xs md:text-sm text-white/60">{service.desc}</p>
-                                    </div>
+                    {/* Bento Grid Layout */}
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+                        {/* Grande carte - International */}
+                        <div className="col-span-2 row-span-2 group relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#006994]/20 to-[#041C30] border border-white/10 hover:border-[#4CBBD5]/40 transition-all duration-500 p-6 md:p-8">
+                            <div className="absolute top-0 right-0 w-48 h-48 bg-[#4CBBD5]/10 rounded-full blur-[60px] group-hover:bg-[#4CBBD5]/20 transition-all duration-700" />
+                            <div className="relative z-10 h-full flex flex-col">
+                                <div className="w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-[#4CBBD5]/20 to-[#4CBBD5]/5 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 border border-[#4CBBD5]/20">
+                                    <Globe className="w-7 h-7 md:w-8 md:h-8 text-[#4CBBD5]" strokeWidth={1.5} />
                                 </div>
-                            ))}
+                                <h4 className="text-xl md:text-2xl font-semibold mb-3 group-hover:text-[#4CBBD5] transition-colors">Multilingue</h4>
+                                <p className="text-white/60 text-sm md:text-base leading-relaxed mb-6 flex-1">
+                                    Parcours disponible en plusieurs langues pour accueillir tous nos visiteurs internationaux.
+                                </p>
+                                <div className="flex flex-wrap gap-2">
+                                    {['Français', 'English', 'Deutsch'].map((lang) => (
+                                        <span key={lang} className="px-3 py-1.5 bg-white/5 border border-white/10 rounded-full text-xs font-medium text-white/80 group-hover:border-[#4CBBD5]/30 transition-colors">
+                                            {lang}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Carte Accessibilité PMR */}
+                        <div className="col-span-2 group relative overflow-hidden rounded-3xl bg-gradient-to-br from-white/10 to-white/5 border border-white/10 hover:border-[#4CBBD5]/40 transition-all duration-500 p-5 md:p-6">
+                            <div className="absolute inset-0 bg-gradient-to-br from-[#4CBBD5]/0 to-[#4CBBD5]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                            <div className="relative z-10 flex items-start gap-4 md:gap-5">
+                                <div className="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-[#4CBBD5]/20 to-[#4CBBD5]/5 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-500 border border-[#4CBBD5]/20 shrink-0">
+                                    <Accessibility className="w-6 h-6 md:w-7 md:h-7 text-[#4CBBD5]" strokeWidth={1.5} />
+                                </div>
+                                <div>
+                                    <h4 className="text-lg md:text-xl font-semibold mb-1.5 group-hover:text-[#4CBBD5] transition-colors">Accessibilité PMR</h4>
+                                    <p className="text-white/60 text-xs md:text-sm leading-relaxed">Ascenseurs, rampes d&apos;accès et parcours adaptés. Visite virtuelle disponible.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Boutique */}
+                        <div className="group relative overflow-hidden rounded-2xl bg-white/5 border border-white/10 hover:border-[#4CBBD5]/40 transition-all duration-500 p-5 hover:-translate-y-1">
+                            <div className="w-10 h-10 md:w-11 md:h-11 bg-[#4CBBD5]/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-[#4CBBD5]/20 transition-all duration-300 border border-[#4CBBD5]/10">
+                                <ShoppingBag className="w-5 h-5 text-[#4CBBD5]" strokeWidth={1.5} />
+                            </div>
+                            <h5 className="font-semibold text-white text-sm md:text-base mb-1 group-hover:text-[#4CBBD5] transition-colors">Boutique</h5>
+                            <p className="text-xs text-white/50">Souvenirs marins</p>
+                        </div>
+
+                        {/* Cafétéria */}
+                        <div className="group relative overflow-hidden rounded-2xl bg-white/5 border border-white/10 hover:border-[#4CBBD5]/40 transition-all duration-500 p-5 hover:-translate-y-1">
+                            <div className="w-10 h-10 md:w-11 md:h-11 bg-[#4CBBD5]/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-[#4CBBD5]/20 transition-all duration-300 border border-[#4CBBD5]/10">
+                                <Coffee className="w-5 h-5 text-[#4CBBD5]" strokeWidth={1.5} />
+                            </div>
+                            <h5 className="font-semibold text-white text-sm md:text-base mb-1 group-hover:text-[#4CBBD5] transition-colors">Cafétéria</h5>
+                            <p className="text-xs text-white/50">Vue panoramique</p>
+                        </div>
+
+                        {/* Wi-Fi */}
+                        <div className="group relative overflow-hidden rounded-2xl bg-white/5 border border-white/10 hover:border-[#4CBBD5]/40 transition-all duration-500 p-5 hover:-translate-y-1">
+                            <div className="w-10 h-10 md:w-11 md:h-11 bg-[#4CBBD5]/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-[#4CBBD5]/20 transition-all duration-300 border border-[#4CBBD5]/10">
+                                <Wifi className="w-5 h-5 text-[#4CBBD5]" strokeWidth={1.5} />
+                            </div>
+                            <h5 className="font-semibold text-white text-sm md:text-base mb-1 group-hover:text-[#4CBBD5] transition-colors">Wi-Fi Gratuit</h5>
+                            <p className="text-xs text-white/50">Haut débit</p>
+                        </div>
+
+                        {/* Consignes */}
+                        <div className="group relative overflow-hidden rounded-2xl bg-white/5 border border-white/10 hover:border-[#4CBBD5]/40 transition-all duration-500 p-5 hover:-translate-y-1">
+                            <div className="w-10 h-10 md:w-11 md:h-11 bg-[#4CBBD5]/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-[#4CBBD5]/20 transition-all duration-300 border border-[#4CBBD5]/10">
+                                <Lock className="w-5 h-5 text-[#4CBBD5]" strokeWidth={1.5} />
+                            </div>
+                            <h5 className="font-semibold text-white text-sm md:text-base mb-1 group-hover:text-[#4CBBD5] transition-colors">Consignes</h5>
+                            <p className="text-xs text-white/50">Espace sécurisé</p>
                         </div>
                     </div>
                 </section>

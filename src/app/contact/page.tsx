@@ -4,12 +4,40 @@ import { Navbar, Footer } from "@/components/UI";
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import emailjs from "@emailjs/browser";
-import { Mail, Phone, MapPin, Clock, Send, CheckCircle, AlertCircle, Loader2, MessageCircle } from "lucide-react";
+import { Mail, Phone, MapPin, Clock, Send, CheckCircle, AlertCircle, Loader2, MessageCircle, ChevronDown, HelpCircle } from "lucide-react";
+
+const faqData = [
+    {
+        question: "Faut-il réserver à l'avance ?",
+        answer: "La réservation est recommandée pour les week-ends et vacances scolaires, mais pas obligatoire. Les groupes (10+ personnes) doivent réserver au moins 48h à l'avance."
+    },
+    {
+        question: "Le musée est-il accessible aux personnes à mobilité réduite ?",
+        answer: "Oui, l'ensemble du parcours est accessible aux PMR grâce à des ascenseurs et rampes d'accès. Une visite virtuelle est également disponible pour les zones moins accessibles du sous-marin."
+    },
+    {
+        question: "Combien de temps dure la visite ?",
+        answer: "Comptez environ 1h30 pour le parcours découverte, et jusqu'à 2h30 si vous souhaitez profiter de l'expérience complète avec les espaces interactifs et le sous-marin."
+    },
+    {
+        question: "Les animaux sont-ils acceptés ?",
+        answer: "Seuls les chiens guides et d'assistance sont autorisés dans l'enceinte du musée."
+    },
+    {
+        question: "Y a-t-il un parking à proximité ?",
+        answer: "Le parking Port Marchand se trouve à 2 minutes à pied. Des places de stationnement sont également disponibles dans les rues adjacentes."
+    },
+    {
+        question: "Proposez-vous des visites guidées ?",
+        answer: "Oui, des visites guidées sont proposées chaque jour à 11h et 15h. Pour les groupes scolaires ou privés, des créneaux dédiés peuvent être réservés sur demande."
+    }
+];
 
 export default function ContactPage() {
     const containerRef = useRef<HTMLDivElement>(null);
     const formRef = useRef<HTMLFormElement>(null);
     const [formState, setFormState] = useState<"idle" | "sending" | "success" | "error">("idle");
+    const [openFaq, setOpenFaq] = useState<number | null>(null);
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -178,7 +206,7 @@ export default function ContactPage() {
                                 <Clock className="w-5 h-5 text-[#4CBBD5]" />
                             </div>
                             <span className="block text-[10px] text-white/40 uppercase tracking-wider mb-2">Horaires</span>
-                            <span className="block text-sm text-white font-medium">Mar - Dim</span>
+                            <span className="block text-sm text-white font-medium">Mardi - Dimanche</span>
                             <p className="text-xs text-white/50 mt-2">10h00 - 18h00</p>
                         </div>
                     </div>
@@ -358,6 +386,65 @@ export default function ContactPage() {
                 </div>
             </section>
 
+            {/* FAQ Section */}
+            <section className="max-w-4xl mx-auto px-4 md:px-6 pb-16 md:pb-24 relative z-10">
+                <div className="text-center mb-10 md:mb-12">
+                    <div className="inline-flex items-center gap-2 mb-4">
+                        <HelpCircle className="w-5 h-5 text-[#4CBBD5]" />
+                        <span className="text-[#4CBBD5] text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase">FAQ</span>
+                    </div>
+                    <h2 className="text-2xl md:text-4xl font-light mb-3">Questions Fréquentes</h2>
+                    <p className="text-white/50 text-sm max-w-md mx-auto">
+                        Retrouvez ici les réponses aux questions les plus posées par nos visiteurs.
+                    </p>
+                </div>
+
+                <div className="space-y-3">
+                    {faqData.map((faq, index) => (
+                        <div
+                            key={index}
+                            className="group relative bg-gradient-to-br from-white/5 to-transparent border border-white/10 hover:border-[#4CBBD5]/30 rounded-2xl overflow-hidden transition-all duration-300"
+                        >
+                            <button
+                                onClick={() => setOpenFaq(openFaq === index ? null : index)}
+                                className="w-full px-5 md:px-6 py-4 md:py-5 flex items-center justify-between text-left"
+                            >
+                                <span className="font-medium text-sm md:text-base text-white group-hover:text-[#4CBBD5] transition-colors pr-4">
+                                    {faq.question}
+                                </span>
+                                <div className={`w-8 h-8 rounded-full bg-[#4CBBD5]/10 flex items-center justify-center shrink-0 transition-all duration-300 ${openFaq === index ? 'bg-[#4CBBD5]/20 rotate-180' : ''}`}>
+                                    <ChevronDown className="w-4 h-4 text-[#4CBBD5]" />
+                                </div>
+                            </button>
+
+                            <div className={`overflow-hidden transition-all duration-300 ease-out ${openFaq === index ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'}`}>
+                                <div className="px-5 md:px-6 pb-5 md:pb-6">
+                                    <div className="h-px w-full bg-white/5 mb-4" />
+                                    <p className="text-white/60 text-sm leading-relaxed">
+                                        {faq.answer}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* CTA après FAQ */}
+                <div className="mt-10 text-center">
+                    <p className="text-white/40 text-sm mb-3">Vous n&apos;avez pas trouvé votre réponse ?</p>
+                    <a
+                        href="#contact-form"
+                        className="inline-flex items-center gap-2 text-[#4CBBD5] text-sm font-medium hover:gap-3 transition-all"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            document.querySelector('.form-container')?.scrollIntoView({ behavior: 'smooth' });
+                        }}
+                    >
+                        <span>Contactez-nous directement</span>
+                        <ChevronDown className="w-4 h-4 rotate-[-90deg]" />
+                    </a>
+                </div>
+            </section>
 
             <Footer />
         </main>
