@@ -299,10 +299,10 @@ export default function InformationsPage() {
 
                 {/* 3. Tarifs */}
                 <section>
-                    <div className="section-header mb-10 md:mb-16 text-center">
+                    <div className="section-header mb-10 md:mb-16">
                         <span className="text-[#4CBBD5] text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase block mb-3 md:mb-4">03. BILLETTERIE</span>
-                        <h3 className="text-3xl md:text-5xl font-light mb-6 md:mb-8">Tarifs & Offres</h3>
-                        <div className="h-1 w-16 md:w-24 bg-gradient-to-r from-[#4CBBD5] to-transparent mx-auto mb-6 md:mb-8" />
+                        <h3 className="text-3xl md:text-5xl font-light mb-4">Tarifs & Offres</h3>
+                        <div className="h-1 w-16 md:w-24 bg-gradient-to-r from-[#4CBBD5] to-transparent mb-6 md:mb-8" />
                         <a href="/billetterie" className="inline-block bg-gradient-to-r from-[#4CBBD5] to-[#006994] text-white px-8 py-4 md:px-10 md:py-5 rounded-full text-sm md:text-base font-bold tracking-widest uppercase hover:shadow-[0_0_40px_rgba(76,187,213,0.5)] hover:scale-105 transition-all duration-300">
                             Réserver en ligne
                         </a>
