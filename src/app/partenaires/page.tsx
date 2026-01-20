@@ -96,7 +96,7 @@ export default function PartenairesPage() {
             </div>
 
             {/* Hero Section (Restored) */}
-            <section className="relative h-[50vh] md:h-[60vh] flex flex-col justify-center items-center text-center px-4 md:px-6 z-10">
+            <section className="relative h-[55vh] md:h-[65vh] flex flex-col justify-center items-center text-center px-4 md:px-6 z-10 pt-32 md:pt-40">
                 {/* Extended Gradient Background */}
                 <div className="absolute inset-0 bg-gradient-to-b from-[#006994]/30 to-[#041C30]" />
 
