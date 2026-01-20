@@ -11,8 +11,8 @@ export function Navbar() {
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 right-0 z-[100] px-6 md:px-10 py-3 transition-all duration-300 ${isOpen ? 'bg-transparent' : 'bg-gradient-to-b from-black/60 to-transparent'}`}>
-        <div className="flex items-center justify-between">
+      <nav className={`fixed top-0 left-0 right-0 z-[100] px-6 md:px-10 py-8 transition-all duration-300 ${isOpen ? 'bg-transparent' : 'bg-gradient-to-b from-black/60 to-transparent'}`}>
+        <div className="flex items-center justify-between relative">
           {/* Logo */}
           <Link
             href="/"
@@ -21,18 +21,18 @@ export function Navbar() {
             suppressHydrationWarning
           >
             <Image
-              src="/assets/logo-final.svg"
+              src="/assets/logofinal.png"
               alt="ABYSSE"
-              width={800}
-              height={260}
-              className="h-40 md:h-48 w-auto"
+              width={160}
+              height={52}
+              className="h-10 md:h-14 w-auto"
               unoptimized
               priority
             />
           </Link>
 
-          {/* Desktop Menu */}
-          <div className="hidden md:flex items-center gap-8">
+          {/* Desktop Menu - Centré en absolu */}
+          <div className="hidden md:flex items-center gap-8 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
             <Link href="/visiter" className="group relative text-xs text-white/60 uppercase tracking-[0.15em] hover:text-white transition-colors">
               Visiter
               <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full" />

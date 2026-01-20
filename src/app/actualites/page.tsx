@@ -47,7 +47,7 @@ const newsData: NewsItem[] = [
         date: "10 Jan 2026",
         title: "Record battu : vie découverte à 8 336 mètres",
         excerpt: "Une équipe internationale vient d'identifier un poisson vivant dans la fosse des Mariannes, pulvérisant le précédent record. Cette découverte bouleverse notre compréhension de la vie dans les conditions extrêmes.",
-        image: "https://images.unsplash.com/photo-1534766555764-ce878a5e3a2b?w=800&q=80",
+        image: "/assets/fond-marin.jpg",
         featured: true
     },
     {
@@ -57,7 +57,7 @@ const newsData: NewsItem[] = [
         date: "5 Jan 2026",
         title: "Le FNRS III renaît de ses cendres",
         excerpt: "Après deux ans de restauration minutieuse, le légendaire bathyscaphe retrouve peu à peu sa splendeur d'origine. Nos équipes vous dévoilent les coulisses de ce travail d'orfèvre.",
-        image: "https://images.unsplash.com/photo-1580019542155-247062e19ce4?w=800&q=80"
+        image: "/assets/fnrs_3_220307_043.jpg"
     },
     {
         id: 4,
@@ -189,7 +189,7 @@ export default function ActualitesPage() {
             </div>
 
             {/* Hero Section */}
-            <section className="relative h-[55vh] md:h-[65vh] flex flex-col justify-center items-center text-center px-4 md:px-6 z-10 pt-32 md:pt-40">
+            <section className="relative h-[50vh] md:h-[60vh] flex flex-col justify-center items-center text-center px-4 md:px-6 z-10 pt-20">
                 <div className="absolute inset-0 bg-gradient-to-b from-[#006994]/30 to-[#041C30]" />
 
                 <div className="relative z-10 space-y-6 max-w-4xl">
