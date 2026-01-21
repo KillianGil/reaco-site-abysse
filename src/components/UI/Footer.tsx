@@ -75,13 +75,18 @@ export function Footer() {
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/expositions" className="text-sm text-white/60 hover:text-[#4CBBD5] transition-colors">
-                                    Expositions
+                                <Link href="/visiter" className="text-sm text-white/60 hover:text-[#4CBBD5] transition-colors">
+                                    Visiter
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href="/actualites" className="text-sm text-white/60 hover:text-[#4CBBD5] transition-colors">
+                                    Actualités
                                 </Link>
                             </li>
                             <li>
                                 <Link href="/informations" className="text-sm text-white/60 hover:text-[#4CBBD5] transition-colors">
-                                    Informations Pratiques
+                                    Informations
                                 </Link>
                             </li>
                             <li>
