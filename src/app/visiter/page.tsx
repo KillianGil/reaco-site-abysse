@@ -194,16 +194,12 @@ export default function ExpositionsPage() {
                 {/* ZONE 2: BIODIVERSITÉ & ABYSSES */}
                 <section className="px-4 md:px-20 max-w-7xl mx-auto w-full relative py-8 md:py-12">
                     {/* Organic wave decoration */}
-                    <div className="absolute inset-0 opacity-30 pointer-events-none overflow-hidden">
-                        <svg className="absolute -top-20 -right-20 w-[500px] h-[500px] text-[#4CBBD5]/10" viewBox="0 0 200 200">
-                            <path fill="currentColor" d="M44.5,-76.3C57.5,-69.2,67.7,-56.3,75.3,-42.1C82.9,-27.9,87.9,-12.4,86.8,2.4C85.7,17.2,78.5,31.3,69.1,43.3C59.7,55.3,48.1,65.1,34.8,71.8C21.5,78.5,6.5,82.1,-8.8,81.9C-24.1,81.7,-39.7,77.7,-52.1,69.5C-64.5,61.3,-73.7,48.9,-79.3,35C-84.9,21.1,-86.9,5.7,-84.4,-8.7C-81.9,-23.1,-74.9,-36.5,-64.8,-47.3C-54.7,-58.1,-41.5,-66.3,-27.7,-72.8C-13.9,-79.3,0.5,-84.1,14.4,-82.7C28.3,-81.3,31.5,-83.4,44.5,-76.3Z" transform="translate(100 100)" />
-                        </svg>
-                    </div>
+
 
                     <div className="section-header mb-10 md:mb-16 relative z-10 text-left md:text-right">
                         <span className="text-[#4CBBD5] text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase block mb-3 md:mb-4">02. BIODIVERSITÉ</span>
-                        <h3 className="text-3xl md:text-5xl font-light">
-                            <span className="font-serif italic text-white/80">Merveilles</span> des Profondeurs
+                        <h3 className="text-3xl md:text-5xl font-light uppercase">
+                            Merveilles des Profondeurs
                         </h3>
                         <div className="h-1 w-16 md:w-24 bg-gradient-to-r md:bg-gradient-to-l from-[#4CBBD5] to-transparent mt-3 md:mt-4 md:ml-auto" />
                         <p className="mt-4 md:mt-6 text-white/60 max-w-xl md:ml-auto leading-relaxed text-sm md:text-base font-light">
@@ -238,34 +234,32 @@ export default function ExpositionsPage() {
                             }
                         ].map((card, i) => (
                             <div key={i} className="group relative h-full">
-                                {/* Card with organic shape */}
-                                <div className="relative rounded-[2rem] overflow-hidden border border-white/10 bg-gradient-to-b from-[#062438] to-[#041C30] hover:border-[#4CBBD5]/30 transition-all duration-700 h-full">
-                                    {/* Soft glow effect */}
-                                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-32 bg-[#4CBBD5]/10 rounded-full blur-[50px] group-hover:bg-[#4CBBD5]/20 transition-all duration-700" />
+                                {/* Technical Clean Card */}
+                                <div className="bg-[#031525] border border-white/10 hover:border-[#4CBBD5] transition-all duration-300 p-6 md:p-8 rounded-xl h-full flex flex-col relative overflow-hidden">
+                                    <div className="absolute top-0 right-0 w-20 h-20 bg-[#4CBBD5]/5 rounded-bl-full -mr-10 -mt-10 transition-colors group-hover:bg-[#4CBBD5]/10" />
 
-                                    <div className="p-6 md:p-8 relative z-10 h-full flex flex-col">
-                                        {/* Icon with organic container */}
-                                        <div className="w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-[#4CBBD5]/20 to-[#006994]/10 rounded-[1rem] flex items-center justify-center mb-5 md:mb-6 group-hover:scale-105 transition-transform duration-500 border border-[#4CBBD5]/20">
-                                            <card.icon className="w-6 h-6 md:w-7 md:h-7 text-[#4CBBD5]" strokeWidth={1.5} />
-                                        </div>
+                                    {/* Icon */}
+                                    <div className="w-12 h-12 md:w-14 md:h-14 bg-[#4CBBD5]/10 rounded-lg flex items-center justify-center mb-6 group-hover:scale-105 transition-transform duration-300 border border-[#4CBBD5]/20">
+                                        <card.icon className="w-6 h-6 md:w-7 md:h-7 text-[#4CBBD5]" strokeWidth={1.5} />
+                                    </div>
 
-                                        {/* Subtitle */}
-                                        <span className="text-[10px] md:text-xs text-[#4CBBD5]/70 uppercase tracking-wider mb-1">{card.subtitle}</span>
+                                    {/* Subtitle */}
+                                    <span className="text-[10px] md:text-xs text-[#4CBBD5]/70 uppercase tracking-wider mb-2 font-mono block">{card.subtitle}</span>
 
-                                        {/* Title */}
-                                        <h3 className="text-xl md:text-2xl font-light mb-4 leading-tight group-hover:text-[#4CBBD5] transition-colors">
-                                            {card.title}
-                                        </h3>
+                                    {/* Title */}
+                                    <h3 className="text-xl md:text-2xl font-bold mb-4 leading-tight group-hover:text-[#4CBBD5] transition-colors">
+                                        {card.title}
+                                    </h3>
 
-                                        {/* Description */}
-                                        <p className="text-white/50 text-sm leading-relaxed mb-6 flex-1">
-                                            {card.desc}
-                                        </p>
+                                    {/* Description */}
+                                    <p className="text-white/60 text-sm leading-relaxed mb-6 flex-1">
+                                        {card.desc}
+                                    </p>
 
-                                        {/* Bottom detail */}
-                                        <div className="pt-4 border-t border-white/5">
-                                            <span className="text-xs text-white/40 font-light italic">{card.detail}</span>
-                                        </div>
+                                    {/* Bottom detail */}
+                                    <div className="pt-4 border-t border-white/5 flex items-center gap-2">
+                                        <div className="w-1.5 h-1.5 bg-[#4CBBD5] rounded-full" />
+                                        <span className="text-xs text-white/40 font-mono uppercase tracking-wider">{card.detail}</span>
                                     </div>
                                 </div>
                             </div>
@@ -337,7 +331,8 @@ export default function ExpositionsPage() {
                             {[
                                 { year: "1888", title: "Le Gymnote", desc: "Premier sous-marin électrique, construit et naviguant au Mourillon." },
                                 { year: "1943", title: "Les Mousquemers", desc: "Cousteau, Tailliez, Dumas inventent la plongée autonome moderne dans la rade." },
-                                { year: "1953", title: "Records du FNRS III", desc: "Premiers records établis au large de Toulon, profitant des grands fonds à proximité." }
+                                { year: "1953", title: "Records du FNRS III", desc: "Premiers records établis au large de Toulon, profitant des grands fonds à proximité." },
+                                { year: "2024", title: "Maîtrise des Fonds", desc: "Toulon reste le cœur stratégique de la plongée profonde et des drones sous-marins." }
                             ].map((item, i) => (
                                 <div key={i} className="timeline-item relative flex flex-col md:grid md:grid-cols-2 md:gap-20 items-start md:items-center pl-8 md:pl-0">
                                     {/* Dot */}
@@ -345,7 +340,7 @@ export default function ExpositionsPage() {
 
                                     {/* Date */}
                                     <div className={`w-full ${i % 2 === 0 ? 'md:text-right md:pr-0' : 'md:order-2 md:text-left'}`}>
-                                        <span className="text-4xl md:text-8xl font-serif font-bold text-[#4CBBD5]/40 block leading-none mb-1 md:mb-0">{item.year}</span>
+                                        <span className="text-4xl md:text-8xl font-serif font-bold text-white block leading-none mb-1 md:mb-0">{item.year}</span>
                                     </div>
 
                                     {/* Content */}

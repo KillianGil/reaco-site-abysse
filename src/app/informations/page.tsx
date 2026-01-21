@@ -288,7 +288,7 @@ export default function InformationsPage() {
                     <div className="info-card relative rounded-3xl overflow-hidden border border-white/10 aspect-square group">
                         {/* IMAGE PLACEHOLDER - Remplacer le src par le path de votre image */}
                         <Image
-                            src="/Users/killiangil/Desktop/reaco-site-abysse/public/assets/port-toulon.jpg"
+                            src="/assets/port-toulon-final.jpg"
                             alt="Musée Abysse"
                             fill
                             className="object-cover group-hover:scale-105 transition-transform duration-700"
@@ -397,95 +397,109 @@ export default function InformationsPage() {
                     </div>
 
                     {/* Services Grid - Cleaner Design */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                    {/* Services Grid - Cleaner Design - Uniform Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-                        {/* Accessibilité - Featured Card */}
-                        <div className="md:col-span-2 lg:col-span-1 lg:row-span-2 group relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#006994]/30 to-[#041C30] border border-white/10 hover:border-[#4CBBD5]/40 transition-all duration-500 p-6 md:p-8">
-                            <div className="absolute top-0 right-0 w-48 h-48 bg-[#4CBBD5]/10 rounded-full blur-[60px] group-hover:bg-[#4CBBD5]/20 transition-all duration-700" />
-                            <div className="relative z-10 h-full flex flex-col">
-                                <div className="icon-wrapper w-14 h-14 md:w-16 md:h-16 bg-[#4CBBD5]/10 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 border border-[#4CBBD5]/20">
-                                    <Accessibility className="w-7 h-7 md:w-8 md:h-8 text-[#4CBBD5]" strokeWidth={1.5} />
-                                </div>
-                                <h4 className="text-xl md:text-2xl font-semibold mb-3 group-hover:text-[#4CBBD5] transition-colors">Accessible à tous</h4>
-                                <p className="text-white/60 text-sm md:text-base leading-relaxed mb-6 flex-1">
-                                    Le musée est entièrement accessible aux personnes à mobilité réduite. Ascenseurs panoramiques, rampes douces, et parcours adaptés vous attendent.
-                                </p>
-                                <ul className="space-y-2 text-sm text-white/70">
-                                    <li className="flex items-center gap-2">
-                                        <span className="w-1.5 h-1.5 bg-[#4CBBD5] rounded-full" />
-                                        Fauteuils roulants disponibles
-                                    </li>
-                                    <li className="flex items-center gap-2">
-                                        <span className="w-1.5 h-1.5 bg-[#4CBBD5] rounded-full" />
-                                        Visite virtuelle du sous-marin
-                                    </li>
-                                    <li className="flex items-center gap-2">
-                                        <span className="w-1.5 h-1.5 bg-[#4CBBD5] rounded-full" />
-                                        Boucles magnétiques
-                                    </li>
-                                </ul>
+                        {/* Accessibilité */}
+                        <div className="bg-[#031525] border border-white/10 hover:border-[#4CBBD5] transition-all duration-300 p-6 md:p-8 rounded-xl group relative overflow-hidden h-full">
+                            <div className="absolute top-0 right-0 w-16 h-16 bg-[#4CBBD5]/5 rounded-bl-full -mr-8 -mt-8 transition-colors group-hover:bg-[#4CBBD5]/10" />
+
+                            <div className="w-12 h-12 bg-[#4CBBD5]/10 rounded-lg flex items-center justify-center mb-6 group-hover:scale-105 transition-transform duration-300 border border-[#4CBBD5]/20">
+                                <Accessibility className="w-6 h-6 text-[#4CBBD5]" strokeWidth={1.5} />
+                            </div>
+
+                            <h4 className="text-xl font-bold mb-3 group-hover:text-[#4CBBD5] transition-colors">Accessible à tous</h4>
+                            <p className="text-white/60 text-sm leading-relaxed mb-4">
+                                Le musée est 100% accessible aux PMR. Ascenseurs panoramiques, rampes douces et parcours adaptés.
+                            </p>
+                            <div className="pt-4 border-t border-white/5 flex items-center gap-2">
+                                <div className="w-1.5 h-1.5 bg-[#4CBBD5] rounded-full" />
+                                <span className="text-xs text-white/40 font-mono uppercase tracking-wider">LABELLISÉ</span>
                             </div>
                         </div>
 
                         {/* Multilingue */}
-                        <div className="info-card group relative overflow-hidden rounded-2xl bg-gradient-to-br from-white/10 to-white/5 border border-white/10 hover:border-[#4CBBD5]/40 transition-all duration-500 p-5 md:p-6 hover:-translate-y-1">
-                            <div className="absolute inset-0 bg-gradient-to-br from-[#4CBBD5]/0 to-[#4CBBD5]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                            <div className="relative z-10">
-                                <div className="icon-wrapper w-12 h-12 bg-[#4CBBD5]/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 border border-[#4CBBD5]/10">
-                                    <Globe className="w-6 h-6 text-[#4CBBD5]" strokeWidth={1.5} />
-                                </div>
-                                <h4 className="text-lg font-semibold mb-2 group-hover:text-[#4CBBD5] transition-colors">Multilingue</h4>
-                                <p className="text-white/60 text-sm leading-relaxed mb-3">Audioguides et panneaux en plusieurs langues.</p>
-                                <div className="flex flex-wrap gap-1.5">
-                                    {['FR', 'EN', 'DE', 'ES'].map((lang) => (
-                                        <span key={lang} className="px-2 py-1 bg-white/5 border border-white/10 rounded text-[10px] font-bold text-white/70">
-                                            {lang}
-                                        </span>
-                                    ))}
-                                </div>
+                        <div className="bg-[#031525] border border-white/10 hover:border-[#4CBBD5] transition-all duration-300 p-6 md:p-8 rounded-xl group relative overflow-hidden h-full">
+                            <div className="absolute top-0 right-0 w-16 h-16 bg-[#4CBBD5]/5 rounded-bl-full -mr-8 -mt-8 transition-colors group-hover:bg-[#4CBBD5]/10" />
+
+                            <div className="w-12 h-12 bg-[#4CBBD5]/10 rounded-lg flex items-center justify-center mb-6 group-hover:scale-105 transition-transform duration-300 border border-[#4CBBD5]/20">
+                                <Globe className="w-6 h-6 text-[#4CBBD5]" strokeWidth={1.5} />
+                            </div>
+
+                            <h4 className="text-xl font-bold mb-3 group-hover:text-[#4CBBD5] transition-colors">International</h4>
+                            <p className="text-white/60 text-sm leading-relaxed mb-4">
+                                Audioguides et contenus disponibles en 4 langues pour une expérience sans frontières.
+                            </p>
+
+                            <div className="flex gap-2 pt-4 border-t border-white/5">
+                                {['FR', 'EN', 'DE', 'ES'].map((lang) => (
+                                    <span key={lang} className="text-[10px] font-mono text-[#4CBBD5] border border-[#4CBBD5]/30 px-1.5 py-0.5 rounded">
+                                        {lang}
+                                    </span>
+                                ))}
                             </div>
                         </div>
 
                         {/* Cafétéria */}
-                        <div className="info-card group relative overflow-hidden rounded-2xl bg-gradient-to-br from-white/10 to-white/5 border border-white/10 hover:border-[#4CBBD5]/40 transition-all duration-500 p-5 md:p-6 hover:-translate-y-1">
-                            <div className="absolute inset-0 bg-gradient-to-br from-[#4CBBD5]/0 to-[#4CBBD5]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                            <div className="relative z-10">
-                                <div className="icon-wrapper w-12 h-12 bg-[#4CBBD5]/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 border border-[#4CBBD5]/10">
-                                    <Coffee className="w-6 h-6 text-[#4CBBD5]" strokeWidth={1.5} />
-                                </div>
-                                <h4 className="text-lg font-semibold mb-2 group-hover:text-[#4CBBD5] transition-colors">Cafétéria Marine</h4>
-                                <p className="text-white/60 text-sm leading-relaxed">Pause gourmande avec vue sur la rade. Produits locaux et spécialités méditerranéennes.</p>
+                        <div className="bg-[#031525] border border-white/10 hover:border-[#4CBBD5] transition-all duration-300 p-6 md:p-8 rounded-xl group relative overflow-hidden h-full">
+                            <div className="absolute top-0 right-0 w-16 h-16 bg-[#4CBBD5]/5 rounded-bl-full -mr-8 -mt-8 transition-colors group-hover:bg-[#4CBBD5]/10" />
+
+                            <div className="w-12 h-12 bg-[#4CBBD5]/10 rounded-lg flex items-center justify-center mb-6 group-hover:scale-105 transition-transform duration-300 border border-[#4CBBD5]/20">
+                                <Coffee className="w-6 h-6 text-[#4CBBD5]" strokeWidth={1.5} />
+                            </div>
+
+                            <h4 className="text-xl font-bold mb-3 group-hover:text-[#4CBBD5] transition-colors">Cafétéria Marine</h4>
+                            <p className="text-white/60 text-sm leading-relaxed mb-4">
+                                Pause gourmande avec vue imprenable sur la rade. Produits locaux et de saison.
+                            </p>
+                            <div className="pt-4 border-t border-white/5 flex items-center gap-2">
+                                <div className="w-1.5 h-1.5 bg-[#4CBBD5] rounded-full" />
+                                <span className="text-xs text-white/40 font-mono uppercase tracking-wider">PANORAMIQUE</span>
                             </div>
                         </div>
 
                         {/* Boutique */}
-                        <div className="info-card group relative overflow-hidden rounded-2xl bg-gradient-to-br from-white/10 to-white/5 border border-white/10 hover:border-[#4CBBD5]/40 transition-all duration-500 p-5 md:p-6 hover:-translate-y-1">
-                            <div className="absolute inset-0 bg-gradient-to-br from-[#4CBBD5]/0 to-[#4CBBD5]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                            <div className="relative z-10">
-                                <div className="icon-wrapper w-12 h-12 bg-[#4CBBD5]/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 border border-[#4CBBD5]/10">
-                                    <ShoppingBag className="w-6 h-6 text-[#4CBBD5]" strokeWidth={1.5} />
-                                </div>
-                                <h4 className="text-lg font-semibold mb-2 group-hover:text-[#4CBBD5] transition-colors">Boutique</h4>
-                                <p className="text-white/60 text-sm leading-relaxed">Livres, maquettes, objets artisanaux... Repartez avec un souvenir des profondeurs.</p>
+                        <div className="bg-[#031525] border border-white/10 hover:border-[#4CBBD5] transition-all duration-300 p-6 md:p-8 rounded-xl group relative overflow-hidden h-full">
+                            <div className="absolute top-0 right-0 w-16 h-16 bg-[#4CBBD5]/5 rounded-bl-full -mr-8 -mt-8 transition-colors group-hover:bg-[#4CBBD5]/10" />
+
+                            <div className="w-12 h-12 bg-[#4CBBD5]/10 rounded-lg flex items-center justify-center mb-6 group-hover:scale-105 transition-transform duration-300 border border-[#4CBBD5]/20">
+                                <ShoppingBag className="w-6 h-6 text-[#4CBBD5]" strokeWidth={1.5} />
+                            </div>
+
+                            <h4 className="text-xl font-bold mb-3 group-hover:text-[#4CBBD5] transition-colors">Concept Store</h4>
+                            <p className="text-white/60 text-sm leading-relaxed mb-4">
+                                Une sélection pointue de livres, objets design et souvenirs inspirés par l'océan.
+                            </p>
+                            <div className="pt-4 border-t border-white/5 flex items-center gap-2">
+                                <div className="w-1.5 h-1.5 bg-[#4CBBD5] rounded-full" />
+                                <span className="text-xs text-white/40 font-mono uppercase tracking-wider">OUVERT 7J/7</span>
                             </div>
                         </div>
 
-                        {/* Wi-Fi & Consignes - Combined */}
-                        <div className="info-card group relative overflow-hidden rounded-2xl bg-gradient-to-br from-white/10 to-white/5 border border-white/10 hover:border-[#4CBBD5]/40 transition-all duration-500 p-5 md:p-6 hover:-translate-y-1">
-                            <div className="absolute inset-0 bg-gradient-to-br from-[#4CBBD5]/0 to-[#4CBBD5]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                            <div className="relative z-10">
-                                <div className="flex gap-3 mb-4">
-                                    <div className="icon-wrapper w-10 h-10 bg-[#4CBBD5]/10 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300 border border-[#4CBBD5]/10">
-                                        <Wifi className="w-5 h-5 text-[#4CBBD5]" strokeWidth={1.5} />
+                        {/* Wi-Fi & Consignes */}
+                        <div className="bg-[#031525] border border-white/10 hover:border-[#4CBBD5] transition-all duration-300 p-6 md:p-8 rounded-xl group relative overflow-hidden h-full md:col-span-2">
+                            <div className="absolute top-0 right-0 w-24 h-24 bg-[#4CBBD5]/5 rounded-bl-full -mr-10 -mt-10 transition-colors group-hover:bg-[#4CBBD5]/10" />
+
+                            <div className="flex flex-col md:flex-row gap-6 md:gap-10 items-start md:items-center h-full">
+                                <div className="flex gap-4">
+                                    <div className="w-12 h-12 bg-[#4CBBD5]/10 rounded-lg flex items-center justify-center border border-[#4CBBD5]/20 group-hover:scale-105 transition-transform">
+                                        <Wifi className="w-6 h-6 text-[#4CBBD5]" strokeWidth={1.5} />
                                     </div>
-                                    <div className="icon-wrapper w-10 h-10 bg-[#4CBBD5]/10 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300 border border-[#4CBBD5]/10">
-                                        <Lock className="w-5 h-5 text-[#4CBBD5]" strokeWidth={1.5} />
+                                    <div className="w-12 h-12 bg-[#4CBBD5]/10 rounded-lg flex items-center justify-center border border-[#4CBBD5]/20 group-hover:scale-105 transition-transform">
+                                        <Lock className="w-6 h-6 text-[#4CBBD5]" strokeWidth={1.5} />
                                     </div>
                                 </div>
-                                <h4 className="text-lg font-semibold mb-2 group-hover:text-[#4CBBD5] transition-colors">Confort & Sécurité</h4>
-                                <p className="text-white/60 text-sm leading-relaxed">Wi-Fi gratuit dans tout le musée. Casiers sécurisés pour vos affaires.</p>
+
+                                <div className="flex-1">
+                                    <h4 className="text-xl font-bold mb-2 group-hover:text-[#4CBBD5] transition-colors">Services & Confort</h4>
+                                    <p className="text-white/60 text-sm leading-relaxed">
+                                        Profitez du Wi-Fi haut débit gratuit dans tout le musée.
+                                        Des casiers sécurisés sont à votre disposition à l'accueil pour voyager léger.
+                                    </p>
+                                </div>
                             </div>
                         </div>
+
                     </div>
                 </section>
 
