@@ -395,20 +395,57 @@ export default function InformationsPage() {
 
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
                         {[
-                            { icon: Accessibility, title: "Accessibilité", desc: "100% PMR, ascenseurs, rampes" },
-                            { icon: Globe, title: "Multilingue", desc: "FR, EN, DE, ES" },
-                            { icon: Coffee, title: "Cafétéria", desc: "Vue sur la rade" },
-                            { icon: ShoppingBag, title: "Boutique", desc: "Souvenirs et livres" },
-                            { icon: Wifi, title: "Wi-Fi", desc: "Gratuit" },
-                            { icon: Lock, title: "Consignes", desc: "Casiers sécurisés" },
+                            {
+                                icon: Accessibility,
+                                title: "Accessibilité",
+                                desc: "100% accessible PMR. Ascenseurs panoramiques, rampes douces et parcours adaptés.",
+                                tag: "Label Tourisme & Handicap"
+                            },
+                            {
+                                icon: Globe,
+                                title: "Multilingue",
+                                desc: "Audioguides et contenus disponibles en 4 langues pour tous les visiteurs.",
+                                tag: "FR · EN · DE · ES"
+                            },
+                            {
+                                icon: Coffee,
+                                title: "Cafétéria",
+                                desc: "Pause gourmande avec vue imprenable sur la rade. Produits locaux et de saison.",
+                                tag: "Vue panoramique"
+                            },
+                            {
+                                icon: ShoppingBag,
+                                title: "Boutique",
+                                desc: "Repartez avec un souvenir. Livres, objets design et inspirations océaniques.",
+                                tag: null
+                            },
+                            {
+                                icon: Wifi,
+                                title: "Wi-Fi Gratuit",
+                                desc: "Connexion haut débit disponible dans tout le musée pour nos visiteurs.",
+                                tag: null
+                            },
+                            {
+                                icon: Lock,
+                                title: "Consignes",
+                                desc: "Casiers sécurisés à disposition à l'accueil pour vos effets personnels.",
+                                tag: "Gratuit"
+                            },
                         ].map((service, i) => (
                             <div
                                 key={i}
                                 className="info-card group p-5 md:p-6 bg-[#031525] rounded-xl border border-white/10 hover:border-[#4CBBD5] transition-all duration-300"
                             >
-                                <service.icon className="w-8 h-8 text-[#4CBBD5] mb-4" strokeWidth={1.5} />
-                                <h4 className="text-base md:text-lg font-bold text-white mb-1">{service.title}</h4>
-                                <p className="text-xs md:text-sm text-white/50">{service.desc}</p>
+                                <div className="flex items-start justify-between mb-4">
+                                    <div className="w-12 h-12 rounded-xl bg-[#4CBBD5]/10 flex items-center justify-center group-hover:bg-[#4CBBD5]/20 transition-colors">
+                                        <service.icon className="w-6 h-6 text-[#4CBBD5]" strokeWidth={1.5} />
+                                    </div>
+                                    {service.tag && (
+                                        <span className="text-[9px] md:text-[10px] font-medium text-[#4CBBD5]/70 uppercase tracking-wider">{service.tag}</span>
+                                    )}
+                                </div>
+                                <h4 className="text-base md:text-lg font-bold text-white mb-2 group-hover:text-[#4CBBD5] transition-colors">{service.title}</h4>
+                                <p className="text-xs md:text-sm text-white/50 leading-relaxed">{service.desc}</p>
                             </div>
                         ))}
                     </div>
