@@ -124,11 +124,8 @@ export default function ContactPage() {
         <main ref={containerRef} className="min-h-screen bg-[#041C30] text-white selection:bg-[#4CBBD5] selection:text-[#020A19]">
             <Navbar />
 
-            {/* Animated background */}
-            <div className="fixed inset-0 pointer-events-none overflow-hidden">
-                <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-[#4CBBD5]/10 rounded-full blur-[120px] animate-pulse" />
-                <div className="absolute bottom-[-20%] left-[-10%] w-[600px] h-[600px] bg-[#006994]/15 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '1s' }} />
-            </div>
+            {/* Clean Background - No blobs for cleaner look */}
+            <div className="fixed inset-0 pointer-events-none bg-[#041C30]" />
 
             {/* Hero Section */}
             <section className="relative h-[50vh] md:h-[60vh] flex flex-col justify-center items-center text-center px-4 md:px-6 z-10 pt-20">
@@ -152,7 +149,7 @@ export default function ContactPage() {
                     {/* Email */}
                     <a
                         href="mailto:contact@musee-abysse.fr"
-                        className="contact-block group relative bg-gradient-to-br from-white/10 to-white/5 border border-white/20 hover:border-[#4CBBD5]/50 rounded-2xl p-6 transition-all duration-500 hover:-translate-y-1"
+                        className="contact-block group relative bg-gradient-to-br from-white/10 to-white/5 border border-white/20 hover:border-[#4CBBD5]/50 rounded-2xl p-6 transition-colors duration-300 hover:-translate-y-1 transform-gpu"
                     >
                         <div className="absolute inset-0 bg-gradient-to-br from-[#4CBBD5]/0 to-[#4CBBD5]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
                         <div className="relative z-10">
@@ -168,7 +165,7 @@ export default function ContactPage() {
                     {/* Téléphone */}
                     <a
                         href="tel:+33494000000"
-                        className="contact-block group relative bg-gradient-to-br from-white/10 to-white/5 border border-white/20 hover:border-[#4CBBD5]/50 rounded-2xl p-6 transition-all duration-500 hover:-translate-y-1"
+                        className="contact-block group relative bg-gradient-to-br from-white/10 to-white/5 border border-white/20 hover:border-[#4CBBD5]/50 rounded-2xl p-6 transition-colors duration-300 hover:-translate-y-1 transform-gpu"
                     >
                         <div className="absolute inset-0 bg-gradient-to-br from-[#4CBBD5]/0 to-[#4CBBD5]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
                         <div className="relative z-10">
@@ -186,7 +183,7 @@ export default function ContactPage() {
                         href="https://maps.google.com/?q=Port+de+Toulon"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="contact-block group relative bg-gradient-to-br from-white/10 to-white/5 border border-white/20 hover:border-[#4CBBD5]/50 rounded-2xl p-6 transition-all duration-500 hover:-translate-y-1"
+                        className="contact-block group relative bg-gradient-to-br from-white/10 to-white/5 border border-white/20 hover:border-[#4CBBD5]/50 rounded-2xl p-6 transition-colors duration-300 hover:-translate-y-1 transform-gpu"
                     >
                         <div className="absolute inset-0 bg-gradient-to-br from-[#4CBBD5]/0 to-[#4CBBD5]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
                         <div className="relative z-10">

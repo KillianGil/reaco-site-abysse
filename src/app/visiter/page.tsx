@@ -94,7 +94,7 @@ export default function ExpositionsPage() {
             name: "Drones & ROV",
             year: "2024",
             depth: "6000m+",
-            desc: "Les robots autonomes d'ECA Group et Ifremer. Ils descendent là où l'homme ne peut aller.",
+            desc: "Les robots autonomes d'ECA Group et Ifremer. Ils descendent là où l'homme ne peut aller., jusqu’à plus de 6 000 mètres de profondeur, pour cartographier les fonds et prélever des échantillons.",
             icon: Radio
         }
     ];
@@ -131,7 +131,7 @@ export default function ExpositionsPage() {
 
 
 
-            <div className="space-y-20 md:space-y-32 pb-20 md:pb-32 relative z-10">
+            <div className="space-y-16 md:space-y-24 pb-20 md:pb-24 relative z-10">
 
                 {/* ZONE 1: LA GRANDE HALLE DES ENGINS */}
                 <section className="px-4 md:px-12 max-w-[1400px] mx-auto w-full relative">
@@ -209,58 +209,40 @@ export default function ExpositionsPage() {
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
                         {[
                             {
                                 icon: Microscope,
                                 title: "10 000 mètres de vie",
-                                subtitle: "L'expédition Galathéa",
-                                desc: "En 1951, le navire danois Galathéa révéla au monde que la vie existait dans les plus grandes profondeurs. Des anémones, des bactéries, des êtres vivants là où on pensait le vide absolu.",
-                                detail: "Un moment clé de l'histoire scientifique"
+                                subtitle: "L'EXPÉDITION GALATHÉA",
+                                desc: "En 1951, le navire danois Galathéa a prouvé l'impossible : la vie foisonne même au plus profond des abysses. Une découverte qui a bouleversé la science.",
+                                detail: "1951"
                             },
                             {
                                 icon: Droplets,
-                                title: "Trésors vivants",
-                                subtitle: "La pharmacie des abysses",
-                                desc: "Les organismes des profondeurs ont développé des molécules uniques pour survivre. Aujourd'hui, ces trésors inspirent la recherche médicale et pourraient soigner les maladies de demain.",
-                                detail: "Un espoir pour la médecine"
+                                title: "Pharmacie des Océans",
+                                subtitle: "MOLECULES RARES",
+                                desc: "Pour survivre dans le noir absolu, les organismes abyssaux ont développé une chimie unique. Ces molécules sont aujourd'hui l'espoir de la médecine de demain.",
+                                detail: "Recherche"
                             },
                             {
                                 icon: Fish,
-                                title: "Fragile équilibre",
-                                subtitle: "Protéger l'invisible",
-                                desc: "Ces écosystèmes, isolés pendant des millions d'années, sont menacés par l'exploitation minière et le changement climatique. Comprendre pour mieux préserver : c'est notre mission.",
-                                detail: "L'urgence de la protection"
+                                title: "Écosystèmes Fragiles",
+                                subtitle: "PRÉSERVATION",
+                                desc: "Isolés depuis des millénaires, ces mondes sont d'une fragilité extrême face à l'exploitation minière et au changement climatique. Les protéger est vital.",
+                                detail: "Urgence"
                             }
                         ].map((card, i) => (
-                            <div key={i} className="group relative h-full">
-                                {/* Technical Clean Card */}
-                                <div className="bg-[#031525] border border-white/10 hover:border-[#4CBBD5] transition-all duration-300 p-6 md:p-8 rounded-xl h-full flex flex-col relative overflow-hidden">
-                                    <div className="absolute top-0 right-0 w-20 h-20 bg-[#4CBBD5]/5 rounded-bl-full -mr-10 -mt-10 transition-colors group-hover:bg-[#4CBBD5]/10" />
+                            <div key={i} className="group flex flex-col items-start gap-4">
+                                {/* Minimalist Icon */}
+                                <div className="w-12 h-12 flex items-center justify-center rounded-full bg-[#4CBBD5]/10 text-[#4CBBD5] group-hover:bg-[#4CBBD5] group-hover:text-[#020A19] transition-all duration-300">
+                                    <card.icon className="w-6 h-6" strokeWidth={2} />
+                                </div>
 
-                                    {/* Icon */}
-                                    <div className="w-12 h-12 md:w-14 md:h-14 bg-[#4CBBD5]/10 rounded-lg flex items-center justify-center mb-6 group-hover:scale-105 transition-transform duration-300 border border-[#4CBBD5]/20">
-                                        <card.icon className="w-6 h-6 md:w-7 md:h-7 text-[#4CBBD5]" strokeWidth={1.5} />
-                                    </div>
-
-                                    {/* Subtitle */}
-                                    <span className="text-[10px] md:text-xs text-[#4CBBD5]/70 uppercase tracking-wider mb-2 font-mono block">{card.subtitle}</span>
-
-                                    {/* Title */}
-                                    <h3 className="text-xl md:text-2xl font-bold mb-4 leading-tight group-hover:text-[#4CBBD5] transition-colors">
-                                        {card.title}
-                                    </h3>
-
-                                    {/* Description */}
-                                    <p className="text-white/60 text-sm leading-relaxed mb-6 flex-1">
-                                        {card.desc}
-                                    </p>
-
-                                    {/* Bottom detail */}
-                                    <div className="pt-4 border-t border-white/5 flex items-center gap-2">
-                                        <div className="w-1.5 h-1.5 bg-[#4CBBD5] rounded-full" />
-                                        <span className="text-xs text-white/40 font-mono uppercase tracking-wider">{card.detail}</span>
-                                    </div>
+                                <div className="space-y-2">
+                                    <span className="text-[10px] font-bold tracking-widest text-white/40 uppercase">{card.subtitle}</span>
+                                    <h3 className="text-xl md:text-2xl font-bold text-white leading-tight group-hover:text-[#4CBBD5] transition-colors">{card.title}</h3>
+                                    <p className="text-sm text-white/60 leading-relaxed max-w-sm">{card.desc}</p>
                                 </div>
                             </div>
                         ))}
@@ -275,7 +257,7 @@ export default function ExpositionsPage() {
                 </section>
 
                 {/* ZONE 3: GÉOPOLITIQUE & STRATÉGIE */}
-                <section className="w-full relative overflow-hidden py-16 md:py-24">
+                <section className="w-full relative overflow-hidden py-12 md:py-16">
                     {/* Simple gradient background */}
                     <div className="absolute inset-0 bg-gradient-to-b from-[#4CBBD5]/5 to-transparent pointer-events-none" />
 
@@ -292,21 +274,16 @@ export default function ExpositionsPage() {
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             {[
-                                { icon: Globe, title: "Géant Maritime", desc: "Comprendre les enjeux de la 2ème Zone Économique Exclusive mondiale.", status: "STRATÉGIQUE" },
-                                { icon: ShieldAlert, title: "Guerre des Câbles", desc: "Protection des infrastructures vitales et prévention des exploitations illégales.", status: "CRITIQUE" },
-                                { icon: Database, title: "Ressources Minérales", desc: "Convoitises autour des grands fonds et choix stratégiques pour leur exploitation.", status: "EN ANALYSE" }
+                                { icon: Globe, title: "La ZEE Française", desc: "Avec 11 millions de km², la France possède le 2ème domaine maritime mondial. Un atout géopolitique majeur qui implique des responsabilités immenses." },
+                                { icon: ShieldAlert, title: "Câbles Sous-marins", desc: "99% des communications mondiales passent sous la mer. La surveillance et la protection de ces artères vitales est un enjeu de souveraineté." },
+                                { icon: Database, title: "Ressources Minérales", desc: "Terres rares, nodules polymétalliques... Les grands fonds attirent les convoitises. Faut-il les exploiter ou les sanctuariser ?" }
                             ].map((card, i) => (
-                                <div key={i} className="bg-[#031525]/95 backdrop-blur border border-white/10 hover:border-[#4CBBD5] p-5 md:p-6 transition-all duration-300 group relative overflow-hidden rounded-lg">
-                                    <div className="absolute top-0 right-0 px-2 py-1 text-[9px] md:text-[10px] font-bold uppercase rounded-bl-lg bg-[#4CBBD5]/10 text-[#4CBBD5]">
-                                        {card.status}
-                                    </div>
-                                    <card.icon className="w-6 h-6 md:w-8 md:h-8 mb-4 md:mb-6 text-[#4CBBD5]" />
-                                    <h4 className="font-bold text-lg md:text-xl mb-2 md:mb-3">{card.title}</h4>
-                                    <p className="text-white/60 text-xs md:text-sm leading-relaxed mb-4">{card.desc}</p>
-
-                                    <div className="h-px w-full bg-[#4CBBD5]/20" />
+                                <div key={i} className="border-l-2 border-white/10 pl-6 hover:border-[#4CBBD5] transition-colors duration-300 group">
+                                    <card.icon className="w-8 h-8 mb-4 text-[#4CBBD5] opacity-80 group-hover:opacity-100 transition-opacity" />
+                                    <h4 className="font-bold text-xl mb-3 text-white group-hover:text-[#4CBBD5] transition-colors">{card.title}</h4>
+                                    <p className="text-white/60 text-sm leading-relaxed">{card.desc}</p>
                                 </div>
                             ))}
                         </div>
@@ -329,10 +306,11 @@ export default function ExpositionsPage() {
 
                         <div className="space-y-12 md:space-y-24">
                             {[
-                                { year: "1888", title: "Le Gymnote", desc: "Premier sous-marin électrique, construit et naviguant au Mourillon." },
-                                { year: "1943", title: "Les Mousquemers", desc: "Cousteau, Tailliez, Dumas inventent la plongée autonome moderne dans la rade." },
-                                { year: "1953", title: "Records du FNRS III", desc: "Premiers records établis au large de Toulon, profitant des grands fonds à proximité." },
-                                { year: "2024", title: "Maîtrise des Fonds", desc: "Toulon reste le cœur stratégique de la plongée profonde et des drones sous-marins." }
+                                { year: "1888", title: "Le Gymnote", desc: "Lancement au Mourillon du premier sous-marin électrique opérationnel de l'histoire." },
+                                { year: "1943", title: "Les Mousquemers", desc: "Cousteau, Tailliez et Dumas inventent la plongée autonome moderne dans la rade." },
+                                { year: "1953", title: "Records du FNRS III", desc: "Le bathyscaphe réalise des plongées historiques en Méditerranée, repoussant les limites." },
+                                { year: "1985", title: "Ifremer Méditerranée", desc: "La Seyne devient un pôle mondial pour la robotique sous-marine et l'exploration." },
+                                { year: "2024", title: "Drones Grands Fonds", desc: "Déploiement de la nouvelle flotte autonome (UlyX, AsterX) pour cartographier les abysses." }
                             ].map((item, i) => (
                                 <div key={i} className="timeline-item relative flex flex-col md:grid md:grid-cols-2 md:gap-20 items-start md:items-center pl-8 md:pl-0">
                                     {/* Dot */}

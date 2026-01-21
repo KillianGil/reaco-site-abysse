@@ -211,10 +211,6 @@ export default function ActualitesPage() {
                         Les Dernières<br />
                         <span className="font-serif italic text-white/80">Nouvelles</span>
                     </h1>
-
-                    <p className="hero-quote text-base md:text-lg text-white/60 max-w-xl mx-auto font-light leading-relaxed">
-                        « L&apos;océan est le dernier espace sauvage sur Terre. Chaque jour apporte son lot de découvertes. »
-                    </p>
                 </div>
             </section>
 
@@ -229,7 +225,7 @@ export default function ActualitesPage() {
                     {featuredNews.map((item) => (
                         <article
                             key={item.id}
-                            className="featured-card group relative overflow-hidden rounded-2xl border border-white/10 hover:border-[#4CBBD5]/50 transition-all duration-500 cursor-pointer"
+                            className="featured-card group relative overflow-hidden rounded-2xl border border-white/10 hover:border-[#4CBBD5]/50 transition-colors duration-300 cursor-pointer"
                         >
                             {/* Image */}
                             <div className="relative h-64 md:h-80 overflow-hidden">
