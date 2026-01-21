@@ -45,6 +45,10 @@ export function Navbar() {
               Informations
               <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full" />
             </Link>
+            <Link href="/partenaires" className="group relative text-xs text-white/60 uppercase tracking-[0.15em] hover:text-white transition-colors">
+              Partenaires
+              <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full" />
+            </Link>
             <Link href="/contact" className="group relative text-xs text-white/60 uppercase tracking-[0.15em] hover:text-white transition-colors">
               Contact
               <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full" />

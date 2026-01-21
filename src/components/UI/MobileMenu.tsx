@@ -43,6 +43,7 @@ const links = [
     { name: "Visiter", href: "/visiter" },
     { name: "Actualités", href: "/actualites" },
     { name: "Informations", href: "/informations" },
+    { name: "Partenaires", href: "/partenaires" },
     { name: "Contact", href: "/contact" },
     { name: "Billetterie", href: "/billetterie", isCta: true },
 ];
