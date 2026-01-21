@@ -468,7 +468,7 @@ export default function InformationsPage() {
 
                             <h4 className="text-xl font-bold mb-3 group-hover:text-[#4CBBD5] transition-colors">Concept Store</h4>
                             <p className="text-white/60 text-sm leading-relaxed mb-4">
-                                Une sélection pointue de livres, objets design et souvenirs inspirés par l'océan.
+                                Une sélection pointue de livres, objets design et souvenirs inspirés par l&apos;océan.
                             </p>
                             <div className="pt-4 border-t border-white/5 flex items-center gap-2">
                                 <div className="w-1.5 h-1.5 bg-[#4CBBD5] rounded-full" />
@@ -494,7 +494,7 @@ export default function InformationsPage() {
                                     <h4 className="text-xl font-bold mb-2 group-hover:text-[#4CBBD5] transition-colors">Services & Confort</h4>
                                     <p className="text-white/60 text-sm leading-relaxed">
                                         Profitez du Wi-Fi haut débit gratuit dans tout le musée.
-                                        Des casiers sécurisés sont à votre disposition à l'accueil pour voyager léger.
+                                        Des casiers sécurisés sont à votre disposition à l&apos;accueil pour voyager léger.
                                     </p>
                                 </div>
                             </div>
