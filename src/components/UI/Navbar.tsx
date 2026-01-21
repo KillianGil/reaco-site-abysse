@@ -37,12 +37,12 @@ export function Navbar() {
               Visiter
               <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full" />
             </Link>
-            <Link href="/actualites" className="group relative text-xs text-white/60 uppercase tracking-[0.15em] hover:text-white transition-colors">
-              Actualités
-              <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full" />
-            </Link>
             <Link href="/informations" className="group relative text-xs text-white/60 uppercase tracking-[0.15em] hover:text-white transition-colors">
               Informations
+              <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full" />
+            </Link>
+            <Link href="/actualites" className="group relative text-xs text-white/60 uppercase tracking-[0.15em] hover:text-white transition-colors">
+              Actualités
               <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full" />
             </Link>
             <Link href="/partenaires" className="group relative text-xs text-white/60 uppercase tracking-[0.15em] hover:text-white transition-colors">
