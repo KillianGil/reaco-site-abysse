@@ -386,103 +386,83 @@ export default function InformationsPage() {
                 </section>
 
                 {/* 4. Services */}
-                <section>
-                    <div className="section-header mb-10 md:mb-16">
-                        <span className="text-[#4CBBD5] text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase block mb-3 md:mb-4">04. CONFORT</span>
-                        <h3 className="text-3xl md:text-5xl font-light">À Votre Service</h3>
-                        <div className="h-1 w-16 md:w-24 bg-gradient-to-r from-[#4CBBD5] to-transparent mt-3 md:mt-4" />
-                        <p className="mt-4 md:mt-6 text-white/60 max-w-xl leading-relaxed text-sm md:text-base">
-                            Nous avons pensé à tout pour que votre visite soit aussi agréable que mémorable.
-                        </p>
-                    </div>
+                <section className="relative py-8 md:py-12">
+                    {/* Subtle gradient background */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-[#4CBBD5]/5 to-transparent pointer-events-none" />
 
-                    {/* Services Grid - Cleaner Design */}
-                    {/* Services Grid - Cleaner Design - Uniform Grid */}
-                    {/* Services List - Clean Manifest Design */}
-                    {/* Services Minimalist Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-
-                        {/* ACCESS */}
-                        <div className="group p-6 md:p-8 rounded-2xl bg-[#031525] border border-white/5 hover:border-[#4CBBD5]/30 transition-all duration-300">
-                            <div className="flex justify-between items-start mb-6">
-                                <div className="p-3 bg-white/5 rounded-xl group-hover:bg-[#4CBBD5]/10 group-hover:scale-105 transition-all duration-300">
-                                    <Accessibility className="w-6 h-6 text-[#4CBBD5]" strokeWidth={1.5} />
-                                </div>
-                                <span className="text-[10px] font-medium text-white/40 uppercase tracking-widest py-1 px-2 rounded-full border border-white/5">
-                                    Label Tourisme
-                                </span>
-                            </div>
-                            <h4 className="text-xl font-medium mb-3 text-white group-hover:text-[#4CBBD5] transition-colors">Accessible à tous</h4>
-                            <p className="text-white/60 text-sm leading-relaxed">
-                                100% accessible aux PMR. Ascenseurs panoramiques, rampes douces et parcours adaptés pour une visite fluide.
+                    <div className="relative z-10">
+                        <div className="section-header mb-10 md:mb-16">
+                            <span className="text-[#4CBBD5] text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase block mb-3 md:mb-4">04. CONFORT</span>
+                            <h3 className="text-3xl md:text-5xl font-light">À Votre Service</h3>
+                            <div className="h-1 w-16 md:w-24 bg-gradient-to-r from-[#4CBBD5] to-transparent mt-3 md:mt-4" />
+                            <p className="mt-4 md:mt-6 text-white/60 max-w-xl leading-relaxed text-sm md:text-base">
+                                Nous avons pensé à tout pour que votre visite soit aussi agréable que mémorable.
                             </p>
                         </div>
 
-                        {/* INTERNATIONAL */}
-                        <div className="group p-6 md:p-8 rounded-2xl bg-[#031525] border border-white/5 hover:border-[#4CBBD5]/30 transition-all duration-300">
-                            <div className="flex justify-between items-start mb-6">
-                                <div className="p-3 bg-white/5 rounded-xl group-hover:bg-[#4CBBD5]/10 group-hover:scale-105 transition-all duration-300">
-                                    <Globe className="w-6 h-6 text-[#4CBBD5]" strokeWidth={1.5} />
+                        {/* Main Services Grid */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-8 md:mb-12">
+                            {[
+                                {
+                                    icon: Accessibility,
+                                    title: "Accessible à tous",
+                                    subtitle: "LABEL TOURISME & HANDICAP",
+                                    desc: "100% accessible aux PMR. Ascenseurs panoramiques, rampes douces et parcours adaptés pour une visite fluide."
+                                },
+                                {
+                                    icon: Globe,
+                                    title: "International",
+                                    subtitle: "4 LANGUES DISPONIBLES",
+                                    desc: "Audioguides et contenus disponibles en français, anglais, allemand et espagnol."
+                                },
+                                {
+                                    icon: Coffee,
+                                    title: "Cafétéria Panoramique",
+                                    subtitle: "VUE SUR LA RADE",
+                                    desc: "Une pause gourmande avec vue imprenable. Dégustez des produits locaux et de saison."
+                                }
+                            ].map((service, i) => (
+                                <div key={i} className="info-card group border-l-2 border-white/10 pl-6 hover:border-[#4CBBD5] transition-colors duration-300">
+                                    <div className="w-12 h-12 flex items-center justify-center rounded-full bg-[#4CBBD5]/10 text-[#4CBBD5] group-hover:bg-[#4CBBD5] group-hover:text-[#020A19] transition-all duration-300 mb-4">
+                                        <service.icon className="w-6 h-6" strokeWidth={1.5} />
+                                    </div>
+                                    <span className="text-[10px] font-bold tracking-widest text-white/40 uppercase block mb-2">{service.subtitle}</span>
+                                    <h4 className="text-xl md:text-2xl font-bold text-white leading-tight group-hover:text-[#4CBBD5] transition-colors mb-3">{service.title}</h4>
+                                    <p className="text-sm text-white/60 leading-relaxed">{service.desc}</p>
                                 </div>
-                                <div className="flex gap-1.5">
-                                    {['FR', 'EN', 'DE', 'ES'].map((lang) => (
-                                        <span key={lang} className="text-[10px] font-medium text-white/40 border border-white/5 px-1.5 py-0.5 rounded">
-                                            {lang}
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-                            <h4 className="text-xl font-medium mb-3 text-white group-hover:text-[#4CBBD5] transition-colors">International</h4>
-                            <p className="text-white/60 text-sm leading-relaxed">
-                                Audioguides et contenus disponibles en 4 langues pour une expérience culturelle sans frontières.
-                            </p>
+                            ))}
                         </div>
 
-                        {/* RESTAURATION */}
-                        <div className="group p-6 md:p-8 rounded-2xl bg-[#031525] border border-white/5 hover:border-[#4CBBD5]/30 transition-all duration-300">
-                            <div className="flex justify-between items-start mb-6">
-                                <div className="p-3 bg-white/5 rounded-xl group-hover:bg-[#4CBBD5]/10 group-hover:scale-105 transition-all duration-300">
-                                    <Coffee className="w-6 h-6 text-[#4CBBD5]" strokeWidth={1.5} />
+                        {/* Secondary Services */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+                            {[
+                                {
+                                    icon: ShoppingBag,
+                                    title: "Boutique",
+                                    desc: "Livres, objets design et inspirations océaniques."
+                                },
+                                {
+                                    icon: Wifi,
+                                    title: "Wi-Fi Gratuit",
+                                    desc: "Connexion haut débit dans tout le musée."
+                                },
+                                {
+                                    icon: Lock,
+                                    title: "Casiers Sécurisés",
+                                    desc: "Consignes à disposition à l'accueil."
+                                }
+                            ].map((service, i) => (
+                                <div key={i} className="info-card group flex items-start gap-4 p-5 md:p-6 bg-[#031525] border border-white/10 hover:border-[#4CBBD5] rounded-xl transition-all duration-300">
+                                    <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-[#4CBBD5]/10 text-[#4CBBD5] shrink-0 group-hover:scale-110 transition-transform">
+                                        <service.icon className="w-5 h-5" strokeWidth={1.5} />
+                                    </div>
+                                    <div>
+                                        <h4 className="font-bold text-white group-hover:text-[#4CBBD5] transition-colors mb-1">{service.title}</h4>
+                                        <p className="text-sm text-white/60">{service.desc}</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <h4 className="text-xl font-medium mb-3 text-white group-hover:text-[#4CBBD5] transition-colors">Cafétéria</h4>
-                            <p className="text-white/60 text-sm leading-relaxed">
-                                Une pause gourmande avec vue imprenable sur la rade. Dégustez des produits locaux et de saison.
-                            </p>
+                            ))}
                         </div>
-
-                        {/* BOUTIQUE */}
-                        <div className="group p-6 md:p-8 rounded-2xl bg-[#031525] border border-white/5 hover:border-[#4CBBD5]/30 transition-all duration-300">
-                            <div className="flex justify-between items-start mb-6">
-                                <div className="p-3 bg-white/5 rounded-xl group-hover:bg-[#4CBBD5]/10 group-hover:scale-105 transition-all duration-300">
-                                    <ShoppingBag className="w-6 h-6 text-[#4CBBD5]" strokeWidth={1.5} />
-                                </div>
-                            </div>
-                            <h4 className="text-xl font-medium mb-3 text-white group-hover:text-[#4CBBD5] transition-colors">Boutique</h4>
-                            <p className="text-white/60 text-sm leading-relaxed">
-                                Repartez avec un souvenir. Une sélection pointue de livres, objets design et inspirations océaniques.
-                            </p>
-                        </div>
-
-                        {/* WIFI & LOCKERS */}
-                        <div className="group p-6 md:p-8 rounded-2xl bg-[#031525] border border-white/5 hover:border-[#4CBBD5]/30 transition-all duration-300 md:col-span-2 flex flex-col md:flex-row md:items-center gap-6">
-                            <div className="flex gap-4">
-                                <div className="p-3 bg-white/5 rounded-xl group-hover:bg-[#4CBBD5]/10 transition-colors">
-                                    <Wifi className="w-6 h-6 text-[#4CBBD5]" strokeWidth={1.5} />
-                                </div>
-                                <div className="p-3 bg-white/5 rounded-xl group-hover:bg-[#4CBBD5]/10 transition-colors">
-                                    <Lock className="w-6 h-6 text-[#4CBBD5]" strokeWidth={1.5} />
-                                </div>
-                            </div>
-                            <div className="flex-1">
-                                <h4 className="text-xl font-medium mb-1 text-white group-hover:text-[#4CBBD5] transition-colors">Services & Confort</h4>
-                                <p className="text-white/60 text-sm leading-relaxed">
-                                    Pour votre confort, profitez du Wi-Fi haut débit gratuit dans tout le musée.
-                                    Des casiers sécurisés sont également à votre disposition à l&apos;accueil.
-                                </p>
-                            </div>
-                        </div>
-
                     </div>
                 </section>
 
