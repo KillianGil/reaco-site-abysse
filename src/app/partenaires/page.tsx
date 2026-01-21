@@ -348,31 +348,29 @@ export default function PartenairesPage() {
                 </section>
 
                 {/* 5. CTA (Restored & Enhanced) */}
-                <section className="px-4 md:px-6 pb-20 max-w-7xl mx-auto">
-                    <div className="relative p-8 md:p-16 rounded-3xl bg-[#031525] border border-[#4CBBD5]/30 overflow-hidden text-center group hover:border-[#4CBBD5]/60 transition-all duration-500">
-                        {/* Darker Premium Background */}
-                        <div className="absolute inset-0 bg-[linear-gradient(rgba(76,187,213,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(76,187,213,0.05)_1px,transparent_1px)] bg-[size:40px_40px] opacity-50" />
-                        <div className="absolute top-0 right-0 w-96 h-96 bg-[#4CBBD5]/8 rounded-full blur-[100px] group-hover:bg-[#4CBBD5]/15 transition-all duration-700" />
-                        <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#006994]/15 rounded-full blur-[80px]" />
-
-                        <div className="relative z-10 max-w-3xl mx-auto">
-                            <div className="w-16 h-16 md:w-20 md:h-20 mx-auto mb-6 md:mb-8 bg-[#4CBBD5]/10 rounded-2xl flex items-center justify-center border border-[#4CBBD5]/20 group-hover:scale-110 transition-transform duration-500 shadow-[0_0_20px_rgba(76,187,213,0.1)]">
-                                <Mail className="w-6 h-6 md:w-8 md:h-8 text-[#4CBBD5]" strokeWidth={1.5} />
+                {/* 5. CTA (Clean & Technical) */}
+                <section className="max-w-4xl mx-auto px-4 md:px-6 pb-20 relative z-10">
+                    <div className="relative border-t border-b border-white/10 py-12 md:py-16">
+                        <div className="text-center">
+                            <div className="flex items-center justify-center gap-3 mb-4">
+                                <Mail className="w-5 h-5 text-[#4CBBD5]" strokeWidth={1.5} />
+                                <span className="text-[#4CBBD5] text-xs font-medium uppercase tracking-[0.2em]">Partenariats</span>
                             </div>
 
-                            <h3 className="text-3xl md:text-5xl font-light mb-4 md:mb-6 text-white">Rejoignez l&apos;Aventure</h3>
-                            <p className="text-base md:text-xl text-white/60 mb-8 md:mb-10 leading-relaxed">
+                            <h3 className="text-2xl md:text-3xl font-light mb-3">Rejoignez l&apos;Aventure</h3>
+                            <p className="text-white/50 text-sm max-w-lg mx-auto mb-8 leading-relaxed">
                                 Associez votre image à un projet porteur de sens, alliant innovation, écologie et patrimoine maritime.
                             </p>
 
                             <a
                                 href="mailto:partenariats@musee-abysse.fr"
-                                className="inline-flex items-center gap-3 bg-white text-[#020A19] px-8 py-3 md:px-10 md:py-4 rounded-full font-bold tracking-widest uppercase hover:bg-[#4CBBD5] hover:text-white transition-all duration-300 shadow-lg hover:shadow-[0_0_30px_rgba(76,187,213,0.4)] text-sm md:text-base"
+                                className="inline-flex items-center gap-2 px-8 py-3 bg-[#4CBBD5] hover:bg-[#5DCCE6] text-[#020A19] font-bold text-sm rounded-lg transition-colors duration-300"
                             >
-                                <Mail className="w-4 h-4 md:w-5 md:h-5" />
+                                <Mail className="w-4 h-4" />
                                 <span>Nous Contacter</span>
                             </a>
-                            <p className="text-[#4CBBD5] text-xs md:text-sm mt-6 md:mt-8 font-mono tracking-wider opacity-80">
+
+                            <p className="text-[10px] text-white/30 mt-4 tracking-wider">
                                 partenariats@musee-abysse.fr
                             </p>
                         </div>
