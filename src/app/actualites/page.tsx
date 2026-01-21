@@ -96,7 +96,7 @@ const newsData: NewsItem[] = [
         excerpt:
             "Grâce à vous, le musée ABYSSE a accueilli plus de 25 000 curieux depuis son ouverture en novembre. Chaque visite nous rappelle pourquoi nous faisons ce métier : transmettre la passion de l'océan.",
         image:
-            "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=800&q=80"
+            "/Users/killiangil/Desktop/reaco-site-abysse/public/assets/1moisdeja.webp"
     },
     {
         id: 7,
@@ -106,7 +106,7 @@ const newsData: NewsItem[] = [
         title: "Conférence : Les pionnières des profondeurs",
         excerpt:
             "Rencontre exceptionnelle avec trois océanographes qui ont marqué l'histoire de l'exploration sous-marine. Un hommage émouvant aux femmes qui ont bravé les préjugés pour explorer l'inconnu.",
-        image: "/assets/conference.jpg", // chemin corrigé
+        image: "/Users/killiangil/Desktop/reaco-site-abysse/public/assets/conf.webp",
         eventDate: "8 Mars 2026",
         eventTime: "18h"
     },
@@ -119,7 +119,7 @@ const newsData: NewsItem[] = [
         excerpt:
             "C'est le grand jour ! Le musée ABYSSE ouvre enfin ses portes au public. Venez découvrir les mystères des profondeurs dans un parcours immersif unique en France.",
         image:
-            "https://images.unsplash.com/photo-1483683804023-6ccdb62f86ef?w=800&q=80"
+            "/Users/killiangil/Desktop/reaco-site-abysse/public/assets/museum.webp"
     }
 ];
 
