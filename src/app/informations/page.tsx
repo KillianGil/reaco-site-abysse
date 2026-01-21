@@ -386,83 +386,39 @@ export default function InformationsPage() {
                 </section>
 
                 {/* 4. Services */}
-                <section className="relative py-8 md:py-12">
-                    {/* Subtle gradient background */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-[#4CBBD5]/5 to-transparent pointer-events-none" />
+                <section>
+                    <div className="section-header mb-10 md:mb-16">
+                        <span className="text-[#4CBBD5] text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase block mb-3 md:mb-4">04. CONFORT</span>
+                        <h3 className="text-3xl md:text-5xl font-light">À Votre Service</h3>
+                        <div className="h-1 w-16 md:w-24 bg-gradient-to-r from-[#4CBBD5] to-transparent mt-3 md:mt-4" />
+                    </div>
 
-                    <div className="relative z-10">
-                        <div className="section-header mb-10 md:mb-16">
-                            <span className="text-[#4CBBD5] text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase block mb-3 md:mb-4">04. CONFORT</span>
-                            <h3 className="text-3xl md:text-5xl font-light">À Votre Service</h3>
-                            <div className="h-1 w-16 md:w-24 bg-gradient-to-r from-[#4CBBD5] to-transparent mt-3 md:mt-4" />
-                            <p className="mt-4 md:mt-6 text-white/60 max-w-xl leading-relaxed text-sm md:text-base">
-                                Nous avons pensé à tout pour que votre visite soit aussi agréable que mémorable.
-                            </p>
-                        </div>
-
-                        {/* Main Services Grid */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-8 md:mb-12">
-                            {[
-                                {
-                                    icon: Accessibility,
-                                    title: "Accessible à tous",
-                                    subtitle: "LABEL TOURISME & HANDICAP",
-                                    desc: "100% accessible aux PMR. Ascenseurs panoramiques, rampes douces et parcours adaptés pour une visite fluide."
-                                },
-                                {
-                                    icon: Globe,
-                                    title: "International",
-                                    subtitle: "4 LANGUES DISPONIBLES",
-                                    desc: "Audioguides et contenus disponibles en français, anglais, allemand et espagnol."
-                                },
-                                {
-                                    icon: Coffee,
-                                    title: "Cafétéria Panoramique",
-                                    subtitle: "VUE SUR LA RADE",
-                                    desc: "Une pause gourmande avec vue imprenable. Dégustez des produits locaux et de saison."
-                                }
-                            ].map((service, i) => (
-                                <div key={i} className="info-card group border-l-2 border-white/10 pl-6 hover:border-[#4CBBD5] transition-colors duration-300">
-                                    <div className="w-12 h-12 flex items-center justify-center rounded-full bg-[#4CBBD5]/10 text-[#4CBBD5] group-hover:bg-[#4CBBD5] group-hover:text-[#020A19] transition-all duration-300 mb-4">
-                                        <service.icon className="w-6 h-6" strokeWidth={1.5} />
-                                    </div>
-                                    <span className="text-[10px] font-bold tracking-widest text-white/40 uppercase block mb-2">{service.subtitle}</span>
-                                    <h4 className="text-xl md:text-2xl font-bold text-white leading-tight group-hover:text-[#4CBBD5] transition-colors mb-3">{service.title}</h4>
-                                    <p className="text-sm text-white/60 leading-relaxed">{service.desc}</p>
-                                </div>
-                            ))}
-                        </div>
-
-                        {/* Secondary Services */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-                            {[
-                                {
-                                    icon: ShoppingBag,
-                                    title: "Boutique",
-                                    desc: "Livres, objets design et inspirations océaniques."
-                                },
-                                {
-                                    icon: Wifi,
-                                    title: "Wi-Fi Gratuit",
-                                    desc: "Connexion haut débit dans tout le musée."
-                                },
-                                {
-                                    icon: Lock,
-                                    title: "Casiers Sécurisés",
-                                    desc: "Consignes à disposition à l'accueil."
-                                }
-                            ].map((service, i) => (
-                                <div key={i} className="info-card group flex items-start gap-4 p-5 md:p-6 bg-[#031525] border border-white/10 hover:border-[#4CBBD5] rounded-xl transition-all duration-300">
-                                    <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-[#4CBBD5]/10 text-[#4CBBD5] shrink-0 group-hover:scale-110 transition-transform">
-                                        <service.icon className="w-5 h-5" strokeWidth={1.5} />
-                                    </div>
+                    {/* Services List - Editorial Style */}
+                    <div className="space-y-0 border-t border-white/10">
+                        {[
+                            { icon: Accessibility, title: "Accessibilité", detail: "100% PMR · Ascenseurs · Rampes", tag: "Label Tourisme & Handicap" },
+                            { icon: Globe, title: "Multilingue", detail: "Audioguides en 4 langues", tag: "FR · EN · DE · ES" },
+                            { icon: Coffee, title: "Cafétéria", detail: "Vue panoramique sur la rade", tag: "Produits locaux" },
+                            { icon: ShoppingBag, title: "Boutique", detail: "Livres, objets, souvenirs", tag: null },
+                            { icon: Wifi, title: "Wi-Fi", detail: "Gratuit dans tout le musée", tag: null },
+                            { icon: Lock, title: "Consignes", detail: "Casiers sécurisés à l'accueil", tag: null },
+                        ].map((service, i) => (
+                            <div
+                                key={i}
+                                className="info-card group flex items-center justify-between py-5 md:py-6 border-b border-white/10 hover:border-[#4CBBD5]/30 transition-colors cursor-default"
+                            >
+                                <div className="flex items-center gap-4 md:gap-6">
+                                    <service.icon className="w-5 h-5 md:w-6 md:h-6 text-[#4CBBD5] opacity-60 group-hover:opacity-100 transition-opacity" strokeWidth={1.5} />
                                     <div>
-                                        <h4 className="font-bold text-white group-hover:text-[#4CBBD5] transition-colors mb-1">{service.title}</h4>
-                                        <p className="text-sm text-white/60">{service.desc}</p>
+                                        <h4 className="text-base md:text-lg font-medium text-white group-hover:text-[#4CBBD5] transition-colors">{service.title}</h4>
+                                        <p className="text-xs md:text-sm text-white/50">{service.detail}</p>
                                     </div>
                                 </div>
-                            ))}
-                        </div>
+                                {service.tag && (
+                                    <span className="hidden md:block text-[10px] font-medium tracking-wider text-white/30 uppercase">{service.tag}</span>
+                                )}
+                            </div>
+                        ))}
                     </div>
                 </section>
 
