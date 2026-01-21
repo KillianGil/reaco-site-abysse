@@ -387,36 +387,55 @@ export default function InformationsPage() {
 
                 {/* 4. Services */}
                 <section>
-                    <div className="section-header mb-10 md:mb-16">
+                    <div className="section-header mb-12 md:mb-20">
                         <span className="text-[#4CBBD5] text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase block mb-3 md:mb-4">04. CONFORT</span>
                         <h3 className="text-3xl md:text-5xl font-light">À Votre Service</h3>
                         <div className="h-1 w-16 md:w-24 bg-gradient-to-r from-[#4CBBD5] to-transparent mt-3 md:mt-4" />
                     </div>
 
-                    {/* Services List - Editorial Style */}
-                    <div className="space-y-0 border-t border-white/10">
+                    {/* Services - Large Typography Style */}
+                    <div className="space-y-6 md:space-y-8">
                         {[
-                            { icon: Accessibility, title: "Accessibilité", detail: "100% PMR · Ascenseurs · Rampes", tag: "Label Tourisme & Handicap" },
-                            { icon: Globe, title: "Multilingue", detail: "Audioguides en 4 langues", tag: "FR · EN · DE · ES" },
-                            { icon: Coffee, title: "Cafétéria", detail: "Vue panoramique sur la rade", tag: "Produits locaux" },
-                            { icon: ShoppingBag, title: "Boutique", detail: "Livres, objets, souvenirs", tag: null },
-                            { icon: Wifi, title: "Wi-Fi", detail: "Gratuit dans tout le musée", tag: null },
-                            { icon: Lock, title: "Consignes", detail: "Casiers sécurisés à l'accueil", tag: null },
+                            { icon: Accessibility, title: "Accessibilité", highlight: "100%", desc: "PMR · Ascenseurs panoramiques · Rampes douces" },
+                            { icon: Globe, title: "Multilingue", highlight: "4", desc: "langues · FR · EN · DE · ES" },
+                            { icon: Coffee, title: "Cafétéria", highlight: "Vue", desc: "panoramique sur la rade de Toulon" },
+                            { icon: ShoppingBag, title: "Boutique", highlight: "Design", desc: "Livres · Objets · Souvenirs marins" },
                         ].map((service, i) => (
                             <div
                                 key={i}
-                                className="info-card group flex items-center justify-between py-5 md:py-6 border-b border-white/10 hover:border-[#4CBBD5]/30 transition-colors cursor-default"
+                                className="info-card group relative flex flex-col md:flex-row md:items-center gap-4 md:gap-8 py-6 md:py-8 border-b border-white/10 hover:border-[#4CBBD5]/30 transition-colors"
                             >
-                                <div className="flex items-center gap-4 md:gap-6">
-                                    <service.icon className="w-5 h-5 md:w-6 md:h-6 text-[#4CBBD5] opacity-60 group-hover:opacity-100 transition-opacity" strokeWidth={1.5} />
-                                    <div>
-                                        <h4 className="text-base md:text-lg font-medium text-white group-hover:text-[#4CBBD5] transition-colors">{service.title}</h4>
-                                        <p className="text-xs md:text-sm text-white/50">{service.detail}</p>
-                                    </div>
+                                {/* Number */}
+                                <span className="text-6xl md:text-8xl font-serif font-bold text-white/5 group-hover:text-[#4CBBD5]/10 transition-colors absolute right-0 top-0 md:relative md:right-auto md:top-auto">
+                                    0{i + 1}
+                                </span>
+
+                                {/* Icon */}
+                                <div className="w-14 h-14 md:w-16 md:h-16 rounded-full border border-white/10 group-hover:border-[#4CBBD5]/40 flex items-center justify-center transition-colors shrink-0">
+                                    <service.icon className="w-6 h-6 md:w-7 md:h-7 text-[#4CBBD5]" strokeWidth={1.5} />
                                 </div>
-                                {service.tag && (
-                                    <span className="hidden md:block text-[10px] font-medium tracking-wider text-white/30 uppercase">{service.tag}</span>
-                                )}
+
+                                {/* Content */}
+                                <div className="flex-1">
+                                    <div className="flex items-baseline gap-3 mb-1">
+                                        <h4 className="text-xl md:text-2xl font-bold text-white group-hover:text-[#4CBBD5] transition-colors">{service.title}</h4>
+                                        <span className="text-2xl md:text-3xl font-serif italic text-[#4CBBD5]">{service.highlight}</span>
+                                    </div>
+                                    <p className="text-sm md:text-base text-white/50">{service.desc}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Secondary services - Horizontal pills */}
+                    <div className="flex flex-wrap gap-3 md:gap-4 mt-10 md:mt-12 pt-8 border-t border-white/5">
+                        {[
+                            { icon: Wifi, label: "Wi-Fi gratuit" },
+                            { icon: Lock, label: "Casiers sécurisés" },
+                        ].map((item, i) => (
+                            <div key={i} className="info-card flex items-center gap-3 px-5 py-3 rounded-full border border-white/10 hover:border-[#4CBBD5]/40 transition-colors group">
+                                <item.icon className="w-4 h-4 text-[#4CBBD5]" strokeWidth={1.5} />
+                                <span className="text-sm text-white/70 group-hover:text-white transition-colors">{item.label}</span>
                             </div>
                         ))}
                     </div>
