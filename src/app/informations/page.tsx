@@ -387,55 +387,28 @@ export default function InformationsPage() {
 
                 {/* 4. Services */}
                 <section>
-                    <div className="section-header mb-12 md:mb-20">
+                    <div className="section-header mb-10 md:mb-16">
                         <span className="text-[#4CBBD5] text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase block mb-3 md:mb-4">04. CONFORT</span>
-                        <h3 className="text-3xl md:text-5xl font-light">À Votre Service</h3>
+                        <h3 className="text-3xl md:text-5xl font-light">Nos Services</h3>
                         <div className="h-1 w-16 md:w-24 bg-gradient-to-r from-[#4CBBD5] to-transparent mt-3 md:mt-4" />
                     </div>
 
-                    {/* Services - Large Typography Style */}
-                    <div className="space-y-6 md:space-y-8">
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
                         {[
-                            { icon: Accessibility, title: "Accessibilité", highlight: "100%", desc: "PMR · Ascenseurs panoramiques · Rampes douces" },
-                            { icon: Globe, title: "Multilingue", highlight: "4", desc: "langues · FR · EN · DE · ES" },
-                            { icon: Coffee, title: "Cafétéria", highlight: "Vue", desc: "panoramique sur la rade de Toulon" },
-                            { icon: ShoppingBag, title: "Boutique", highlight: "Design", desc: "Livres · Objets · Souvenirs marins" },
+                            { icon: Accessibility, title: "Accessibilité", desc: "100% PMR, ascenseurs, rampes" },
+                            { icon: Globe, title: "Multilingue", desc: "FR, EN, DE, ES" },
+                            { icon: Coffee, title: "Cafétéria", desc: "Vue sur la rade" },
+                            { icon: ShoppingBag, title: "Boutique", desc: "Souvenirs et livres" },
+                            { icon: Wifi, title: "Wi-Fi", desc: "Gratuit" },
+                            { icon: Lock, title: "Consignes", desc: "Casiers sécurisés" },
                         ].map((service, i) => (
                             <div
                                 key={i}
-                                className="info-card group relative flex flex-col md:flex-row md:items-center gap-4 md:gap-8 py-6 md:py-8 border-b border-white/10 hover:border-[#4CBBD5]/30 transition-colors"
+                                className="info-card group p-5 md:p-6 bg-[#031525] rounded-xl border border-white/10 hover:border-[#4CBBD5] transition-all duration-300"
                             >
-                                {/* Number */}
-                                <span className="text-6xl md:text-8xl font-serif font-bold text-white/5 group-hover:text-[#4CBBD5]/10 transition-colors absolute right-0 top-0 md:relative md:right-auto md:top-auto">
-                                    0{i + 1}
-                                </span>
-
-                                {/* Icon */}
-                                <div className="w-14 h-14 md:w-16 md:h-16 rounded-full border border-white/10 group-hover:border-[#4CBBD5]/40 flex items-center justify-center transition-colors shrink-0">
-                                    <service.icon className="w-6 h-6 md:w-7 md:h-7 text-[#4CBBD5]" strokeWidth={1.5} />
-                                </div>
-
-                                {/* Content */}
-                                <div className="flex-1">
-                                    <div className="flex items-baseline gap-3 mb-1">
-                                        <h4 className="text-xl md:text-2xl font-bold text-white group-hover:text-[#4CBBD5] transition-colors">{service.title}</h4>
-                                        <span className="text-2xl md:text-3xl font-serif italic text-[#4CBBD5]">{service.highlight}</span>
-                                    </div>
-                                    <p className="text-sm md:text-base text-white/50">{service.desc}</p>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-
-                    {/* Secondary services - Horizontal pills */}
-                    <div className="flex flex-wrap gap-3 md:gap-4 mt-10 md:mt-12 pt-8 border-t border-white/5">
-                        {[
-                            { icon: Wifi, label: "Wi-Fi gratuit" },
-                            { icon: Lock, label: "Casiers sécurisés" },
-                        ].map((item, i) => (
-                            <div key={i} className="info-card flex items-center gap-3 px-5 py-3 rounded-full border border-white/10 hover:border-[#4CBBD5]/40 transition-colors group">
-                                <item.icon className="w-4 h-4 text-[#4CBBD5]" strokeWidth={1.5} />
-                                <span className="text-sm text-white/70 group-hover:text-white transition-colors">{item.label}</span>
+                                <service.icon className="w-8 h-8 text-[#4CBBD5] mb-4" strokeWidth={1.5} />
+                                <h4 className="text-base md:text-lg font-bold text-white mb-1">{service.title}</h4>
+                                <p className="text-xs md:text-sm text-white/50">{service.desc}</p>
                             </div>
                         ))}
                     </div>
