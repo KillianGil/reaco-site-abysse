@@ -3,7 +3,7 @@
 import { useState, useEffect, createContext, useContext, ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Lock, Eye, EyeOff, AlertCircle, Home, FileText, PlusCircle, LayoutDashboard, LogOut, BarChart3 } from "lucide-react";
+import { Lock, Eye, EyeOff, AlertCircle, Home, FileText, PlusCircle, LayoutDashboard, LogOut } from "lucide-react";
 
 const ADMIN_PASSWORD = "AbysseSuperMusee2026";
 
@@ -180,8 +180,8 @@ export function AdminLayout({ children, title }: { children: ReactNode; title: s
                                     key={item.href}
                                     href={item.href}
                                     className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${isActive
-                                            ? 'bg-[#4CBBD5] text-[#020A19] font-medium'
-                                            : 'text-white/60 hover:bg-white/5 hover:text-white'
+                                        ? 'bg-[#4CBBD5] text-[#020A19] font-medium'
+                                        : 'text-white/60 hover:bg-white/5 hover:text-white'
                                         }`}
                                 >
                                     <item.icon className="w-5 h-5" />
