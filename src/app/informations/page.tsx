@@ -386,66 +386,68 @@ export default function InformationsPage() {
                 </section>
 
                 {/* 4. Services */}
-                <section>
+                <section className="relative py-12 md:py-16 -mx-4 md:-mx-6 px-4 md:px-6 bg-gradient-to-b from-white/[0.03] to-transparent rounded-3xl">
                     <div className="section-header mb-10 md:mb-16">
                         <span className="text-[#4CBBD5] text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase block mb-3 md:mb-4">04. CONFORT</span>
                         <h3 className="text-3xl md:text-5xl font-light">Nos Services</h3>
                         <div className="h-1 w-16 md:w-24 bg-gradient-to-r from-[#4CBBD5] to-transparent mt-3 md:mt-4" />
                     </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
                         {[
                             {
                                 icon: Accessibility,
                                 title: "Accessibilité",
-                                desc: "100% accessible PMR. Ascenseurs panoramiques, rampes douces et parcours adaptés.",
+                                desc: "100% accessible PMR. Ascenseurs, rampes et parcours adaptés.",
                                 tag: "Label Tourisme & Handicap"
                             },
                             {
                                 icon: Globe,
                                 title: "Multilingue",
-                                desc: "Audioguides et contenus disponibles en 4 langues pour tous les visiteurs.",
+                                desc: "Audioguides disponibles en 4 langues.",
                                 tag: "FR · EN · DE · ES"
                             },
                             {
                                 icon: Coffee,
                                 title: "Cafétéria",
-                                desc: "Pause gourmande avec vue imprenable sur la rade. Produits locaux et de saison.",
-                                tag: "Vue panoramique"
+                                desc: "Vue panoramique sur la rade. Produits locaux.",
+                                tag: null
                             },
                             {
                                 icon: ShoppingBag,
                                 title: "Boutique",
-                                desc: "Repartez avec un souvenir. Livres, objets design et inspirations océaniques.",
+                                desc: "Livres, objets design et souvenirs marins.",
                                 tag: null
                             },
                             {
                                 icon: Wifi,
                                 title: "Wi-Fi Gratuit",
-                                desc: "Connexion haut débit disponible dans tout le musée pour nos visiteurs.",
+                                desc: "Connexion haut débit dans tout le musée.",
                                 tag: null
                             },
                             {
                                 icon: Lock,
                                 title: "Consignes",
-                                desc: "Casiers sécurisés à disposition à l'accueil pour vos effets personnels.",
+                                desc: "Casiers sécurisés à l'accueil.",
                                 tag: "Gratuit"
                             },
                         ].map((service, i) => (
                             <div
                                 key={i}
-                                className="info-card group p-5 md:p-6 bg-[#031525] rounded-xl border border-white/10 hover:border-[#4CBBD5] transition-all duration-300"
+                                className="info-card group flex items-start gap-4 p-5 md:p-6 bg-white/[0.04] hover:bg-white/[0.07] rounded-2xl border border-white/10 hover:border-[#4CBBD5]/50 transition-all duration-300"
                             >
-                                <div className="flex items-start justify-between mb-4">
-                                    <div className="w-12 h-12 rounded-xl bg-[#4CBBD5]/10 flex items-center justify-center group-hover:bg-[#4CBBD5]/20 transition-colors">
-                                        <service.icon className="w-6 h-6 text-[#4CBBD5]" strokeWidth={1.5} />
-                                    </div>
-                                    {service.tag && (
-                                        <span className="text-[9px] md:text-[10px] font-medium text-[#4CBBD5]/70 uppercase tracking-wider">{service.tag}</span>
-                                    )}
+                                <div className="w-12 h-12 rounded-xl bg-[#4CBBD5]/15 flex items-center justify-center shrink-0 group-hover:bg-[#4CBBD5]/25 transition-colors">
+                                    <service.icon className="w-6 h-6 text-[#4CBBD5]" strokeWidth={1.5} />
                                 </div>
-                                <h4 className="text-base md:text-lg font-bold text-white mb-2 group-hover:text-[#4CBBD5] transition-colors">{service.title}</h4>
-                                <p className="text-xs md:text-sm text-white/50 leading-relaxed">{service.desc}</p>
+                                <div className="flex-1 min-w-0">
+                                    <div className="flex items-center justify-between gap-2 mb-1">
+                                        <h4 className="text-base md:text-lg font-bold text-white group-hover:text-[#4CBBD5] transition-colors">{service.title}</h4>
+                                        {service.tag && (
+                                            <span className="text-[9px] md:text-[10px] font-medium text-[#4CBBD5]/70 uppercase tracking-wider shrink-0">{service.tag}</span>
+                                        )}
+                                    </div>
+                                    <p className="text-xs md:text-sm text-white/50">{service.desc}</p>
+                                </div>
                             </div>
                         ))}
                     </div>

@@ -5,134 +5,26 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Calendar, Clock, ArrowRight, Users, Sparkles, Mail } from "lucide-react";
+import { Calendar, Clock, ArrowRight, Users, Sparkles, Mail, Loader2 } from "lucide-react";
 import dynamic from "next/dynamic";
+import { useArticles, type ArticleCategory } from "@/hooks/useArticles";
 
 const Navbar = dynamic(() => import("@/components/UI/Navbar").then(mod => mod.Navbar), { ssr: false });
 
 gsap.registerPlugin(ScrollTrigger);
 
-type NewsCategory = "all" | "evenement" | "decouverte" | "musee";
-
-interface NewsItem {
-    id: number;
-    category: NewsCategory;
-    categoryLabel: string;
-    date: string;
-    title: string;
-    excerpt: string;
-    image: string;
-    featured?: boolean;
-    eventDate?: string;
-    eventTime?: string;
-}
-
-const newsData: NewsItem[] = [
-    {
-        id: 1,
-        category: "evenement",
-        categoryLabel: "Événement",
-        date: "15 Jan 2026",
-        title: "Nuit Européenne des Musées 2026",
-        excerpt:
-            "Une soirée magique vous attend ! Plongez dans les abysses en nocturne avec nos guides passionnés. Au programme : visites guidées exclusives, projections immersives et rencontres avec des océanographes.",
-        image:
-            "https://images.unsplash.com/photo-1551244072-5d12893278ab?w=800&q=80",
-        featured: true,
-        eventDate: "23 Mai 2026", // ajusté pour coller à la date annoncée
-        eventTime: "19h - Minuit"
-    },
-    {
-        id: 2,
-        category: "decouverte",
-        categoryLabel: "Découverte",
-        date: "10 Jan 2026",
-        title: "ABYSSE & Ifremer : une année dédiée aux grands fonds",
-        excerpt:
-            "En 2026, le musée ABYSSE s'associe aux équipes de l'Ifremer pour mettre à l'honneur l'exploration des grands fonds : nouvelles images des abysses, rencontres avec des scientifiques et focus sur les enjeux de protection de ces milieux fragiles.",
-        image: "/assets/fond-marin.jpg",
-        featured: true
-    },
-    {
-        id: 3,
-        category: "musee",
-        categoryLabel: "Vie du Musée",
-        date: "5 Jan 2026",
-        title: "Le FNRS III renaît de ses cendres",
-        excerpt:
-            "Après deux ans de restauration minutieuse, le légendaire bathyscaphe retrouve peu à peu sa splendeur d'origine. Nos équipes vous dévoilent les coulisses de ce travail d'orfèvre.",
-        image: "/assets/fnrs_3_220307_043.jpg"
-    },
-    {
-        id: 4,
-        category: "evenement",
-        categoryLabel: "Événement",
-        date: "28 Déc 2025",
-        title: "Vacances de février : ateliers pour les petits explorateurs",
-        excerpt:
-            "Vos enfants rêvent de devenir océanographes ? Pendant les vacances d'hiver, le musée propose des ateliers créatifs pour les 6-12 ans : construction de mini sous-marins, découverte des créatures bioluminescentes...",
-        image:
-            "https://images.unsplash.com/photo-1596464716127-f2a82984de30?w=800&q=80",
-        eventDate: "10-21 Fév 2026",
-        eventTime: "14h - 16h30"
-    },
-    {
-        id: 5,
-        category: "decouverte",
-        categoryLabel: "Découverte",
-        date: "20 Déc 2025",
-        title: "Un monde caché sous l'Atlantique",
-        excerpt:
-            "Les chercheurs de l'IFREMER ont cartographié un nouveau champ de sources hydrothermales abritant un écosystème unique. Des images à couper le souffle qui nous rappellent combien l'océan recèle encore de mystères.",
-        image:
-            "https://images.unsplash.com/photo-1682687982501-1e58ab814714?w=800&q=80"
-    },
-    {
-        id: 6,
-        category: "musee",
-        categoryLabel: "Vie du Musée",
-        date: "15 Déc 2025",
-        title: "Un mois déjà ! 25 000 visiteurs depuis l'ouverture",
-        excerpt:
-            "Grâce à vous, le musée ABYSSE a accueilli plus de 25 000 curieux depuis son ouverture en novembre. Chaque visite nous rappelle pourquoi nous faisons ce métier : transmettre la passion de l'océan.",
-        image:
-            "/assets/1moisdeja.webp"
-    },
-    {
-        id: 7,
-        category: "evenement",
-        categoryLabel: "Événement",
-        date: "1 Déc 2025",
-        title: "Conférence : Les pionnières des profondeurs",
-        excerpt:
-            "Rencontre exceptionnelle avec trois océanographes qui ont marqué l'histoire de l'exploration sous-marine. Un hommage émouvant aux femmes qui ont bravé les préjugés pour explorer l'inconnu.",
-        image: "/assets/conf.webp",
-        eventDate: "8 Mars 2026",
-        eventTime: "18h"
-    },
-    {
-        id: 8,
-        category: "musee",
-        categoryLabel: "Vie du Musée",
-        date: "15 Nov 2025",
-        title: "Ouverture du musée ABYSSE !",
-        excerpt:
-            "C'est le grand jour ! Le musée ABYSSE ouvre enfin ses portes au public. Venez découvrir les mystères des profondeurs dans un parcours immersif unique en France.",
-        image:
-            "/assets/museum.webp"
-    }
-];
-
-
 export default function ActualitesPage() {
     const containerRef = useRef<HTMLDivElement>(null);
-    const [filter, setFilter] = useState<NewsCategory>("all");
+    const [filter, setFilter] = useState<ArticleCategory>("all");
+
+    // Récupération des articles depuis Firebase
+    const { articles, loading, error } = useArticles();
 
     const filteredNews = filter === "all"
-        ? newsData
-        : newsData.filter(item => item.category === filter);
+        ? articles
+        : articles.filter(item => item.category === filter);
 
-    const featuredNews = newsData.filter(item => item.featured);
+    const featuredNews = articles.filter(item => item.featured);
     const regularNews = filteredNews.filter(item => !item.featured);
 
     useEffect(() => {
@@ -183,7 +75,7 @@ export default function ActualitesPage() {
         return () => ctx.revert();
     }, [filter]);
 
-    const getCategoryColor = (category: NewsCategory) => {
+    const getCategoryColor = (category: ArticleCategory) => {
         switch (category) {
             case "evenement": return "bg-[#4CBBD5]/20 text-[#4CBBD5] border-[#4CBBD5]/30";
             case "decouverte": return "bg-emerald-500/20 text-emerald-400 border-emerald-500/30";
@@ -214,7 +106,24 @@ export default function ActualitesPage() {
                 </div>
             </section>
 
+            {/* Loading State */}
+            {loading && (
+                <div className="flex flex-col items-center justify-center py-32 relative z-20">
+                    <Loader2 className="w-8 h-8 text-[#4CBBD5] animate-spin mb-4" />
+                    <p className="text-white/50 text-sm">Chargement des actualités...</p>
+                </div>
+            )}
+
+            {/* Error State */}
+            {error && !loading && (
+                <div className="flex flex-col items-center justify-center py-32 relative z-20">
+                    <p className="text-red-400 text-sm mb-2">{error}</p>
+                    <p className="text-white/40 text-xs">Veuillez réessayer plus tard.</p>
+                </div>
+            )}
+
             {/* Featured News - À la Une */}
+            {!loading && !error && featuredNews.length > 0 && (
             <section className="max-w-7xl mx-auto px-4 md:px-6 mt-4 md:mt-8 relative z-20">
                 <div className="flex items-center gap-3 mb-8">
                     <Sparkles className="w-5 h-5 text-[#4CBBD5]" />
@@ -275,8 +184,10 @@ export default function ActualitesPage() {
                     ))}
                 </div>
             </section>
+            )}
 
             {/* All News Section */}
+            {!loading && !error && (
             <section className="max-w-7xl mx-auto px-4 md:px-6 py-16 md:py-24 relative z-10">
                 {/* Section Header */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
@@ -292,10 +203,10 @@ export default function ActualitesPage() {
                     {/* Filters */}
                     <div className="flex flex-wrap gap-2">
                         {[
-                            { value: "all" as NewsCategory, label: "Tout voir" },
-                            { value: "evenement" as NewsCategory, label: "Événements" },
-                            { value: "decouverte" as NewsCategory, label: "Découvertes" },
-                            { value: "musee" as NewsCategory, label: "Vie du musée" }
+                            { value: "all" as ArticleCategory, label: "Tout voir" },
+                            { value: "evenement" as ArticleCategory, label: "Événements" },
+                            { value: "decouverte" as ArticleCategory, label: "Découvertes" },
+                            { value: "musee" as ArticleCategory, label: "Vie du musée" }
                         ].map((cat) => (
                             <button
                                 key={cat.value}
@@ -383,6 +294,7 @@ export default function ActualitesPage() {
                     </div>
                 )}
             </section>
+            )}
 
             {/* Newsletter CTA - Plus simple */}
             <section className="max-w-4xl mx-auto px-4 md:px-6 pb-16 md:pb-24 relative z-10">
