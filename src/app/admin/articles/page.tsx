@@ -4,9 +4,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { AdminProvider, useAdmin, AdminLogin, AdminLayout } from "@/components/admin/AdminComponents";
-import { db, storage } from "@/firebase";
+import { db } from "@/firebase";
 import { collection, getDocs, deleteDoc, doc, query, orderBy } from "firebase/firestore";
-import { ref, deleteObject } from "firebase/storage";
 import { Loader2, Trash2, ExternalLink, Search, Filter, Plus, Pencil } from "lucide-react";
 
 interface Article {
@@ -78,17 +77,6 @@ function ArticlesListContent() {
         try {
             // Delete from Firestore
             await deleteDoc(doc(db, "articles", article.id));
-
-            // Try to delete image from storage if it's a Firebase Storage URL
-            if (article.image_url.includes("firebasestorage.googleapis.com")) {
-                try {
-                    const imageRef = ref(storage, article.image_url);
-                    await deleteObject(imageRef);
-                } catch {
-                    // Image might not exist, ignore
-                }
-            }
-
             setArticles(prev => prev.filter(a => a.id !== article.id));
         } catch (error) {
             console.error("Erreur suppression:", error);
