@@ -12,30 +12,17 @@ export function DepthGauge({ scrollProgress }: DepthGaugeProps) {
   const [mounted, setMounted] = useState(false);
   const [displayProgress, setDisplayProgress] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
-  const animationRef = useRef<number>();
   const trackRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Smooth animation for the progress bar
+  // Update display progress - utilise CSS transitions pour l'animation fluide
   useEffect(() => {
-    if (isDragging) return; // Ne pas animer pendant le drag
-
-    const animate = () => {
-      setDisplayProgress(prev => {
-        const diff = scrollProgress - prev;
-        if (Math.abs(diff) < 0.001) return scrollProgress;
-        return prev + diff * 0.15;
-      });
-      animationRef.current = requestAnimationFrame(animate);
-    };
-
-    animationRef.current = requestAnimationFrame(animate);
-    return () => {
-      if (animationRef.current) cancelAnimationFrame(animationRef.current);
-    };
+    if (!isDragging) {
+      setDisplayProgress(scrollProgress);
+    }
   }, [scrollProgress, isDragging]);
 
   // ✅ GESTION DU DRAG
@@ -155,12 +142,13 @@ export function DepthGauge({ scrollProgress }: DepthGaugeProps) {
           className="relative w-2 h-44 bg-white/20 rounded-full overflow-hidden shadow-inner cursor-pointer"
           onClick={handleTrackClick}
         >
-          {/* Fill */}
+          {/* Fill - utilise CSS transition pour performance */}
           <div
             className="absolute top-0 left-0 w-full rounded-full pointer-events-none"
             style={{
               height: `${fillPercent}%`,
               background: "linear-gradient(to bottom, #4CBBD5, #1a8aaa, #0a6080)",
+              transition: isDragging ? 'none' : 'height 0.15s ease-out',
             }}
           />
 
@@ -174,11 +162,12 @@ export function DepthGauge({ scrollProgress }: DepthGaugeProps) {
 
         {/* Current position indicator - DRAGGABLE */}
         <div
-          className={`absolute w-4 h-4 rounded-full bg-white shadow-lg -left-1 transition-transform ${isDragging ? 'scale-125 cursor-grabbing' : 'cursor-grab'
+          className={`absolute w-4 h-4 rounded-full bg-white shadow-lg -left-1 ${isDragging ? 'scale-125 cursor-grabbing' : 'cursor-grab'
             }`}
           style={{
             top: `${dotPosition}px`,
             transform: `translateY(-50%) ${isDragging ? 'scale(1.25)' : ''}`,
+            transition: isDragging ? 'transform 0.1s' : 'top 0.15s ease-out, transform 0.1s',
             boxShadow: isDragging
               ? "0 0 12px #fff, 0 0 24px #4CBBD5"
               : "0 0 8px #fff, 0 0 16px #4CBBD5"

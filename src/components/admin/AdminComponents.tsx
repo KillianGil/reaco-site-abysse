@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, createContext, useContext, ReactNode } from "react";
+import { useState, createContext, useContext, ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Lock, Eye, EyeOff, AlertCircle, Home, FileText, PlusCircle, LayoutDashboard, LogOut } from "lucide-react";
@@ -27,18 +27,9 @@ export function useAdmin() {
 export function AdminProvider({ children }: { children: ReactNode }) {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-    // Check session storage on mount
-    useEffect(() => {
-        const stored = sessionStorage.getItem("admin_auth");
-        if (stored === "true") {
-            setIsAuthenticated(true);
-        }
-    }, []);
-
     const login = (password: string): boolean => {
         if (password === ADMIN_PASSWORD) {
             setIsAuthenticated(true);
-            sessionStorage.setItem("admin_auth", "true");
             return true;
         }
         return false;
@@ -46,7 +37,6 @@ export function AdminProvider({ children }: { children: ReactNode }) {
 
     const logout = () => {
         setIsAuthenticated(false);
-        sessionStorage.removeItem("admin_auth");
     };
 
     return (

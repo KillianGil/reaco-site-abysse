@@ -1,7 +1,7 @@
 "use client";
 
 import { Canvas } from "@react-three/fiber";
-import { Suspense, useRef, useMemo } from "react";
+import { Suspense, useRef, useMemo, memo, useEffect, createContext, useContext } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
@@ -19,6 +19,10 @@ import { useAccessibility } from "@/contexts/AccessibilityContext";
 // Configure Draco decoder globally for all GLTF models
 // MeshOpt decoder is loaded automatically by drei when meshoptimizer package is installed
 useGLTF.setDecoderPath("https://www.gstatic.com/draco/versioned/decoders/1.5.6/");
+
+// Scroll progress ref context - permet aux composants 3D de lire sans re-render
+const ScrollProgressRefContext = createContext<React.MutableRefObject<number>>({ current: 0 });
+export const useScrollProgressRef = () => useContext(ScrollProgressRefContext);
 
 interface SceneProps {
   scrollProgress: number;
@@ -51,15 +55,16 @@ function getCircleTexture() {
   return circleTextureCache;
 }
 
-// ✅ MARINE SNOW OPTIMISÉ
-function MarineSnow({ scrollProgress }: { scrollProgress: number }) {
+// MARINE SNOW OPTIMISÉ - lit depuis le ref context
+const MarineSnow = memo(function MarineSnow() {
   const ref = useRef<THREE.Points>(null);
+  const scrollProgressRef = useScrollProgressRef();
 
   // Cache texture in useMemo
   const circleTexture = useMemo(() => getCircleTexture(), []);
 
   const { positions, velocities } = useMemo(() => {
-    const count = 600; // Réduit de 800 à 600 pour la performance
+    const count = 600;
     const pos = new Float32Array(count * 3);
     const vel = new Float32Array(count * 3);
 
@@ -88,7 +93,6 @@ function MarineSnow({ scrollProgress }: { scrollProgress: number }) {
       posArray[i3 + 1] += velocities[i3 + 1];
       posArray[i3 + 2] += velocities[i3 + 2];
 
-      // Reset si trop bas
       if (posArray[i3 + 1] < -175) {
         posArray[i3 + 1] = 175;
         posArray[i3] = (Math.random() - 0.5) * 120;
@@ -96,7 +100,7 @@ function MarineSnow({ scrollProgress }: { scrollProgress: number }) {
     }
 
     ref.current.geometry.attributes.position.needsUpdate = true;
-    ref.current.position.y = scrollProgress * 100;
+    ref.current.position.y = scrollProgressRef.current * 100;
   });
 
   return (
@@ -121,11 +125,13 @@ function MarineSnow({ scrollProgress }: { scrollProgress: number }) {
       />
     </points>
   );
-}
+});
 
-// ✅ CAUSTICS AMÉLIORÉS - Plus visibles et réalistes
-function WaterCaustics({ scrollProgress }: { scrollProgress: number }) {
+// CAUSTICS - lit depuis le ref context
+const WaterCaustics = memo(function WaterCaustics() {
   const meshRef = useRef<THREE.Mesh>(null);
+  const scrollProgressRef = useScrollProgressRef();
+  const visibleRef = useRef(true);
 
   const material = useMemo(() => {
     return new THREE.ShaderMaterial({
@@ -144,37 +150,24 @@ function WaterCaustics({ scrollProgress }: { scrollProgress: number }) {
         uniform float uTime;
         uniform float uOpacity;
         varying vec2 vUv;
-        
-        // Caustic pattern amélioré
+
         float caustic(vec2 uv, float time) {
           vec2 p = mod(uv * 4.5 + vec2(time * 0.25, time * 0.18), 1.0) - 0.5;
           float d = length(p);
-          
-          // Pattern ondulatoire plus prononcé
           float c = sin(d * 18.0 - time * 2.5) * 0.5 + 0.5;
           c += sin(d * 12.0 - time * 1.8) * 0.3;
-          
-          // Atténuation adoucie
           c *= 1.0 - smoothstep(0.25, 0.6, d);
           return pow(c, 2.5);
         }
-        
+
         void main() {
-          // Plusieurs couches de caustics avec différentes vitesses
           float c1 = caustic(vUv, uTime);
           float c2 = caustic(vUv * 1.5 + 0.5, uTime * 1.2);
           float c3 = caustic(vUv * 0.9 + 0.25, uTime * 0.85);
           float c4 = caustic(vUv * 1.8 + 0.7, uTime * 0.7);
-          
-          // Combiner les couches avec intensité augmentée
           float caustics = (c1 * 1.2 + c2 * 0.8 + c3 * 0.6 + c4 * 0.5) * 2.0;
-          
-          // Couleur bleu-vert eau
           vec3 color = vec3(0.6, 0.85, 1.0);
-          
-          // Opacité plus forte pour être visible
           float alpha = caustics * uOpacity * 0.65;
-          
           gl_FragColor = vec4(color, alpha);
         }
       `,
@@ -185,15 +178,17 @@ function WaterCaustics({ scrollProgress }: { scrollProgress: number }) {
   }, []);
 
   useFrame((state) => {
-    if (meshRef.current) {
+    const progress = scrollProgressRef.current;
+    visibleRef.current = progress <= 0.7;
+
+    if (meshRef.current && visibleRef.current) {
+      meshRef.current.visible = true;
       material.uniforms.uTime.value = state.clock.elapsedTime;
-      // Les caustics disparaissent progressivement avec la profondeur
-      material.uniforms.uOpacity.value = Math.max(0, 1 - scrollProgress * 1.2);
+      material.uniforms.uOpacity.value = Math.max(0, 1 - progress * 1.2);
+    } else if (meshRef.current) {
+      meshRef.current.visible = false;
     }
   });
-
-  // Ne pas afficher trop profond
-  if (scrollProgress > 0.7) return null;
 
   return (
     <mesh
@@ -206,11 +201,12 @@ function WaterCaustics({ scrollProgress }: { scrollProgress: number }) {
       <primitive object={material} attach="material" />
     </mesh>
   );
-}
+});
 
-// ✅ VOLUMETRIC LIGHT RAYS
-function VolumetricLight({ scrollProgress }: { scrollProgress: number }) {
+// VOLUMETRIC LIGHT RAYS - lit depuis le ref context
+const VolumetricLight = memo(function VolumetricLight() {
   const meshRef = useRef<THREE.Mesh>(null);
+  const scrollProgressRef = useScrollProgressRef();
 
   const shaderMaterial = useMemo(() => {
     return new THREE.ShaderMaterial({
@@ -232,17 +228,14 @@ function VolumetricLight({ scrollProgress }: { scrollProgress: number }) {
         uniform float uOpacity;
         varying vec2 vUv;
         varying vec3 vPosition;
-        
+
         void main() {
           float rays = sin(vPosition.x * 0.2 + uTime * 0.3) * 0.5 + 0.5;
           rays *= sin(vPosition.z * 0.15 - uTime * 0.2) * 0.5 + 0.5;
-          
           float fade = 1.0 - vUv.y;
           fade = pow(fade, 2.0);
-          
           vec3 color = vec3(0.6, 0.8, 1.0);
           float alpha = rays * fade * uOpacity * 0.15;
-          
           gl_FragColor = vec4(color, alpha);
         }
       `,
@@ -254,13 +247,15 @@ function VolumetricLight({ scrollProgress }: { scrollProgress: number }) {
   }, []);
 
   useFrame((state) => {
+    const progress = scrollProgressRef.current;
     if (meshRef.current) {
-      shaderMaterial.uniforms.uTime.value = state.clock.elapsedTime;
-      shaderMaterial.uniforms.uOpacity.value = Math.max(0, 1 - scrollProgress * 1.8);
+      meshRef.current.visible = progress <= 0.6;
+      if (meshRef.current.visible) {
+        shaderMaterial.uniforms.uTime.value = state.clock.elapsedTime;
+        shaderMaterial.uniforms.uOpacity.value = Math.max(0, 1 - progress * 1.8);
+      }
     }
   });
-
-  if (scrollProgress > 0.6) return null;
 
   return (
     <mesh
@@ -273,10 +268,46 @@ function VolumetricLight({ scrollProgress }: { scrollProgress: number }) {
       <primitive object={shaderMaterial} attach="material" />
     </mesh>
   );
-}
+});
 
-export function Scene({ scrollProgress }: SceneProps) {
+// Contenu interne memoizé pour éviter les re-renders
+const SceneContent = memo(function SceneContent({ reducedMotion }: { reducedMotion: boolean }) {
+  const scrollProgressRef = useScrollProgressRef();
+
+  return (
+    <>
+      <color attach="background" args={["#006994"]} />
+
+      <Suspense fallback={null}>
+        <OceanEnvironment scrollProgress={scrollProgressRef.current} />
+
+        {/* Effets visuels optimisés - lisent depuis le ref context */}
+        {!reducedMotion && <WaterCaustics />}
+        {!reducedMotion && <VolumetricLight />}
+        {!reducedMotion && <MarineSnow />}
+
+        <OceanDecorations scrollProgress={scrollProgressRef.current} />
+        {/* Créatures - utilisent encore les props car définies dans d'autres fichiers */}
+        <Submarine scrollProgress={scrollProgressRef.current} />
+        <Jellyfish scrollProgress={scrollProgressRef.current} reducedMotion={reducedMotion} />
+        <FishSchool scrollProgress={scrollProgressRef.current} reducedMotion={reducedMotion} />
+        <FastFish scrollProgress={scrollProgressRef.current} reducedMotion={reducedMotion} />
+        <Seaweed scrollProgress={scrollProgressRef.current} />
+        <MantaRay scrollProgress={scrollProgressRef.current} reducedMotion={reducedMotion} />
+        <Anglerfish scrollProgress={scrollProgressRef.current} reducedMotion={reducedMotion} />
+      </Suspense>
+    </>
+  );
+});
+
+export const Scene = memo(function Scene({ scrollProgress }: SceneProps) {
   const { reducedMotion } = useAccessibility();
+  const scrollProgressRef = useRef(scrollProgress);
+
+  // Update ref without causing re-renders
+  useEffect(() => {
+    scrollProgressRef.current = scrollProgress;
+  }, [scrollProgress]);
 
   return (
     <div className="canvas-container">
@@ -298,27 +329,10 @@ export function Scene({ scrollProgress }: SceneProps) {
         performance={{ min: 0.5 }}
         style={{ background: "#006994" }}
       >
-        <color attach="background" args={["#006994"]} />
-
-        <Suspense fallback={null}>
-          <OceanEnvironment scrollProgress={scrollProgress} />
-
-          {/* ✅ Effets visuels - désactivés en mode calme pour performance */}
-          {!reducedMotion && <WaterCaustics scrollProgress={scrollProgress} />}
-          {!reducedMotion && <VolumetricLight scrollProgress={scrollProgress} />}
-          {!reducedMotion && <MarineSnow scrollProgress={scrollProgress} />}
-
-          <OceanDecorations scrollProgress={scrollProgress} />
-          {/* ✅ Créatures - figées en mode calme */}
-          <Submarine scrollProgress={scrollProgress} />
-          <Jellyfish scrollProgress={scrollProgress} reducedMotion={reducedMotion} />
-          <FishSchool scrollProgress={scrollProgress} reducedMotion={reducedMotion} />
-          <FastFish scrollProgress={scrollProgress} reducedMotion={reducedMotion} />
-          <Seaweed scrollProgress={scrollProgress} />
-          <MantaRay scrollProgress={scrollProgress} reducedMotion={reducedMotion} />
-          <Anglerfish scrollProgress={scrollProgress} reducedMotion={reducedMotion} />
-        </Suspense>
+        <ScrollProgressRefContext.Provider value={scrollProgressRef}>
+          <SceneContent reducedMotion={reducedMotion} />
+        </ScrollProgressRefContext.Provider>
       </Canvas>
     </div>
   );
-}
+});
