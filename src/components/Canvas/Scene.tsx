@@ -270,31 +270,29 @@ const VolumetricLight = memo(function VolumetricLight() {
   );
 });
 
-// Contenu interne memoizé pour éviter les re-renders
-const SceneContent = memo(function SceneContent({ reducedMotion }: { reducedMotion: boolean }) {
-  const scrollProgressRef = useScrollProgressRef();
-
+// Contenu interne
+const SceneContent = memo(function SceneContent({ scrollProgress, reducedMotion }: { scrollProgress: number; reducedMotion: boolean }) {
   return (
     <>
       <color attach="background" args={["#006994"]} />
 
       <Suspense fallback={null}>
-        <OceanEnvironment scrollProgress={scrollProgressRef.current} />
+        <OceanEnvironment scrollProgress={scrollProgress} />
 
         {/* Effets visuels optimisés - lisent depuis le ref context */}
         {!reducedMotion && <WaterCaustics />}
         {!reducedMotion && <VolumetricLight />}
         {!reducedMotion && <MarineSnow />}
 
-        <OceanDecorations scrollProgress={scrollProgressRef.current} />
-        {/* Créatures - utilisent encore les props car définies dans d'autres fichiers */}
-        <Submarine scrollProgress={scrollProgressRef.current} />
-        <Jellyfish scrollProgress={scrollProgressRef.current} reducedMotion={reducedMotion} />
-        <FishSchool scrollProgress={scrollProgressRef.current} reducedMotion={reducedMotion} />
-        <FastFish scrollProgress={scrollProgressRef.current} reducedMotion={reducedMotion} />
-        <Seaweed scrollProgress={scrollProgressRef.current} />
-        <MantaRay scrollProgress={scrollProgressRef.current} reducedMotion={reducedMotion} />
-        <Anglerfish scrollProgress={scrollProgressRef.current} reducedMotion={reducedMotion} />
+        <OceanDecorations scrollProgress={scrollProgress} />
+        {/* Créatures */}
+        <Submarine scrollProgress={scrollProgress} />
+        <Jellyfish scrollProgress={scrollProgress} reducedMotion={reducedMotion} />
+        <FishSchool scrollProgress={scrollProgress} reducedMotion={reducedMotion} />
+        <FastFish scrollProgress={scrollProgress} reducedMotion={reducedMotion} />
+        <Seaweed scrollProgress={scrollProgress} />
+        <MantaRay scrollProgress={scrollProgress} reducedMotion={reducedMotion} />
+        <Anglerfish scrollProgress={scrollProgress} reducedMotion={reducedMotion} />
       </Suspense>
     </>
   );
@@ -330,7 +328,7 @@ export const Scene = memo(function Scene({ scrollProgress }: SceneProps) {
         style={{ background: "#006994" }}
       >
         <ScrollProgressRefContext.Provider value={scrollProgressRef}>
-          <SceneContent reducedMotion={reducedMotion} />
+          <SceneContent scrollProgress={scrollProgress} reducedMotion={reducedMotion} />
         </ScrollProgressRefContext.Provider>
       </Canvas>
     </div>
