@@ -4,9 +4,8 @@ import { useState, useRef, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Image from "next/image";
 import { AdminProvider, useAdmin, AdminLogin, AdminLayout } from "@/components/admin/AdminComponents";
-import { db, storage } from "@/firebase";
+import { db } from "@/firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { Loader2, Upload, X, Check, AlertCircle, Calendar, Clock, FileText, Tag, Star, Save, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
@@ -135,16 +134,21 @@ function EditArticleContent() {
 
         setUploadProgress(true);
 
-        const timestamp = Date.now();
-        const sanitizedName = imageFile.name.replace(/[^a-zA-Z0-9.]/g, "_");
-        const filename = `articles/${timestamp}_${sanitizedName}`;
+        const formData = new FormData();
+        formData.append("file", imageFile);
 
-        const storageRef = ref(storage, filename);
-        await uploadBytes(storageRef, imageFile);
-        const downloadURL = await getDownloadURL(storageRef);
+        const response = await fetch("/api/upload", {
+            method: "POST",
+            body: formData,
+        });
 
+        if (!response.ok) {
+            throw new Error("Erreur lors de l'upload");
+        }
+
+        const data = await response.json();
         setUploadProgress(false);
-        return downloadURL;
+        return data.url;
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
