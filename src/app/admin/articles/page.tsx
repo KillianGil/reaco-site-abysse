@@ -7,7 +7,7 @@ import { AdminProvider, useAdmin, AdminLogin, AdminLayout } from "@/components/a
 import { db, storage } from "@/firebase";
 import { collection, getDocs, deleteDoc, doc, query, orderBy } from "firebase/firestore";
 import { ref, deleteObject } from "firebase/storage";
-import { Loader2, Trash2, ExternalLink, Search, Filter, Plus } from "lucide-react";
+import { Loader2, Trash2, ExternalLink, Search, Filter, Plus, Pencil } from "lucide-react";
 
 interface Article {
     id: string;
@@ -215,7 +215,14 @@ function ArticlesListContent() {
                                             className="inline-flex items-center gap-2 text-[#4CBBD5] text-sm hover:underline"
                                         >
                                             <ExternalLink className="w-4 h-4" />
-                                            Voir l&apos;article
+                                            Voir
+                                        </Link>
+                                        <Link
+                                            href={`/admin/articles/${article.id}`}
+                                            className="inline-flex items-center gap-2 text-amber-400 text-sm hover:text-amber-300 transition-colors"
+                                        >
+                                            <Pencil className="w-4 h-4" />
+                                            Modifier
                                         </Link>
                                         <button
                                             onClick={() => handleDelete(article)}
