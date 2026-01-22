@@ -3,6 +3,7 @@
 import { Footer } from "@/components/UI";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Calendar, Clock, ArrowRight, Users, Sparkles, Mail, Loader2 } from "lucide-react";
@@ -132,8 +133,8 @@ export default function ActualitesPage() {
 
                 <div className="grid md:grid-cols-2 gap-6">
                     {featuredNews.map((item) => (
+                        <Link key={item.id} href={`/actualites/${item.id}`}>
                         <article
-                            key={item.id}
                             className="featured-card group relative overflow-hidden rounded-2xl border border-white/10 hover:border-[#4CBBD5]/50 transition-colors duration-300 cursor-pointer"
                         >
                             {/* Image */}
@@ -181,6 +182,7 @@ export default function ActualitesPage() {
                                 </div>
                             </div>
                         </article>
+                        </Link>
                     ))}
                 </div>
             </section>
@@ -225,8 +227,8 @@ export default function ActualitesPage() {
                 {/* News Grid */}
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {regularNews.map((item) => (
+                        <Link key={item.id} href={`/actualites/${item.id}`}>
                         <article
-                            key={item.id}
                             className="news-card group cursor-pointer"
                         >
                             {/* Image */}
@@ -283,6 +285,7 @@ export default function ActualitesPage() {
                                 </div>
                             </div>
                         </article>
+                        </Link>
                     ))}
                 </div>
 

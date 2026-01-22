@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { db } from "@/firebase";
-import { collection, getDocs, query, orderBy, Timestamp } from "firebase/firestore";
+import { collection, getDocs, query, orderBy, Timestamp, doc, getDoc } from "firebase/firestore";
 
 export type ArticleCategory = "all" | "evenement" | "decouverte" | "musee";
 
@@ -85,4 +85,45 @@ export function useArticles() {
     }, []);
 
     return { articles, loading, error };
+}
+
+// Hook pour récupérer un article par son ID
+export function useArticle(id: string) {
+    const [article, setArticle] = useState<NewsItem | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        async function fetchArticle() {
+            if (!id) {
+                setError("ID d'article manquant");
+                setLoading(false);
+                return;
+            }
+
+            try {
+                setLoading(true);
+                setError(null);
+
+                const articleRef = doc(db, "articles", id);
+                const articleSnap = await getDoc(articleRef);
+
+                if (articleSnap.exists()) {
+                    const data = articleSnap.data() as Omit<Article, "id">;
+                    setArticle(transformArticle({ id: articleSnap.id, ...data }));
+                } else {
+                    setError("Article non trouvé");
+                }
+            } catch (err) {
+                console.error("Erreur lors de la récupération de l'article:", err);
+                setError("Impossible de charger l'article");
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        fetchArticle();
+    }, [id]);
+
+    return { article, loading, error };
 }
