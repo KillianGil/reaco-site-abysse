@@ -7,13 +7,20 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Calendar, Clock, ArrowLeft, ArrowRight, Share2, Loader2, Link2, Twitter, Facebook, Linkedin } from "lucide-react";
+import { Calendar, Clock, ArrowLeft, ArrowRight, Share2, Loader2, Link2, Facebook, Linkedin, Instagram } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useArticle, useArticles, type ArticleCategory } from "@/hooks/useArticles";
 
 const Navbar = dynamic(() => import("@/components/UI/Navbar").then(mod => mod.Navbar), { ssr: false });
 
 gsap.registerPlugin(ScrollTrigger);
+
+// Custom X (Twitter) icon component
+const XIcon = ({ className }: { className?: string }) => (
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor">
+        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
+);
 
 export default function ArticlePage() {
     const params = useParams();
@@ -91,9 +98,10 @@ export default function ArticlePage() {
 
     const handleShare = (platform: string) => {
         const urls: Record<string, string> = {
-            twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareTitle)}`,
+            x: `https://x.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareTitle)}`,
             facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
             linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`,
+            instagram: `https://www.instagram.com/`,
         };
 
         if (platform === "copy") {
@@ -188,11 +196,11 @@ export default function ArticlePage() {
                             </span>
                             <div className="flex items-center gap-2">
                                 <button
-                                    onClick={() => handleShare("twitter")}
-                                    className="w-9 h-9 rounded-full bg-white/5 hover:bg-[#1DA1F2]/20 border border-white/10 hover:border-[#1DA1F2]/50 flex items-center justify-center transition-all"
-                                    aria-label="Partager sur Twitter"
+                                    onClick={() => handleShare("x")}
+                                    className="w-9 h-9 rounded-full bg-white/5 hover:bg-white/20 border border-white/10 hover:border-white/30 flex items-center justify-center transition-all"
+                                    aria-label="Partager sur X"
                                 >
-                                    <Twitter className="w-4 h-4 text-white/70 hover:text-[#1DA1F2]" />
+                                    <XIcon className="w-4 h-4 text-white/70" />
                                 </button>
                                 <button
                                     onClick={() => handleShare("facebook")}
@@ -209,6 +217,13 @@ export default function ArticlePage() {
                                     <Linkedin className="w-4 h-4 text-white/70 hover:text-[#0A66C2]" />
                                 </button>
                                 <button
+                                    onClick={() => handleShare("instagram")}
+                                    className="w-9 h-9 rounded-full bg-white/5 hover:bg-gradient-to-br hover:from-[#833AB4]/30 hover:via-[#FD1D1D]/30 hover:to-[#FCAF45]/30 border border-white/10 hover:border-[#E1306C]/50 flex items-center justify-center transition-all"
+                                    aria-label="Partager sur Instagram"
+                                >
+                                    <Instagram className="w-4 h-4 text-white/70" />
+                                </button>
+                                <button
                                     onClick={() => handleShare("copy")}
                                     className="w-9 h-9 rounded-full bg-white/5 hover:bg-[#4CBBD5]/20 border border-white/10 hover:border-[#4CBBD5]/50 flex items-center justify-center transition-all"
                                     aria-label="Copier le lien"
@@ -219,9 +234,9 @@ export default function ArticlePage() {
                         </div>
                     </header>
 
-                    {/* Featured Image */}
-                    <div className="article-image max-w-5xl mx-auto px-4 md:px-6 py-10 md:py-16 relative z-20">
-                        <div className="relative aspect-[16/9] rounded-2xl overflow-hidden">
+                    {/* Featured Image - Reduced size */}
+                    <div className="article-image max-w-4xl mx-auto px-4 md:px-6 py-8 md:py-12 relative z-20">
+                        <div className="relative aspect-[2/1] rounded-2xl overflow-hidden">
                             <Image
                                 src={article.image}
                                 alt={article.title}
@@ -233,51 +248,21 @@ export default function ArticlePage() {
                         </div>
                     </div>
 
-                    {/* Article Body */}
+                    {/* Article Body - Improved typography */}
                     <article className="article-content max-w-3xl mx-auto px-4 md:px-6 pb-16 md:pb-24 relative z-20">
                         <div
                             className="prose prose-lg prose-invert max-w-none
-                                prose-p:text-white/70 prose-p:leading-relaxed prose-p:mb-6
-                                prose-headings:text-white prose-headings:font-light
-                                prose-h2:text-2xl prose-h2:md:text-3xl prose-h2:mt-12 prose-h2:mb-6
-                                prose-h3:text-xl prose-h3:md:text-2xl prose-h3:mt-8 prose-h3:mb-4
+                                prose-p:text-white/70 prose-p:leading-[1.8] prose-p:mb-8 prose-p:text-[17px]
+                                prose-headings:text-white prose-headings:font-semibold prose-headings:tracking-tight
+                                prose-h2:text-2xl prose-h2:md:text-3xl prose-h2:mt-16 prose-h2:mb-6 prose-h2:pb-3 prose-h2:border-b prose-h2:border-white/10
+                                prose-h3:text-xl prose-h3:md:text-2xl prose-h3:mt-12 prose-h3:mb-5 prose-h3:text-[#4CBBD5]
                                 prose-strong:text-white prose-strong:font-semibold
                                 prose-a:text-[#4CBBD5] prose-a:no-underline hover:prose-a:underline
                                 prose-ul:text-white/70 prose-ol:text-white/70
-                                prose-li:mb-2
-                                prose-blockquote:border-l-[#4CBBD5] prose-blockquote:bg-white/5 prose-blockquote:py-4 prose-blockquote:px-6 prose-blockquote:rounded-r-lg prose-blockquote:not-italic prose-blockquote:text-white/60"
-                            dangerouslySetInnerHTML={{ __html: article.content.replace(/\n/g, '<br />') }}
+                                prose-li:mb-3 prose-li:leading-relaxed
+                                prose-blockquote:border-l-4 prose-blockquote:border-[#4CBBD5] prose-blockquote:bg-white/5 prose-blockquote:py-6 prose-blockquote:px-8 prose-blockquote:rounded-r-xl prose-blockquote:not-italic prose-blockquote:text-white/60 prose-blockquote:my-10"
+                            dangerouslySetInnerHTML={{ __html: article.content.replace(/\n\n/g, '</p><p class="mt-6">').replace(/\n/g, '<br />') }}
                         />
-
-                        {/* Share Again at Bottom */}
-                        <div className="mt-16 pt-8 border-t border-white/10">
-                            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                                <p className="text-white/40 text-sm">Cet article vous a plu ? Partagez-le !</p>
-                                <div className="flex items-center gap-2">
-                                    <button
-                                        onClick={() => handleShare("twitter")}
-                                        className="px-4 py-2 rounded-full bg-white/5 hover:bg-[#1DA1F2]/20 border border-white/10 hover:border-[#1DA1F2]/50 flex items-center gap-2 transition-all text-sm"
-                                    >
-                                        <Twitter className="w-4 h-4" />
-                                        <span className="text-white/70">Twitter</span>
-                                    </button>
-                                    <button
-                                        onClick={() => handleShare("facebook")}
-                                        className="px-4 py-2 rounded-full bg-white/5 hover:bg-[#4267B2]/20 border border-white/10 hover:border-[#4267B2]/50 flex items-center gap-2 transition-all text-sm"
-                                    >
-                                        <Facebook className="w-4 h-4" />
-                                        <span className="text-white/70">Facebook</span>
-                                    </button>
-                                    <button
-                                        onClick={() => handleShare("copy")}
-                                        className="px-4 py-2 rounded-full bg-white/5 hover:bg-[#4CBBD5]/20 border border-white/10 hover:border-[#4CBBD5]/50 flex items-center gap-2 transition-all text-sm"
-                                    >
-                                        <Link2 className="w-4 h-4" />
-                                        <span className="text-white/70">Copier</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
                     </article>
 
                     {/* Suggestions Section */}
