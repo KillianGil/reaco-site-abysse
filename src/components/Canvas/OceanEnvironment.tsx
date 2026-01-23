@@ -1,15 +1,23 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useRef, memo } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
+import { useScrollProgressRef } from "./Scene";
 
 interface OceanEnvironmentProps {
   scrollProgress: number;
 }
 
-export function OceanEnvironment({ scrollProgress }: OceanEnvironmentProps) {
+export const OceanEnvironment = memo(function OceanEnvironment({ }: OceanEnvironmentProps) {
   const { scene } = useThree();
+  const scrollProgressRef = useScrollProgressRef();
+
+  // Refs pour les lumières (évite les re-renders)
+  const ambientRef = useRef<THREE.AmbientLight>(null);
+  const sunRef = useRef<THREE.DirectionalLight>(null);
+  const fillRef = useRef<THREE.DirectionalLight>(null);
+  const bottomRef = useRef<THREE.DirectionalLight>(null);
 
   // ✅ COULEURS OCÉAN RÉALISTES avec vraie progression de profondeur
   const colors = useMemo(() => ({
@@ -28,7 +36,8 @@ export function OceanEnvironment({ scrollProgress }: OceanEnvironmentProps) {
   }, [scene, colors.surface]);
 
   useFrame(() => {
-    const t = Math.min(scrollProgress, 1);
+    const progress = scrollProgressRef.current;
+    const t = Math.min(progress, 1);
 
     // ✅ INTERPOLATION PAR ÉTAPES pour des transitions réalistes
     let bgColor;
@@ -68,16 +77,21 @@ export function OceanEnvironment({ scrollProgress }: OceanEnvironmentProps) {
       const fogCurve = Math.pow(t, 1.5); // Courbe exponentielle
       scene.fog.density = baseDensity + (maxDensity - baseDensity) * fogCurve;
     }
+
+    // ✅ Mise à jour des lumières via refs (pas de re-render)
+    if (ambientRef.current) {
+      ambientRef.current.intensity = Math.max(0.3, 0.8 * (1 - progress * 0.7));
+    }
+    if (sunRef.current) {
+      sunRef.current.intensity = Math.max(0, 1.5 * (1 - progress * 1.2));
+    }
+    if (fillRef.current) {
+      fillRef.current.intensity = Math.max(0, 0.6 * (1 - progress));
+    }
+    if (bottomRef.current) {
+      bottomRef.current.intensity = 0.2 * (1 - progress * 0.5);
+    }
   });
-
-  // Lumière ambiante qui diminue avec la profondeur
-  const ambientIntensity = Math.max(0.3, 0.8 * (1 - scrollProgress * 0.7));
-
-  // Lumière directionnelle (soleil) qui disparaît progressivement
-  const sunIntensity = Math.max(0, 1.5 * (1 - scrollProgress * 1.2));
-
-  // Lumière de remplissage légère (reflets de surface)
-  const fillIntensity = Math.max(0, 0.6 * (1 - scrollProgress));
 
   return (
     <>
@@ -85,28 +99,31 @@ export function OceanEnvironment({ scrollProgress }: OceanEnvironmentProps) {
       <fogExp2 attach="fog" args={["#2d9cbc", 0.003]} />
 
       {/* Lumière ambiante bleutée océanique */}
-      <ambientLight intensity={ambientIntensity} color="#5ba8c8" />
+      <ambientLight ref={ambientRef} intensity={0.8} color="#5ba8c8" />
 
       {/* Soleil (surface) - disparaît en profondeur */}
       <directionalLight
+        ref={sunRef}
         position={[15, 60, 25]}
-        intensity={sunIntensity}
+        intensity={1.5}
         color="#c8e8ff"
       />
 
       {/* Lumière de remplissage (reflets) */}
       <directionalLight
+        ref={fillRef}
         position={[-20, 40, 15]}
-        intensity={fillIntensity}
+        intensity={0.6}
         color="#88bbdd"
       />
 
       {/* Lumière douce d'en bas (diffusion) - très subtile */}
       <directionalLight
+        ref={bottomRef}
         position={[0, -30, 0]}
-        intensity={0.2 * (1 - scrollProgress * 0.5)}
+        intensity={0.2}
         color="#3a5f78"
       />
     </>
   );
-}
+});

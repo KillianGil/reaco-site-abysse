@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import Image from "next/image";
-import { AdminProvider, useAdmin, AdminLogin, AdminLayout } from "@/components/admin/AdminComponents";
+import { AdminProvider, useAdmin, AdminLogin, AdminLayout, SuccessModal } from "@/components/admin/AdminComponents";
 import { db } from "@/firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { Loader2, Upload, X, Check, AlertCircle, Calendar, Clock, FileText, Tag, Star, Save, ArrowLeft } from "lucide-react";
@@ -30,7 +30,6 @@ const categoryLabels: Record<ArticleCategory, string> = {
 };
 
 function EditArticleContent() {
-    const router = useRouter();
     const params = useParams();
     const articleId = params.id as string;
 
@@ -185,10 +184,6 @@ function EditArticleContent() {
             await updateDoc(doc(db, "articles", articleId), articleData);
 
             setSubmitSuccess(true);
-
-            setTimeout(() => {
-                router.push("/admin/articles");
-            }, 2000);
         } catch (error) {
             console.error("Erreur lors de la modification:", error);
             setSubmitError("Erreur lors de la modification. Veuillez réessayer.");
@@ -227,13 +222,19 @@ function EditArticleContent() {
                 Retour aux articles
             </Link>
 
-            {/* Success/Error Messages */}
-            {submitSuccess && (
-                <div className="mb-6 p-4 bg-emerald-500/20 border border-emerald-500/30 rounded-xl flex items-center gap-3">
-                    <Check className="w-5 h-5 text-emerald-400" />
-                    <span className="text-emerald-300">Article modifié avec succès ! Redirection...</span>
-                </div>
-            )}
+            {/* Success Modal */}
+            <SuccessModal
+                isOpen={submitSuccess}
+                onClose={() => setSubmitSuccess(false)}
+                title="Modifications enregistrées !"
+                message={`L'article "${form.titre}" a été mis à jour avec succès.`}
+                actions={[
+                    { label: "Voir le site", href: "/actualites", primary: false },
+                    { label: "Gérer les articles", href: "/admin/articles", primary: true },
+                ]}
+            />
+
+            {/* Error Messages */}
             {submitError && (
                 <div className="mb-6 p-4 bg-red-500/20 border border-red-500/30 rounded-xl flex items-center gap-3">
                     <AlertCircle className="w-5 h-5 text-red-400" />

@@ -1,16 +1,18 @@
 "use client";
 
-import { useRef, useEffect, useMemo } from "react";
+import { useRef, useEffect, useMemo, memo } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import * as THREE from "three";
+import { useScrollProgressRef } from "./Scene";
 
 interface JellyfishProps {
   scrollProgress: number;
   reducedMotion?: boolean;
 }
 
-export function Jellyfish({ scrollProgress, reducedMotion = false }: JellyfishProps) {
+export const Jellyfish = memo(function Jellyfish({ reducedMotion = false }: JellyfishProps) {
+  const scrollProgressRef = useScrollProgressRef();
   const { scene, animations } = useGLTF("/models/jellyfish2.glb", true);
   const { actions } = useAnimations(animations, scene);
   const groupRef = useRef<THREE.Group>(null);
@@ -68,12 +70,13 @@ export function Jellyfish({ scrollProgress, reducedMotion = false }: JellyfishPr
   useFrame((state) => {
     if (!groupRef.current) return;
 
-    const isVisibleRange = scrollProgress > START_SCROLL - 0.1 && scrollProgress < END_SCROLL + 0.1;
+    const progress = scrollProgressRef.current;
+    const isVisibleRange = progress > START_SCROLL - 0.1 && progress < END_SCROLL + 0.1;
 
     let targetOpacity = 0;
     if (isVisibleRange) {
-      const distFromStart = scrollProgress - (START_SCROLL - 0.1);
-      const distFromEnd = (END_SCROLL + 0.1) - scrollProgress;
+      const distFromStart = progress - (START_SCROLL - 0.1);
+      const distFromEnd = (END_SCROLL + 0.1) - progress;
       const fade = Math.min(distFromStart, distFromEnd) * 8;
       targetOpacity = Math.max(0, Math.min(1.0, fade));
     }
@@ -106,7 +109,7 @@ export function Jellyfish({ scrollProgress, reducedMotion = false }: JellyfishPr
     // Position de base
     const BASE_DEPTH = -70;
     const OFFSET_X = -25;
-    const cameraY = scrollProgress * 100;
+    const cameraY = progress * 100;
 
     // DÉPLACEMENT VERTICAL LENT - figé en mode calme
     const verticalCycle = reducedMotion ? 0 : Math.sin(t * 0.08) * 15;
@@ -148,6 +151,7 @@ export function Jellyfish({ scrollProgress, reducedMotion = false }: JellyfishPr
   useFrame((state) => {
     if (!secondRef.current) return;
 
+    const progress = scrollProgressRef.current;
     const realTime = state.clock.elapsedTime + 2.5; // Décalage de base
 
     // Détection du changement de mode pour reprise fluide
@@ -168,7 +172,7 @@ export function Jellyfish({ scrollProgress, reducedMotion = false }: JellyfishPr
 
     const BASE_DEPTH = -60;
     const OFFSET_X = 15;
-    const cameraY = scrollProgress * 100;
+    const cameraY = progress * 100;
 
     const verticalCycle = reducedMotion ? 0 : Math.sin(t * 0.07) * 18;
 
@@ -187,9 +191,7 @@ export function Jellyfish({ scrollProgress, reducedMotion = false }: JellyfishPr
     const baseScale = 1.6;
     secondRef.current.scale.set(baseScale - squish, baseScale + squish, baseScale - squish);
 
-    const START_SCROLL = 0.6;
-    const END_SCROLL = 0.95;
-    const isVisibleRange = scrollProgress > START_SCROLL - 0.1 && scrollProgress < END_SCROLL + 0.1;
+    const isVisibleRange = progress > START_SCROLL - 0.1 && progress < END_SCROLL + 0.1;
     secondRef.current.visible = isVisibleRange;
   });
 
@@ -204,6 +206,6 @@ export function Jellyfish({ scrollProgress, reducedMotion = false }: JellyfishPr
       </group>
     </>
   );
-}
+});
 
 useGLTF.preload("/models/jellyfish2.glb", true);

@@ -3,7 +3,7 @@
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { AdminProvider, useAdmin, AdminLogin, AdminLayout } from "@/components/admin/AdminComponents";
+import { AdminProvider, useAdmin, AdminLogin, AdminLayout, SuccessModal } from "@/components/admin/AdminComponents";
 import { db } from "@/firebase";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { Loader2, Upload, X, Check, AlertCircle, Calendar, Clock, FileText, Tag, Star, Send } from "lucide-react";
@@ -146,11 +146,6 @@ function NewArticleContent() {
             await addDoc(collection(db, "articles"), articleData);
 
             setSubmitSuccess(true);
-
-            // Redirect after 2 seconds
-            setTimeout(() => {
-                router.push("/admin/articles");
-            }, 2000);
         } catch (error) {
             console.error("Erreur lors de l'ajout:", error);
             setSubmitError("Erreur lors de l'ajout de l'article. Veuillez réessayer.");
@@ -161,13 +156,19 @@ function NewArticleContent() {
 
     return (
         <div className="max-w-4xl">
-            {/* Success/Error Messages */}
-            {submitSuccess && (
-                <div className="mb-6 p-4 bg-emerald-500/20 border border-emerald-500/30 rounded-xl flex items-center gap-3">
-                    <Check className="w-5 h-5 text-emerald-400" />
-                    <span className="text-emerald-300">Article ajouté avec succès ! Redirection...</span>
-                </div>
-            )}
+            {/* Success Modal */}
+            <SuccessModal
+                isOpen={submitSuccess}
+                onClose={() => setSubmitSuccess(false)}
+                title="Article publié !"
+                message={`L'article "${form.titre}" a été publié avec succès.`}
+                actions={[
+                    { label: "Voir le site", href: "/actualites", primary: false },
+                    { label: "Gérer les articles", href: "/admin/articles", primary: true },
+                ]}
+            />
+
+            {/* Error Messages */}
             {submitError && (
                 <div className="mb-6 p-4 bg-red-500/20 border border-red-500/30 rounded-xl flex items-center gap-3">
                     <AlertCircle className="w-5 h-5 text-red-400" />

@@ -5,6 +5,7 @@ import { useRef, useEffect, useMemo, memo, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import * as THREE from "three";
+import { useScrollProgressRef } from "./Scene";
 
 // ✅ Composant Modèle (Memoized pour éviter les re-renders et restart d'animation)
 const SubmarineModel = memo(() => {
@@ -56,7 +57,8 @@ interface SubmarineProps {
   scrollProgress: number;
 }
 
-export function Submarine({ scrollProgress }: SubmarineProps) {
+export const Submarine = memo(function Submarine({ }: SubmarineProps) {
+  const scrollProgressRef = useScrollProgressRef();
   const groupRef = useRef<THREE.Group>(null);
   const innerGroupRef = useRef<THREE.Group>(null);
   const initialized = useRef(false);
@@ -165,6 +167,7 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
     if (!groupRef.current || !innerGroupRef.current) return;
 
     const time = state.clock.elapsedTime;
+    const progress = scrollProgressRef.current;
 
     if (!initialized.current && time < 1) {
       groupRef.current.position.set(0, 2, -60);
@@ -180,8 +183,8 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
 
     for (let i = 0; i < keyframes.length - 1; i++) {
       if (
-        scrollProgress >= keyframes[i].progress &&
-        scrollProgress <= keyframes[i + 1].progress
+        progress >= keyframes[i].progress &&
+        progress <= keyframes[i + 1].progress
       ) {
         start = keyframes[i];
         end = keyframes[i + 1];
@@ -193,7 +196,7 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
     const t =
       segmentDuration > 0
         ? THREE.MathUtils.clamp(
-          (scrollProgress - start.progress) / segmentDuration,
+          (progress - start.progress) / segmentDuration,
           0,
           1
         )
@@ -212,7 +215,7 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
     const targetFacing = THREE.MathUtils.lerp(start.facing, end.facing, easeT);
     const targetScale = THREE.MathUtils.lerp(start.scale || 1, end.scale || 1, easeT);
 
-    const inertia = scrollProgress < 0.1 ? 0.03 : 0.05;
+    const inertia = progress < 0.1 ? 0.03 : 0.05;
     current.current.x += (targetX - current.current.x) * inertia;
     current.current.y += (targetY - current.current.y) * inertia;
     current.current.z += (targetZ - current.current.z) * inertia;
@@ -222,7 +225,7 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
     current.current.facing += (targetFacing - current.current.facing) * inertia;
     current.current.scale += (targetScale - current.current.scale) * inertia;
 
-    const idleIntensity = Math.max(0, 1 - scrollProgress * 2);
+    const idleIntensity = Math.max(0, 1 - progress * 2);
     const floatX = Math.sin(time * 0.12) * (0.08 + idleIntensity * 0.25);
     const floatY = Math.sin(time * 0.18) * (0.1 + idleIntensity * 0.3);
     const floatZ = Math.sin(time * 0.1) * idleIntensity * 0.4;
@@ -288,7 +291,7 @@ export function Submarine({ scrollProgress }: SubmarineProps) {
       </group>
     </>
   );
-}
+});
 
 // ✅ Preload le modèle
 useGLTF.preload("/models/submarinetest.glb", true);
