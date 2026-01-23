@@ -24,10 +24,22 @@ export default function PartenairesPage() {
                         trigger: header,
                         start: "top 85%"
                     },
-                    x: -100,
+                    x: -50,
                     opacity: 0,
-                    duration: 1,
+                    duration: 0.8,
                     ease: "power3.out"
+                });
+            });
+
+            // Institution items stagger animation
+            gsap.utils.toArray<HTMLElement>(".institution-item").forEach((item, i) => {
+                gsap.from(item, {
+                    scrollTrigger: { trigger: item, start: "top 90%" },
+                    x: -30,
+                    opacity: 0,
+                    duration: 0.6,
+                    delay: i * 0.1,
+                    ease: "power2.out"
                 });
             });
 
@@ -35,11 +47,11 @@ export default function PartenairesPage() {
             gsap.utils.toArray<HTMLElement>(".hex-item").forEach((hex, i) => {
                 gsap.from(hex, {
                     scrollTrigger: { trigger: hex, start: "top 85%" },
-                    scale: 0,
+                    scale: 0.8,
                     opacity: 0,
-                    duration: 0.8,
-                    delay: i * 0.1,
-                    ease: "back.out(1.5)"
+                    duration: 0.7,
+                    delay: i * 0.12,
+                    ease: "back.out(1.2)"
                 });
             });
 
@@ -49,6 +61,27 @@ export default function PartenairesPage() {
                 width: 0,
                 duration: 1.5,
                 ease: "power2.inOut"
+            });
+
+            // Industry cards animation
+            gsap.utils.toArray<HTMLElement>(".industry-card").forEach((card, i) => {
+                gsap.from(card, {
+                    scrollTrigger: { trigger: card, start: "top 85%" },
+                    y: 30,
+                    opacity: 0,
+                    duration: 0.6,
+                    delay: i * 0.1,
+                    ease: "power2.out"
+                });
+            });
+
+            // CTA section
+            gsap.from(".cta-section", {
+                scrollTrigger: { trigger: ".cta-section", start: "top 85%" },
+                y: 40,
+                opacity: 0,
+                duration: 0.8,
+                ease: "power2.out"
             });
 
         }, containerRef);
@@ -129,7 +162,7 @@ export default function PartenairesPage() {
                         {institutions.map((inst, i) => (
                             <div
                                 key={i}
-                                className="group relative border-b border-white/10 py-6 md:py-8 cursor-pointer transition-all duration-500 hover:border-[#4CBBD5] hover:pl-4"
+                                className="institution-item group relative border-b border-white/10 py-6 md:py-8 cursor-pointer transition-all duration-500 hover:border-[#4CBBD5] hover:pl-4"
                             >
                                 <div className="flex flex-col md:flex-row md:items-center justify-between relative z-10 gap-2 md:gap-4">
                                     <div className="flex flex-col md:flex-row md:items-baseline gap-1 md:gap-6">

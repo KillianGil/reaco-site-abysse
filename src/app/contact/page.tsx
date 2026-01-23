@@ -63,23 +63,53 @@ export default function ContactPage() {
                 ease: "power3.out"
             });
 
-            gsap.fromTo(".contact-block",
-                { y: 30, opacity: 0 },
-                {
-                    y: 0,
-                    opacity: 1,
-                    duration: 0.6,
-                    delay: 0.2,
+            // Contact blocks with stagger
+            gsap.utils.toArray<HTMLElement>(".contact-block").forEach((block, i) => {
+                gsap.from(block, {
+                    y: 30,
+                    opacity: 0,
+                    duration: 0.5,
+                    delay: 0.2 + i * 0.1,
                     ease: "power2.out"
-                }
-            );
+                });
+            });
 
             gsap.from(".form-container", {
-                y: 80,
+                y: 60,
                 opacity: 0,
-                duration: 1,
-                delay: 0.6,
+                duration: 0.8,
+                delay: 0.4,
                 ease: "power3.out"
+            });
+
+            // Map container animation
+            gsap.from(".map-container", {
+                x: 50,
+                opacity: 0,
+                duration: 0.8,
+                delay: 0.5,
+                ease: "power3.out"
+            });
+
+            // FAQ section header
+            gsap.from(".faq-header", {
+                scrollTrigger: { trigger: ".faq-header", start: "top 85%" },
+                y: 30,
+                opacity: 0,
+                duration: 0.7,
+                ease: "power2.out"
+            });
+
+            // FAQ items with stagger
+            gsap.utils.toArray<HTMLElement>(".faq-item").forEach((item, i) => {
+                gsap.from(item, {
+                    scrollTrigger: { trigger: item, start: "top 90%" },
+                    y: 25,
+                    opacity: 0,
+                    duration: 0.5,
+                    delay: i * 0.08,
+                    ease: "power2.out"
+                });
             });
         }, containerRef);
 
@@ -350,7 +380,7 @@ export default function ContactPage() {
                     </div>
 
                     {/* Map Container - Right Side */}
-                    <div className="hidden lg:block relative rounded-3xl overflow-hidden border border-white/10 min-h-[500px]">
+                    <div className="map-container hidden lg:block relative rounded-3xl overflow-hidden border border-white/10 min-h-[500px]">
                         {/* Google Maps Embed */}
                         <iframe
                             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2904.8538848853583!2d5.928!3d43.1167!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12c9c1234567890%3A0x1234567890abcdef!2sPort%20de%20Toulon!5e0!3m2!1sfr!2sfr!4v1234567890123!5m2!1sfr!2sfr"
@@ -385,7 +415,7 @@ export default function ContactPage() {
 
             {/* FAQ Section */}
             <section className="max-w-4xl mx-auto px-4 md:px-6 pb-16 md:pb-24 relative z-10">
-                <div className="text-center mb-10 md:mb-12">
+                <div className="faq-header text-center mb-10 md:mb-12">
                     <div className="inline-flex items-center gap-2 mb-4">
                         <HelpCircle className="w-5 h-5 text-[#4CBBD5]" />
                         <span className="text-[#4CBBD5] text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase">FAQ</span>
@@ -400,7 +430,7 @@ export default function ContactPage() {
                     {faqData.map((faq, index) => (
                         <div
                             key={index}
-                            className="group relative bg-gradient-to-br from-white/5 to-transparent border border-white/10 hover:border-[#4CBBD5]/30 rounded-2xl overflow-hidden transition-all duration-300"
+                            className="faq-item group relative bg-gradient-to-br from-white/5 to-transparent border border-white/10 hover:border-[#4CBBD5]/30 rounded-2xl overflow-hidden transition-all duration-300"
                         >
                             <button
                                 onClick={() => setOpenFaq(openFaq === index ? null : index)}

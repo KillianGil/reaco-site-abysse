@@ -32,10 +32,10 @@ export default function ExpositionsPage() {
             gsap.utils.toArray<HTMLElement>(".zone-1-card").forEach((card, i) => {
                 gsap.from(card, {
                     scrollTrigger: { trigger: card, start: "top 85%" },
-                    y: 60,
+                    y: 40,
                     opacity: 0,
-                    duration: 0.8,
-                    delay: i * 0.15,
+                    duration: 0.5,
+                    delay: i * 0.08,
                     ease: "power2.out"
                 });
             });
