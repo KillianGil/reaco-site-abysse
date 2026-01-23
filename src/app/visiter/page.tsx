@@ -4,7 +4,7 @@ import { Navbar, Footer } from "@/components/UI";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Anchor, Ship, Globe, Microscope, Radio, Database, ShieldAlert, Fish, Droplets } from "lucide-react";
+import { Anchor, Ship, Globe, Microscope, Radio, Database, ShieldAlert, Fish } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -191,68 +191,65 @@ export default function ExpositionsPage() {
                     </div>
                 </section>
 
-                {/* ZONE 2: BIODIVERSITÉ & ABYSSES */}
-                <section className="px-4 md:px-20 max-w-7xl mx-auto w-full relative py-8 md:py-12">
-                    {/* Organic wave decoration */}
+                {/* ZONE 2: BIODIVERSITÉ - Design immersif bioluminescent */}
+                <section className="relative py-16 md:py-24 overflow-hidden">
+                    {/* Background atmosphérique */}
+                    <div className="absolute inset-0 bg-[#020A19]" />
+                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_#4CBBD5/8_0%,_transparent_70%)]" />
 
-
-                    <div className="section-header mb-10 md:mb-16 relative z-10 text-left md:text-right">
-                        <span className="text-[#4CBBD5] text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase block mb-3 md:mb-4">02. BIODIVERSITÉ</span>
-                        <h3 className="text-3xl md:text-5xl font-light uppercase">
-                            Merveilles des Profondeurs
-                        </h3>
-                        <div className="h-1 w-16 md:w-24 bg-gradient-to-r md:bg-gradient-to-l from-[#4CBBD5] to-transparent mt-3 md:mt-4 md:ml-auto" />
-                        <p className="mt-4 md:mt-6 text-white/60 max-w-xl md:ml-auto leading-relaxed text-sm md:text-base font-light">
-                            Là où la lumière du soleil ne parvient plus, un monde extraordinaire s&apos;éveille.
-                            Des créatures bioluminescentes aux écosystèmes des sources hydrothermales,
-                            découvrez la vie qui défie l&apos;impossible.
-                        </p>
+                    {/* Particules bioluminescentes */}
+                    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                        <div className="bio-particle absolute top-[20%] left-[10%] w-2 h-2 bg-[#4CBBD5] rounded-full blur-[2px] opacity-60" />
+                        <div className="bio-particle absolute top-[40%] left-[25%] w-1 h-1 bg-cyan-300 rounded-full blur-[1px] opacity-40" />
+                        <div className="bio-particle absolute top-[60%] left-[15%] w-1.5 h-1.5 bg-[#4CBBD5] rounded-full blur-[2px] opacity-50" />
+                        <div className="bio-particle absolute top-[30%] right-[20%] w-2 h-2 bg-emerald-400 rounded-full blur-[2px] opacity-40" />
+                        <div className="bio-particle absolute top-[70%] right-[10%] w-1 h-1 bg-[#4CBBD5] rounded-full blur-[1px] opacity-60" />
+                        <div className="bio-particle absolute top-[50%] right-[30%] w-1.5 h-1.5 bg-cyan-200 rounded-full blur-[2px] opacity-30" />
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-                        {[
-                            {
-                                icon: Microscope,
-                                title: "10 000 mètres de vie",
-                                subtitle: "L'EXPÉDITION GALATHÉA",
-                                desc: "En 1951, le navire danois Galathéa a prouvé l'impossible : la vie foisonne même au plus profond des abysses. Une découverte qui a bouleversé la science.",
-                                detail: "1951"
-                            },
-                            {
-                                icon: Droplets,
-                                title: "Pharmacie des Océans",
-                                subtitle: "MOLECULES RARES",
-                                desc: "Pour survivre dans le noir absolu, les organismes abyssaux ont développé une chimie unique. Ces molécules sont aujourd'hui l'espoir de la médecine de demain.",
-                                detail: "Recherche"
-                            },
-                            {
-                                icon: Fish,
-                                title: "Écosystèmes Fragiles",
-                                subtitle: "PRÉSERVATION",
-                                desc: "Isolés depuis des millénaires, ces mondes sont d'une fragilité extrême face à l'exploitation minière et au changement climatique. Les protéger est vital.",
-                                detail: "Urgence"
-                            }
-                        ].map((card, i) => (
-                            <div key={i} className="group flex flex-col items-start gap-4">
-                                {/* Minimalist Icon */}
-                                <div className="w-12 h-12 flex items-center justify-center rounded-full bg-[#4CBBD5]/10 text-[#4CBBD5] group-hover:bg-[#4CBBD5] group-hover:text-[#020A19] transition-all duration-300">
-                                    <card.icon className="w-6 h-6" strokeWidth={2} />
-                                </div>
+                    <div className="relative z-10 px-4 md:px-12 max-w-7xl mx-auto">
+                        {/* Header centré */}
+                        <div className="text-center mb-12 md:mb-20">
+                            <span className="text-[#4CBBD5] text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase">02. BIODIVERSITÉ</span>
+                            <h3 className="text-4xl md:text-6xl lg:text-7xl font-light mt-4 mb-6">
+                                La Vie dans le <span className="text-[#4CBBD5]">Noir</span>
+                            </h3>
+                            <p className="text-white/50 max-w-lg mx-auto text-sm md:text-base">
+                                À 10 000 mètres, là où règne l&apos;obscurité absolue, la vie invente ses propres règles.
+                            </p>
+                        </div>
 
-                                <div className="space-y-2">
-                                    <span className="text-[10px] font-bold tracking-widest text-white/40 uppercase">{card.subtitle}</span>
-                                    <h3 className="text-xl md:text-2xl font-bold text-white leading-tight group-hover:text-[#4CBBD5] transition-colors">{card.title}</h3>
-                                    <p className="text-sm text-white/60 leading-relaxed max-w-sm">{card.desc}</p>
+                        {/* Bento Grid asymétrique */}
+                        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6">
+                            {/* Grande carte - Bioluminescence */}
+                            <div className="md:col-span-7 group relative bg-gradient-to-br from-[#4CBBD5]/10 to-transparent rounded-3xl p-8 md:p-10 border border-[#4CBBD5]/20 hover:border-[#4CBBD5]/40 transition-all duration-500 overflow-hidden min-h-[280px] flex flex-col justify-end">
+                                <div className="absolute top-6 right-6 w-24 h-24 md:w-32 md:h-32 bg-[#4CBBD5]/20 rounded-full blur-[40px] group-hover:bg-[#4CBBD5]/30 transition-all duration-700" />
+                                <div className="absolute top-10 right-10 w-12 h-12 md:w-16 md:h-16 bg-cyan-300/30 rounded-full blur-[20px] animate-pulse" />
+
+                                <div className="relative z-10">
+                                    <span className="text-[10px] font-bold tracking-[0.2em] text-[#4CBBD5]/70 uppercase">Phénomène</span>
+                                    <h4 className="text-2xl md:text-3xl font-bold text-white mt-2 mb-3">Bioluminescence</h4>
+                                    <p className="text-white/60 text-sm max-w-md">90% des créatures abyssales produisent leur propre lumière pour chasser, communiquer ou se défendre.</p>
                                 </div>
                             </div>
-                        ))}
-                    </div>
 
-                    {/* Quote */}
-                    <div className="mt-12 md:mt-16 text-center">
-                        <blockquote className="text-lg md:text-xl text-white/40 font-serif italic max-w-2xl mx-auto">
-                            « L&apos;océan profond est le dernier territoire sauvage de notre planète. »
-                        </blockquote>
+                            {/* Colonne droite - 2 cartes empilées */}
+                            <div className="md:col-span-5 flex flex-col gap-4 md:gap-6">
+                                {/* Stat card */}
+                                <div className="group relative bg-white/[0.03] rounded-2xl p-6 border border-white/10 hover:border-emerald-500/30 transition-all duration-300 flex-1">
+                                    <Microscope className="w-8 h-8 text-emerald-400 mb-4 opacity-80" />
+                                    <div className="text-4xl md:text-5xl font-mono font-bold text-emerald-400 mb-2">1951</div>
+                                    <p className="text-white/50 text-sm">Expédition Galathéa : première preuve de vie au fond des fosses.</p>
+                                </div>
+
+                                {/* Fact card */}
+                                <div className="group relative bg-white/[0.03] rounded-2xl p-6 border border-white/10 hover:border-amber-500/30 transition-all duration-300 flex-1">
+                                    <Fish className="w-8 h-8 text-amber-400 mb-4 opacity-80" />
+                                    <div className="text-4xl md:text-5xl font-mono font-bold text-amber-400 mb-2">90%</div>
+                                    <p className="text-white/50 text-sm">Des océans restent inexplorés. Un monde à découvrir.</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </section>
 
