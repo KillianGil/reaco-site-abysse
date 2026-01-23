@@ -215,80 +215,53 @@ export default function ExpositionsPage() {
                         </div>
 
                         {/* Right: Content */}
-                        <div className="w-full lg:w-2/3 space-y-6">
-                            {/* Bioluminescence - carte principale */}
-                            <div className="group relative bg-[#031525] border border-white/10 hover:border-[#4CBBD5] transition-all duration-500 rounded-xl overflow-hidden">
+                        <div className="w-full lg:w-2/3 space-y-4">
+                            {/* Carte 1 - Spécimens */}
+                            <div className="group relative bg-[#031525] border border-white/10 hover:border-[#4CBBD5] transition-all duration-500 p-6 rounded-xl overflow-hidden">
                                 <div className="absolute inset-0 bg-gradient-to-r from-[#4CBBD5]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                                <div className="p-6 md:p-8 relative z-10">
-                                    <div className="flex items-start gap-4 mb-4">
-                                        <div className="w-12 h-12 bg-[#4CBBD5]/10 rounded-full flex items-center justify-center shrink-0">
-                                            <div className="w-6 h-6 rounded-full bg-[#4CBBD5] blur-[4px] animate-pulse" />
-                                        </div>
-                                        <div className="flex-1">
-                                            <span className="text-[9px] md:text-[10px] text-[#4CBBD5]/60 uppercase tracking-wider font-bold block mb-1">Adaptation</span>
-                                            <h4 className="text-xl md:text-2xl font-bold text-white group-hover:text-[#4CBBD5] transition-colors">Bioluminescence</h4>
-                                        </div>
+                                <div className="flex items-start gap-4 relative z-10">
+                                    <div className="w-12 h-12 bg-[#4CBBD5]/10 rounded-full flex items-center justify-center shrink-0 group-hover:bg-[#4CBBD5]/20 transition-colors">
+                                        <Fish className="w-6 h-6 text-[#4CBBD5]" strokeWidth={1.5} />
                                     </div>
-
-                                    <p className="text-white/70 text-sm md:text-base leading-relaxed mb-6">
-                                        90% des créatures abyssales produisent leur propre lumière. Dans un monde sans soleil,
-                                        elles ont inventé leur propre source d&apos;éclairage pour communiquer, chasser et se défendre.
-                                    </p>
-
-                                    <div className="grid grid-cols-3 gap-4 pt-4 border-t border-white/5">
-                                        <div className="text-center">
-                                            <div className="w-2 h-2 rounded-full bg-[#4CBBD5] mx-auto mb-2 blur-[1px]" />
-                                            <span className="text-[10px] text-white/50 uppercase tracking-wide">Communication</span>
-                                        </div>
-                                        <div className="text-center">
-                                            <div className="w-2 h-2 rounded-full bg-[#4CBBD5] mx-auto mb-2 blur-[1px]" />
-                                            <span className="text-[10px] text-white/50 uppercase tracking-wide">Chasse</span>
-                                        </div>
-                                        <div className="text-center">
-                                            <div className="w-2 h-2 rounded-full bg-[#4CBBD5] mx-auto mb-2 blur-[1px]" />
-                                            <span className="text-[10px] text-white/50 uppercase tracking-wide">Défense</span>
-                                        </div>
+                                    <div className="flex-1">
+                                        <h4 className="text-lg md:text-xl font-bold text-white mb-2 group-hover:text-[#4CBBD5] transition-colors">Spécimens Abyssaux</h4>
+                                        <p className="text-white/70 text-sm md:text-base leading-relaxed">
+                                            Collection de créatures des grands fonds : méduses bioluminescentes, poissons des abysses, organismes extrêmophiles prélevés lors d&apos;expéditions scientifiques.
+                                        </p>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Deux cartes statistiques */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {/* Expédition Galathéa */}
-                                <div className="group relative bg-[#031525] border border-white/10 hover:border-[#4CBBD5] transition-all duration-500 p-6 rounded-xl">
-                                    <div className="absolute inset-0 bg-gradient-to-r from-[#4CBBD5]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                            {/* Carte 2 - Écosystèmes */}
+                            <div className="group relative bg-[#031525] border border-white/10 hover:border-[#4CBBD5] transition-all duration-500 p-6 rounded-xl overflow-hidden">
+                                <div className="absolute inset-0 bg-gradient-to-r from-[#4CBBD5]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                                    <div className="relative z-10">
-                                        <Microscope className="w-8 h-8 text-[#4CBBD5] mb-4 opacity-70 group-hover:opacity-100 transition-opacity" strokeWidth={1.5} />
-
-                                        <div className="mb-3">
-                                            <div className="text-4xl md:text-5xl font-mono font-bold text-[#4CBBD5] mb-1">1951</div>
-                                            <div className="h-px w-12 bg-[#4CBBD5]/30" />
-                                        </div>
-
-                                        <h5 className="text-base md:text-lg font-bold text-white mb-2">Expédition Galathéa</h5>
-                                        <p className="text-white/60 text-xs md:text-sm leading-relaxed">
-                                            Première preuve de vie au fond des fosses océaniques.
+                                <div className="flex items-start gap-4 relative z-10">
+                                    <div className="w-12 h-12 bg-[#4CBBD5]/10 rounded-full flex items-center justify-center shrink-0 group-hover:bg-[#4CBBD5]/20 transition-colors">
+                                        <Globe className="w-6 h-6 text-[#4CBBD5]" strokeWidth={1.5} />
+                                    </div>
+                                    <div className="flex-1">
+                                        <h4 className="text-lg md:text-xl font-bold text-white mb-2 group-hover:text-[#4CBBD5] transition-colors">Zones de Profondeur</h4>
+                                        <p className="text-white/70 text-sm md:text-base leading-relaxed">
+                                            Voyage à travers les strates océaniques : de la zone photique éclairée aux abysses hadales à 11 000 m. Chaque profondeur révèle son propre écosystème.
                                         </p>
                                     </div>
                                 </div>
+                            </div>
 
-                                {/* Océans inexplorés */}
-                                <div className="group relative bg-[#031525] border border-white/10 hover:border-[#4CBBD5] transition-all duration-500 p-6 rounded-xl">
-                                    <div className="absolute inset-0 bg-gradient-to-r from-[#4CBBD5]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                            {/* Carte 3 - Adaptations */}
+                            <div className="group relative bg-[#031525] border border-white/10 hover:border-[#4CBBD5] transition-all duration-500 p-6 rounded-xl overflow-hidden">
+                                <div className="absolute inset-0 bg-gradient-to-r from-[#4CBBD5]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                                    <div className="relative z-10">
-                                        <Fish className="w-8 h-8 text-[#4CBBD5] mb-4 opacity-70 group-hover:opacity-100 transition-opacity" strokeWidth={1.5} />
-
-                                        <div className="mb-3">
-                                            <div className="text-4xl md:text-5xl font-mono font-bold text-[#4CBBD5] mb-1">90%</div>
-                                            <div className="h-px w-12 bg-[#4CBBD5]/30" />
-                                        </div>
-
-                                        <h5 className="text-base md:text-lg font-bold text-white mb-2">Océans Inexplorés</h5>
-                                        <p className="text-white/60 text-xs md:text-sm leading-relaxed">
-                                            Des océans restent à découvrir. Un monde parallèle sous nos pieds.
+                                <div className="flex items-start gap-4 relative z-10">
+                                    <div className="w-12 h-12 bg-[#4CBBD5]/10 rounded-full flex items-center justify-center shrink-0 group-hover:bg-[#4CBBD5]/20 transition-colors">
+                                        <div className="w-6 h-6 rounded-full bg-[#4CBBD5] blur-[4px] animate-pulse" />
+                                    </div>
+                                    <div className="flex-1">
+                                        <h4 className="text-lg md:text-xl font-bold text-white mb-2 group-hover:text-[#4CBBD5] transition-colors">Adaptations Extrêmes</h4>
+                                        <p className="text-white/70 text-sm md:text-base leading-relaxed">
+                                            Découvrez comment la vie défie l&apos;impossible : bioluminescence, résistance à 1 100 bars de pression, gigantisme abyssal, métabolisme ralenti.
                                         </p>
                                     </div>
                                 </div>
