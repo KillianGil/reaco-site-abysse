@@ -3,15 +3,14 @@
 import { useState, createContext, useContext, ReactNode, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Lock, Eye, EyeOff, AlertCircle, Home, FileText, PlusCircle, LayoutDashboard, LogOut, CheckCircle, X } from "lucide-react";
+import { Lock, Eye, EyeOff, AlertCircle, Home, FileText, PlusCircle, LayoutDashboard, LogOut, CheckCircle, X, Loader2 } from "lucide-react";
 
-const ADMIN_PASSWORD = "AbysseSuperMusee2026";
 const SESSION_KEY = "abysse_admin_session";
 
 // Context pour l'authentification admin
 interface AdminContextType {
     isAuthenticated: boolean;
-    login: (password: string) => boolean;
+    login: (password: string) => Promise<boolean>;
     logout: () => void;
 }
 
@@ -38,13 +37,25 @@ export function AdminProvider({ children }: { children: ReactNode }) {
         setIsLoading(false);
     }, []);
 
-    const login = (password: string): boolean => {
-        if (password === ADMIN_PASSWORD) {
-            setIsAuthenticated(true);
-            sessionStorage.setItem(SESSION_KEY, "authenticated");
-            return true;
+    const login = async (password: string): Promise<boolean> => {
+        try {
+            const response = await fetch("/api/auth/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ password }),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                setIsAuthenticated(true);
+                sessionStorage.setItem(SESSION_KEY, "authenticated");
+                return true;
+            }
+            return false;
+        } catch {
+            return false;
         }
-        return false;
     };
 
     const logout = () => {
@@ -152,12 +163,19 @@ export function AdminLogin() {
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
+    const [isLoggingIn, setIsLoggingIn] = useState(false);
 
-    const handleLogin = (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!login(password)) {
+        setIsLoggingIn(true);
+        setPasswordError(false);
+
+        const success = await login(password);
+
+        if (!success) {
             setPasswordError(true);
         }
+        setIsLoggingIn(false);
     };
 
     return (
@@ -209,9 +227,17 @@ export function AdminLogin() {
 
                     <button
                         type="submit"
-                        className="w-full bg-[#4CBBD5] hover:bg-[#5DCCE6] text-[#020A19] font-semibold py-3 rounded-xl transition-colors"
+                        disabled={isLoggingIn}
+                        className="w-full bg-[#4CBBD5] hover:bg-[#5DCCE6] disabled:bg-[#4CBBD5]/50 text-[#020A19] font-semibold py-3 rounded-xl transition-colors flex items-center justify-center gap-2"
                     >
-                        Se connecter
+                        {isLoggingIn ? (
+                            <>
+                                <Loader2 className="w-5 h-5 animate-spin" />
+                                Connexion...
+                            </>
+                        ) : (
+                            "Se connecter"
+                        )}
                     </button>
                 </form>
 
