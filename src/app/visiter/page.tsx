@@ -4,7 +4,7 @@ import { Navbar, Footer } from "@/components/UI";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Anchor, Ship, Globe, Radio, Database, ShieldAlert, Fish } from "lucide-react";
+import { Anchor, Ship, Globe, Radio, Database, ShieldAlert } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
