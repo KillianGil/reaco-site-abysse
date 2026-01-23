@@ -191,62 +191,151 @@ export default function ExpositionsPage() {
                     </div>
                 </section>
 
-                {/* ZONE 2: BIODIVERSITÉ - Design immersif bioluminescent */}
-                <section className="relative py-16 md:py-24 overflow-hidden">
-                    {/* Background atmosphérique */}
-                    <div className="absolute inset-0 bg-[#020A19]" />
-                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_#4CBBD5/8_0%,_transparent_70%)]" />
+                {/* ZONE 2: BIODIVERSITÉ - Design organique bioluminescent */}
+                <section className="relative py-20 md:py-32 overflow-hidden">
+                    {/* Background océan profond avec gradient complexe */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-[#041C30] via-[#01060D] to-[#041C30]" />
 
-                    {/* Particules bioluminescentes */}
+                    {/* Effet de lumière radiale centrale */}
+                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_40%,rgba(76,187,213,0.15),transparent)]" />
+
+                    {/* Particules bioluminescentes améliorées */}
                     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                        <div className="bio-particle absolute top-[20%] left-[10%] w-2 h-2 bg-[#4CBBD5] rounded-full blur-[2px] opacity-60" />
-                        <div className="bio-particle absolute top-[40%] left-[25%] w-1 h-1 bg-cyan-300 rounded-full blur-[1px] opacity-40" />
-                        <div className="bio-particle absolute top-[60%] left-[15%] w-1.5 h-1.5 bg-[#4CBBD5] rounded-full blur-[2px] opacity-50" />
-                        <div className="bio-particle absolute top-[30%] right-[20%] w-2 h-2 bg-emerald-400 rounded-full blur-[2px] opacity-40" />
-                        <div className="bio-particle absolute top-[70%] right-[10%] w-1 h-1 bg-[#4CBBD5] rounded-full blur-[1px] opacity-60" />
-                        <div className="bio-particle absolute top-[50%] right-[30%] w-1.5 h-1.5 bg-cyan-200 rounded-full blur-[2px] opacity-30" />
+                        {/* Grandes méduses lumineuses */}
+                        <div className="bio-particle absolute top-[15%] left-[8%] w-16 h-16 bg-[#4CBBD5]/20 rounded-full blur-[30px] opacity-70" />
+                        <div className="bio-particle absolute top-[45%] right-[12%] w-20 h-20 bg-emerald-400/15 rounded-full blur-[35px] opacity-60" />
+                        <div className="bio-particle absolute bottom-[25%] left-[15%] w-14 h-14 bg-violet-400/20 rounded-full blur-[25px] opacity-50" />
+
+                        {/* Petites particules scintillantes */}
+                        <div className="bio-particle absolute top-[25%] left-[20%] w-1 h-1 bg-cyan-300 rounded-full blur-[1px] opacity-80" />
+                        <div className="bio-particle absolute top-[60%] left-[30%] w-1.5 h-1.5 bg-[#4CBBD5] rounded-full blur-[1px] opacity-70" />
+                        <div className="bio-particle absolute top-[35%] right-[25%] w-1 h-1 bg-emerald-300 rounded-full blur-[1px] opacity-60" />
+                        <div className="bio-particle absolute bottom-[40%] right-[35%] w-2 h-2 bg-violet-300 rounded-full blur-[2px] opacity-50" />
+                        <div className="bio-particle absolute top-[70%] left-[40%] w-1 h-1 bg-cyan-400 rounded-full opacity-90" />
+                        <div className="bio-particle absolute top-[50%] right-[45%] w-1.5 h-1.5 bg-[#4CBBD5] rounded-full opacity-70" />
                     </div>
 
-                    <div className="relative z-10 px-4 md:px-12 max-w-7xl mx-auto">
-                        {/* Header centré */}
-                        <div className="text-center mb-12 md:mb-20">
-                            <span className="text-[#4CBBD5] text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase">02. BIODIVERSITÉ</span>
-                            <h3 className="text-4xl md:text-6xl lg:text-7xl font-light mt-4 mb-6">
-                                La Vie dans le <span className="text-[#4CBBD5]">Noir</span>
+                    <div className="relative z-10 px-4 md:px-8 max-w-[1600px] mx-auto">
+                        {/* Header avec typographie expressive */}
+                        <div className="text-center mb-16 md:mb-24">
+                            <span className="inline-block text-[#4CBBD5] text-xs font-bold tracking-[0.4em] uppercase mb-6 relative">
+                                <span className="absolute -left-8 top-1/2 w-6 h-px bg-[#4CBBD5]/40" />
+                                02. BIODIVERSITÉ
+                                <span className="absolute -right-8 top-1/2 w-6 h-px bg-[#4CBBD5]/40" />
+                            </span>
+
+                            <h3 className="text-5xl md:text-7xl lg:text-8xl font-serif italic mb-6 leading-[1.1]">
+                                <span className="text-white/90">La Vie dans le</span>
+                                <br />
+                                <span className="bg-gradient-to-r from-[#4CBBD5] via-emerald-400 to-violet-400 bg-clip-text text-transparent">
+                                    Royaume de l&apos;Ombre
+                                </span>
                             </h3>
-                            <p className="text-white/50 max-w-lg mx-auto text-sm md:text-base">
-                                À 10 000 mètres, là où règne l&apos;obscurité absolue, la vie invente ses propres règles.
+
+                            <p className="text-white/40 max-w-2xl mx-auto text-base md:text-lg font-light leading-relaxed">
+                                À <span className="text-[#4CBBD5] font-mono">10 000 m</span> sous la surface, là où règne l&apos;obscurité absolue et la pression écrasante,
+                                <br className="hidden md:block" />
+                                <span className="text-white/60 italic">la vie invente ses propres lois.</span>
                             </p>
                         </div>
 
-                        {/* Bento Grid asymétrique */}
-                        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6">
-                            {/* Grande carte - Bioluminescence */}
-                            <div className="md:col-span-7 group relative bg-gradient-to-br from-[#4CBBD5]/10 to-transparent rounded-3xl p-8 md:p-10 border border-[#4CBBD5]/20 hover:border-[#4CBBD5]/40 transition-all duration-500 overflow-hidden min-h-[280px] flex flex-col justify-end">
-                                <div className="absolute top-6 right-6 w-24 h-24 md:w-32 md:h-32 bg-[#4CBBD5]/20 rounded-full blur-[40px] group-hover:bg-[#4CBBD5]/30 transition-all duration-700" />
-                                <div className="absolute top-10 right-10 w-12 h-12 md:w-16 md:h-16 bg-cyan-300/30 rounded-full blur-[20px] animate-pulse" />
+                        {/* Layout organique en constellation */}
+                        <div className="relative max-w-[1400px] mx-auto">
+                            {/* Carte principale - Bioluminescence (flottante, asymétrique) */}
+                            <div className="group relative mb-8 md:mb-12 md:ml-[5%]">
+                                <div className="relative bg-gradient-to-br from-[#4CBBD5]/5 via-transparent to-emerald-500/5 backdrop-blur-sm rounded-[3rem] p-10 md:p-14 border border-[#4CBBD5]/30 hover:border-[#4CBBD5]/60 transition-all duration-700 overflow-hidden max-w-4xl">
+                                    {/* Effets de lumière internes animés */}
+                                    <div className="absolute -top-20 -right-20 w-64 h-64 bg-gradient-to-br from-[#4CBBD5]/30 via-cyan-400/20 to-transparent rounded-full blur-[60px] group-hover:scale-125 transition-transform duration-1000" />
+                                    <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-gradient-to-tr from-emerald-400/20 to-transparent rounded-full blur-[50px] opacity-60 group-hover:opacity-80 transition-opacity duration-700" />
+                                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-violet-400/10 rounded-full blur-[40px] animate-pulse" />
 
-                                <div className="relative z-10">
-                                    <span className="text-[10px] font-bold tracking-[0.2em] text-[#4CBBD5]/70 uppercase">Phénomène</span>
-                                    <h4 className="text-2xl md:text-3xl font-bold text-white mt-2 mb-3">Bioluminescence</h4>
-                                    <p className="text-white/60 text-sm max-w-md">90% des créatures abyssales produisent leur propre lumière pour chasser, communiquer ou se défendre.</p>
+                                    {/* Cercles décoratifs */}
+                                    <div className="absolute top-8 right-12 w-2 h-2 rounded-full bg-[#4CBBD5] opacity-60 group-hover:scale-150 transition-transform duration-500" />
+                                    <div className="absolute bottom-12 right-20 w-1.5 h-1.5 rounded-full bg-emerald-400 opacity-50 group-hover:scale-150 transition-transform duration-500 delay-100" />
+                                    <div className="absolute top-20 left-16 w-1 h-1 rounded-full bg-violet-300 opacity-70 group-hover:scale-150 transition-transform duration-500 delay-200" />
+
+                                    <div className="relative z-10">
+                                        <div className="flex items-start gap-6 mb-6">
+                                            <div className="w-16 h-16 rounded-2xl bg-[#4CBBD5]/10 border border-[#4CBBD5]/30 flex items-center justify-center group-hover:bg-[#4CBBD5]/20 group-hover:border-[#4CBBD5]/50 transition-all duration-500">
+                                                <div className="w-8 h-8 rounded-full bg-[#4CBBD5] blur-[8px] animate-pulse" />
+                                            </div>
+                                            <div>
+                                                <span className="text-xs font-mono tracking-[0.2em] text-[#4CBBD5]/60 uppercase block mb-2">Phénomène Abyssal</span>
+                                                <h4 className="text-4xl md:text-5xl font-serif italic text-white mb-1 group-hover:text-[#4CBBD5] transition-colors duration-500">Bioluminescence</h4>
+                                            </div>
+                                        </div>
+
+                                        <p className="text-white/70 text-lg md:text-xl leading-relaxed max-w-2xl mb-6">
+                                            <span className="text-[#4CBBD5] font-bold text-2xl md:text-3xl">90%</span> des créatures abyssales produisent leur propre lumière —
+                                            <span className="italic text-white/80"> un ballet de lucioles vivantes dans l&apos;abîme éternel.</span>
+                                        </p>
+
+                                        <div className="flex gap-8 text-sm">
+                                            <div className="flex items-center gap-2">
+                                                <div className="w-3 h-3 rounded-full bg-[#4CBBD5] blur-[2px]" />
+                                                <span className="text-white/50">Communication</span>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <div className="w-3 h-3 rounded-full bg-emerald-400 blur-[2px]" />
+                                                <span className="text-white/50">Chasse</span>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <div className="w-3 h-3 rounded-full bg-violet-400 blur-[2px]" />
+                                                <span className="text-white/50">Défense</span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
-                            {/* Colonne droite - 2 cartes empilées */}
-                            <div className="md:col-span-5 flex flex-col gap-4 md:gap-6">
-                                {/* Stat card */}
-                                <div className="group relative bg-white/[0.03] rounded-2xl p-6 border border-white/10 hover:border-emerald-500/30 transition-all duration-300 flex-1">
-                                    <Microscope className="w-8 h-8 text-emerald-400 mb-4 opacity-80" />
-                                    <div className="text-4xl md:text-5xl font-mono font-bold text-emerald-400 mb-2">1951</div>
-                                    <p className="text-white/50 text-sm">Expédition Galathéa : première preuve de vie au fond des fosses.</p>
+                            {/* Cartes satellites en constellation */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 md:mr-[5%]">
+                                {/* Carte 1 - Expédition Galathea */}
+                                <div className="group relative">
+                                    <div className="relative bg-gradient-to-br from-white/[0.04] to-transparent backdrop-blur-sm rounded-[2.5rem] p-8 md:p-10 border border-white/10 hover:border-emerald-400/40 transition-all duration-500 overflow-hidden h-full">
+                                        {/* Glow effect */}
+                                        <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/0 to-emerald-400/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                                        <div className="absolute -top-16 -right-16 w-40 h-40 bg-emerald-400/20 rounded-full blur-[50px] opacity-0 group-hover:opacity-60 transition-opacity duration-700" />
+
+                                        <div className="relative z-10">
+                                            <Microscope className="w-12 h-12 text-emerald-400 mb-6 opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500" strokeWidth={1.5} />
+
+                                            <div className="mb-4">
+                                                <div className="text-7xl md:text-8xl font-serif italic text-emerald-400 leading-none mb-2 group-hover:scale-105 transition-transform duration-500 origin-left">1951</div>
+                                                <div className="h-px w-20 bg-gradient-to-r from-emerald-400/60 to-transparent" />
+                                            </div>
+
+                                            <h5 className="text-xl md:text-2xl font-bold text-white/90 mb-3 group-hover:text-emerald-400 transition-colors duration-500">Expédition Galathéa</h5>
+                                            <p className="text-white/60 text-sm md:text-base leading-relaxed">
+                                                Première preuve irréfutable de vie au fond des fosses océaniques.
+                                                <span className="text-white/80 italic"> La science repousse l&apos;impossible.</span>
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                {/* Fact card */}
-                                <div className="group relative bg-white/[0.03] rounded-2xl p-6 border border-white/10 hover:border-amber-500/30 transition-all duration-300 flex-1">
-                                    <Fish className="w-8 h-8 text-amber-400 mb-4 opacity-80" />
-                                    <div className="text-4xl md:text-5xl font-mono font-bold text-amber-400 mb-2">90%</div>
-                                    <p className="text-white/50 text-sm">Des océans restent inexplorés. Un monde à découvrir.</p>
+                                {/* Carte 2 - Océans inexplorés */}
+                                <div className="group relative md:mt-12">
+                                    <div className="relative bg-gradient-to-br from-white/[0.04] to-transparent backdrop-blur-sm rounded-[2.5rem] p-8 md:p-10 border border-white/10 hover:border-violet-400/40 transition-all duration-500 overflow-hidden h-full">
+                                        {/* Glow effect */}
+                                        <div className="absolute inset-0 bg-gradient-to-br from-violet-400/0 to-violet-400/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                                        <div className="absolute -bottom-16 -left-16 w-40 h-40 bg-violet-400/20 rounded-full blur-[50px] opacity-0 group-hover:opacity-60 transition-opacity duration-700" />
+
+                                        <div className="relative z-10">
+                                            <Fish className="w-12 h-12 text-violet-400 mb-6 opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500" strokeWidth={1.5} />
+
+                                            <div className="mb-4">
+                                                <div className="text-7xl md:text-8xl font-serif italic text-violet-400 leading-none mb-2 group-hover:scale-105 transition-transform duration-500 origin-left">90%</div>
+                                                <div className="h-px w-20 bg-gradient-to-r from-violet-400/60 to-transparent" />
+                                            </div>
+
+                                            <h5 className="text-xl md:text-2xl font-bold text-white/90 mb-3 group-hover:text-violet-400 transition-colors duration-500">Terra Incognita</h5>
+                                            <p className="text-white/60 text-sm md:text-base leading-relaxed">
+                                                Des océans demeurent inexplorés. Un monde parallèle sous nos pieds.
+                                                <span className="text-white/80 italic"> Chaque plongée révèle l&apos;inédit.</span>
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
