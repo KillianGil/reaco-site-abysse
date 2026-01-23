@@ -14,12 +14,11 @@ export default function ExpositionsPage() {
     useEffect(() => {
         const ctx = gsap.context(() => {
             // Hero Animations
-
             gsap.from(".hero-title", { y: 100, opacity: 0, duration: 1.2, delay: 0.2, ease: "power4.out" });
             gsap.from(".hero-subtitle", { y: 50, opacity: 0, duration: 1, delay: 0.4, ease: "power3.out" });
 
-            // Zone Headers
-            gsap.utils.toArray<HTMLElement>(".zone-header").forEach((header) => {
+            // Section Headers - animate from left
+            gsap.utils.toArray<HTMLElement>(".section-header").forEach((header) => {
                 gsap.from(header, {
                     scrollTrigger: { trigger: header, start: "top 85%" },
                     x: -50,
@@ -29,17 +28,31 @@ export default function ExpositionsPage() {
                 });
             });
 
-            // Zone 1: Tech Cards
-            gsap.from(".tech-card", {
-                scrollTrigger: { trigger: ".tech-grid", start: "top 80%" },
-                y: 50,
-                opacity: 0,
-                duration: 0.8,
-                stagger: 0.2,
-                ease: "power2.out"
+            // Zone 1: Tech Cards - staggered reveal
+            gsap.utils.toArray<HTMLElement>(".zone-1-card").forEach((card, i) => {
+                gsap.from(card, {
+                    scrollTrigger: { trigger: card, start: "top 85%" },
+                    y: 60,
+                    opacity: 0,
+                    duration: 0.8,
+                    delay: i * 0.15,
+                    ease: "power2.out"
+                });
             });
 
-            // Zone 2: Bio Particles
+            // Zone 2: Bio Cards - fade up with stagger
+            gsap.utils.toArray<HTMLElement>(".zone-2-card").forEach((card, i) => {
+                gsap.from(card, {
+                    scrollTrigger: { trigger: card, start: "top 85%" },
+                    y: 50,
+                    opacity: 0,
+                    duration: 0.7,
+                    delay: i * 0.1,
+                    ease: "power2.out"
+                });
+            });
+
+            // Zone 2: Bio Particles floating
             gsap.to(".bio-particle", {
                 y: -20,
                 duration: 2,
@@ -52,22 +65,41 @@ export default function ExpositionsPage() {
                 }
             });
 
-            // Zone 3: Radar Scan
-            gsap.to(".radar-scan", {
-                rotation: 360,
-                duration: 4,
-                repeat: -1,
-                ease: "linear"
+            // Zone 3: Enjeux Cards - slide up
+            gsap.utils.toArray<HTMLElement>(".zone-3-card").forEach((card, i) => {
+                gsap.from(card, {
+                    scrollTrigger: { trigger: card, start: "top 85%" },
+                    y: 40,
+                    opacity: 0,
+                    duration: 0.7,
+                    delay: i * 0.15,
+                    ease: "power2.out"
+                });
             });
 
-            // Zone 4: Timeline
-            gsap.from(".timeline-item", {
-                scrollTrigger: { trigger: ".timeline-container", start: "top 75%" },
-                x: -30,
-                opacity: 0,
-                duration: 0.8,
-                stagger: 0.3,
-                ease: "power2.out"
+            // Zone 4: Timeline - staggered from alternating sides
+            gsap.utils.toArray<HTMLElement>(".timeline-item").forEach((item, i) => {
+                gsap.from(item, {
+                    scrollTrigger: { trigger: item, start: "top 80%" },
+                    x: i % 2 === 0 ? -40 : 40,
+                    opacity: 0,
+                    duration: 0.8,
+                    ease: "power2.out"
+                });
+            });
+
+            // Parallax effect on ambient lights
+            gsap.utils.toArray<HTMLElement>(".ambient-light").forEach((light) => {
+                gsap.to(light, {
+                    scrollTrigger: {
+                        trigger: light,
+                        start: "top bottom",
+                        end: "bottom top",
+                        scrub: 1
+                    },
+                    y: -100,
+                    ease: "none"
+                });
             });
 
         }, containerRef);
@@ -156,7 +188,7 @@ export default function ExpositionsPage() {
                         {/* Right: The Exhibits */}
                         <div className="w-full lg:w-2/3 space-y-3 md:space-y-4">
                             {techItems.map((item, i) => (
-                                <div key={i} className="group relative bg-[#031525] border border-white/10 hover:border-[#4CBBD5] transition-all duration-500 p-4 md:p-6 flex flex-col md:flex-row gap-4 md:gap-6 items-start md:items-center rounded-xl overflow-hidden">
+                                <div key={i} className="zone-1-card group relative bg-[#031525] border border-white/10 hover:border-[#4CBBD5] transition-all duration-500 p-4 md:p-6 flex flex-col md:flex-row gap-4 md:gap-6 items-start md:items-center rounded-xl overflow-hidden">
                                     <div className="absolute inset-0 bg-gradient-to-r from-[#4CBBD5]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                                     {/* Tech Visual */}
@@ -205,7 +237,7 @@ export default function ExpositionsPage() {
                         {/* Left: Content (cartes) */}
                         <div className="w-full lg:w-2/3 space-y-6 order-2 lg:order-1">
                             {/* Spécimens Abyssaux - carte principale */}
-                            <div className="group relative bg-[#031525] border border-white/10 hover:border-[#4CBBD5] transition-all duration-500 rounded-xl overflow-hidden">
+                            <div className="zone-2-card group relative bg-[#031525] border border-white/10 hover:border-[#4CBBD5] transition-all duration-500 rounded-xl overflow-hidden">
                                 <div className="absolute inset-0 bg-gradient-to-r from-[#4CBBD5]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                                 <div className="p-6 md:p-8 relative z-10">
@@ -227,7 +259,7 @@ export default function ExpositionsPage() {
                             {/* Grid 2 colonnes pour les sous-thèmes */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {/* Zones de profondeur */}
-                                <div className="group relative bg-[#031525] border border-white/10 hover:border-[#4CBBD5] transition-all duration-500 rounded-xl overflow-hidden p-6">
+                                <div className="zone-2-card group relative bg-[#031525] border border-white/10 hover:border-[#4CBBD5] transition-all duration-500 rounded-xl overflow-hidden p-6">
                                     <div className="absolute inset-0 bg-gradient-to-r from-[#4CBBD5]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                                     <div className="relative z-10">
                                         <Waves className="w-8 h-8 text-[#4CBBD5] mb-4" strokeWidth={1.5} />
@@ -237,7 +269,7 @@ export default function ExpositionsPage() {
                                 </div>
 
                                 {/* Adaptations extrêmes */}
-                                <div className="group relative bg-[#031525] border border-white/10 hover:border-[#4CBBD5] transition-all duration-500 rounded-xl overflow-hidden p-6">
+                                <div className="zone-2-card group relative bg-[#031525] border border-white/10 hover:border-[#4CBBD5] transition-all duration-500 rounded-xl overflow-hidden p-6">
                                     <div className="absolute inset-0 bg-gradient-to-r from-[#4CBBD5]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                                     <div className="relative z-10">
                                         <Zap className="w-8 h-8 text-[#4CBBD5] mb-4" strokeWidth={1.5} />
@@ -286,7 +318,7 @@ export default function ExpositionsPage() {
                                 { icon: ShieldAlert, title: "Câbles Sous-marins", desc: "99% des communications mondiales passent sous la mer. La surveillance et la protection de ces artères vitales est un enjeu de souveraineté." },
                                 { icon: Database, title: "Ressources Minérales", desc: "Terres rares, nodules polymétalliques... Les grands fonds attirent les convoitises. Faut-il les exploiter ou les sanctuariser ?" }
                             ].map((card, i) => (
-                                <div key={i} className="border-l-2 border-white/10 pl-6 hover:border-[#4CBBD5] transition-colors duration-300 group">
+                                <div key={i} className="zone-3-card border-l-2 border-white/10 pl-6 hover:border-[#4CBBD5] transition-colors duration-300 group">
                                     <card.icon className="w-8 h-8 mb-4 text-[#4CBBD5] opacity-80 group-hover:opacity-100 transition-opacity" />
                                     <h4 className="font-bold text-xl mb-3 text-white group-hover:text-[#4CBBD5] transition-colors">{card.title}</h4>
                                     <p className="text-white/60 text-sm leading-relaxed">{card.desc}</p>
