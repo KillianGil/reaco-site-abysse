@@ -86,7 +86,7 @@ function Section1Surface() {
         </h1>
 
         <p className="surface-2 text-base md:text-xl font-medium tracking-wide text-white/70 mb-4 md:mb-5 drop-shadow-md">
-          Explorez l&apos;ultime frontière.
+          Le Monde des Profondeurs.
         </p>
 
         <p className="surface-3 text-xs md:text-sm font-medium leading-relaxed text-white/50 max-w-xs md:max-w-md mx-auto drop-shadow-sm">
