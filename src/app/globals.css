@@ -295,3 +295,59 @@ html {
   background: linear-gradient(90deg, transparent, #4CBBD5);
   animation: shimmer 3s ease-in-out infinite;
 }
+
+/* Radar/Loader animations */
+@keyframes spin-radar {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-radar {
+  animation: spin-radar 3s linear infinite;
+}
+
+@keyframes blip {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.5);
+    box-shadow: 0 0 10px #4CBBD5;
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+.animate-blip {
+  animation: blip 2s ease-out infinite;
+}
+
+/* Partenaires page - Hexagon and slow spin */
+.clip-hex {
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 8s linear infinite;
+}

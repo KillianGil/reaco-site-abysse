@@ -75,23 +75,6 @@ export function Loader() {
                 />
             </div>
 
-            <style jsx>{`
-        @keyframes spin-radar {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-        .animate-spin-radar {
-          animation: spin-radar 3s linear infinite;
-        }
-        @keyframes blip {
-          0% { opacity: 0; transform: scale(0); }
-          50% { opacity: 1; transform: scale(1.5); box-shadow: 0 0 10px #4CBBD5; }
-          100% { opacity: 0; transform: scale(1); }
-        }
-        .animate-blip {
-          animation: blip 2s ease-out infinite;
-        }
-      `}</style>
         </div>
     );
 }

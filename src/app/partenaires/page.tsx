@@ -413,19 +413,6 @@ export default function PartenairesPage() {
             </div>
 
             <Footer />
-
-            <style jsx>{`
-        .clip-hex {
-          clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-        }
-        @keyframes spin-slow {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-        .animate-spin-slow {
-          animation: spin-slow 8s linear infinite;
-        }
-      `}</style>
         </main>
     );
 }
