@@ -4,7 +4,7 @@ import { Navbar, Footer } from "@/components/UI";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Anchor, Ship, Globe, Radio, Database, ShieldAlert } from "lucide-react";
+import { Anchor, Ship, Globe, Radio, Database, ShieldAlert, Fish, Waves, Zap } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -202,28 +202,16 @@ export default function ExpositionsPage() {
                     </div>
 
                     <div className="flex flex-col lg:flex-row gap-8 md:gap-12 items-start relative z-10">
-                        {/* Left: Header - même style que la section 1 */}
-                        <div className="w-full lg:w-1/3 lg:sticky lg:top-32">
-                            <div className="section-header mb-8 md:mb-10">
-                                <span className="text-[#4CBBD5] text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase block mb-3 md:mb-4">02. BIODIVERSITÉ</span>
-                                <h3 className="text-3xl md:text-5xl font-light uppercase">Vie Abyssale</h3>
-                                <div className="h-1 w-16 md:w-24 bg-gradient-to-r from-[#4CBBD5] to-transparent mt-3 md:mt-4" />
-                                <p className="mt-4 md:mt-6 text-white/60 text-sm md:text-base leading-relaxed border-l-2 border-[#4CBBD5]/30 pl-4 md:pl-6">
-                                    Dans l&apos;obscurité absolue des grands fonds, la vie a développé des adaptations extraordinaires pour survivre.
-                                </p>
-                            </div>
-                        </div>
-
-                        {/* Right: Content */}
-                        <div className="w-full lg:w-2/3 space-y-6">
-                            {/* Bioluminescence - carte principale */}
+                        {/* Left: Content (cartes) */}
+                        <div className="w-full lg:w-2/3 space-y-6 order-2 lg:order-1">
+                            {/* Spécimens Abyssaux - carte principale */}
                             <div className="group relative bg-[#031525] border border-white/10 hover:border-[#4CBBD5] transition-all duration-500 rounded-xl overflow-hidden">
                                 <div className="absolute inset-0 bg-gradient-to-r from-[#4CBBD5]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                                 <div className="p-6 md:p-8 relative z-10">
                                     <div className="flex items-start gap-4 mb-4">
                                         <div className="w-12 h-12 bg-[#4CBBD5]/10 rounded-full flex items-center justify-center shrink-0">
-                                            <div className="w-6 h-6 rounded-full bg-[#4CBBD5] blur-[4px] animate-pulse" />
+                                            <Fish className="w-6 h-6 text-[#4CBBD5]" strokeWidth={1.5} />
                                         </div>
                                         <div>
                                             <span className="text-[10px] font-bold tracking-[0.2em] text-[#4CBBD5]/70 uppercase">Dans cet espace</span>
@@ -242,7 +230,7 @@ export default function ExpositionsPage() {
                                 <div className="group relative bg-[#031525] border border-white/10 hover:border-[#4CBBD5] transition-all duration-500 rounded-xl overflow-hidden p-6">
                                     <div className="absolute inset-0 bg-gradient-to-r from-[#4CBBD5]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                                     <div className="relative z-10">
-                                        <Globe className="w-8 h-8 text-[#4CBBD5] mb-4 opacity-80" />
+                                        <Waves className="w-8 h-8 text-[#4CBBD5] mb-4" strokeWidth={1.5} />
                                         <h5 className="text-lg font-bold text-white mb-2 group-hover:text-[#4CBBD5] transition-colors">Zones de Profondeur</h5>
                                         <p className="text-white/50 text-sm leading-relaxed">Voyage à travers les strates océaniques : de la zone photique éclairée aux abysses hadales à 11 000 m.</p>
                                     </div>
@@ -252,11 +240,23 @@ export default function ExpositionsPage() {
                                 <div className="group relative bg-[#031525] border border-white/10 hover:border-[#4CBBD5] transition-all duration-500 rounded-xl overflow-hidden p-6">
                                     <div className="absolute inset-0 bg-gradient-to-r from-[#4CBBD5]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                                     <div className="relative z-10">
-                                        <div className="w-8 h-8 rounded-full bg-[#4CBBD5] blur-[6px] mb-4 opacity-80" />
+                                        <Zap className="w-8 h-8 text-[#4CBBD5] mb-4" strokeWidth={1.5} />
                                         <h5 className="text-lg font-bold text-white mb-2 group-hover:text-[#4CBBD5] transition-colors">Adaptations Extrêmes</h5>
                                         <p className="text-white/50 text-sm leading-relaxed">Bioluminescence, résistance à 1 100 bars de pression, gigantisme abyssal, métabolisme ralenti.</p>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+
+                        {/* Right: Header */}
+                        <div className="w-full lg:w-1/3 lg:sticky lg:top-32 order-1 lg:order-2">
+                            <div className="section-header mb-8 md:mb-10">
+                                <span className="text-[#4CBBD5] text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase block mb-3 md:mb-4">02. BIODIVERSITÉ</span>
+                                <h3 className="text-3xl md:text-5xl font-light uppercase">Vie Abyssale</h3>
+                                <div className="h-1 w-16 md:w-24 bg-gradient-to-r from-[#4CBBD5] to-transparent mt-3 md:mt-4" />
+                                <p className="mt-4 md:mt-6 text-white/60 text-sm md:text-base leading-relaxed border-l-2 border-[#4CBBD5]/30 pl-4 md:pl-6">
+                                    Dans l&apos;obscurité absolue des grands fonds, la vie a développé des adaptations extraordinaires pour survivre.
+                                </p>
                             </div>
                         </div>
                     </div>
