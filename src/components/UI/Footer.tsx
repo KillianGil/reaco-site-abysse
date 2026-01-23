@@ -23,11 +23,12 @@ export function Footer() {
                             className="inline-block mb-4 hover:opacity-80 transition-opacity"
                         >
                             <Image
-                                src="/assets/logo-final.svg"
+                                src="/assets/logofinal.png"
                                 alt="ABYSSE"
                                 width={150}
                                 height={50}
                                 className="h-10 w-auto"
+                                unoptimized
                             />
                         </Link>
                         <p className="text-sm text-white/50 leading-relaxed mb-6">
