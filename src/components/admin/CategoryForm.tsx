@@ -41,22 +41,26 @@ export function CategoryForm({ category, onSubmit, onCancel, loading = false }: 
             setLabelError(null);
         }
 
-        if (!form.key.trim()) {
-            setKeyError("La clé est requise");
-            isValid = false;
-        } else if (!validateCategoryKey(form.key)) {
-            setKeyError("La clé doit contenir seulement des lettres minuscules, chiffres et tirets");
-            isValid = false;
-        } else {
-            setIsValidating(true);
-            const isUnique = await validateCategoryKeyUnique(form.key, category?.id);
-            setIsValidating(false);
-
-            if (!isUnique) {
-                setKeyError("Cette clé est déjà utilisée");
+        // Seulement valider la clé pour les nouvelles catégories
+        // Les catégories existantes ont leur clé verrouillée
+        if (!category) {
+            if (!form.key.trim()) {
+                setKeyError("La clé est requise");
+                isValid = false;
+            } else if (!validateCategoryKey(form.key)) {
+                setKeyError("La clé doit contenir seulement des lettres minuscules, chiffres et tirets");
                 isValid = false;
             } else {
-                setKeyError(null);
+                setIsValidating(true);
+                const isUnique = await validateCategoryKeyUnique(form.key);
+                setIsValidating(false);
+
+                if (!isUnique) {
+                    setKeyError("Cette clé est déjà utilisée");
+                    isValid = false;
+                } else {
+                    setKeyError(null);
+                }
             }
         }
 
