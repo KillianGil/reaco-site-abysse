@@ -7,28 +7,23 @@ import { AdminProvider, useAdmin, AdminLogin, AdminLayout, SuccessModal } from "
 import { db } from "@/firebase";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { Loader2, Upload, X, Check, AlertCircle, Calendar, Clock, FileText, Tag, Star, Send } from "lucide-react";
-
-type ArticleCategory = "evenement" | "decouverte" | "musee";
+import { useCategories } from "@/hooks/useCategories";
+import { getColorClasses } from "@/types/category";
 
 interface ArticleForm {
     titre: string;
     resume: string;
     contenu: string;
-    categorie: ArticleCategory;
+    categorie: string;
     label_categorie: string;
     mis_en_avant: boolean;
     date_evenement: string;
     heure_evenement: string;
 }
 
-const categoryLabels: Record<ArticleCategory, string> = {
-    evenement: "Événement",
-    decouverte: "Découverte",
-    musee: "Vie du musée"
-};
-
 function NewArticleContent() {
     const router = useRouter();
+    const { categories, loading: categoriesLoading } = useCategories();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitSuccess, setSubmitSuccess] = useState(false);
     const [submitError, setSubmitError] = useState<string | null>(null);
@@ -50,11 +45,11 @@ function NewArticleContent() {
         heure_evenement: ""
     });
 
-    const handleCategoryChange = (cat: ArticleCategory) => {
+    const handleCategoryChange = (key: string, label: string) => {
         setForm(prev => ({
             ...prev,
-            categorie: cat,
-            label_categorie: categoryLabels[cat]
+            categorie: key,
+            label_categorie: label
         }));
     };
 
@@ -274,21 +269,27 @@ function NewArticleContent() {
                         <h2 className="text-lg font-medium">Catégorie</h2>
                     </div>
 
-                    <div className="flex flex-wrap gap-3">
-                        {(Object.entries(categoryLabels) as [ArticleCategory, string][]).map(([key, label]) => (
-                            <button
-                                key={key}
-                                type="button"
-                                onClick={() => handleCategoryChange(key)}
-                                className={`px-5 py-2.5 rounded-xl text-sm font-medium transition-all ${form.categorie === key
-                                    ? 'bg-[#4CBBD5] text-[#020A19]'
-                                    : 'bg-white/5 text-white/60 border border-white/20 hover:border-[#4CBBD5]/50 hover:text-white'
-                                    }`}
-                            >
-                                {label}
-                            </button>
-                        ))}
-                    </div>
+                    {categoriesLoading ? (
+                        <div className="flex items-center justify-center py-8">
+                            <Loader2 className="w-6 h-6 text-[#4CBBD5] animate-spin" />
+                        </div>
+                    ) : (
+                        <div className="flex flex-wrap gap-3">
+                            {categories.map((category) => (
+                                <button
+                                    key={category.id}
+                                    type="button"
+                                    onClick={() => handleCategoryChange(category.key, category.label)}
+                                    className={`px-5 py-2.5 rounded-xl text-sm font-medium transition-all ${form.categorie === category.key
+                                        ? 'bg-[#4CBBD5] text-[#020A19]'
+                                        : 'bg-white/5 text-white/60 border border-white/20 hover:border-[#4CBBD5]/50 hover:text-white'
+                                        }`}
+                                >
+                                    {category.label}
+                                </button>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 {/* Event Details */}

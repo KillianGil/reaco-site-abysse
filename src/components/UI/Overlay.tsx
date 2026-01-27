@@ -471,7 +471,7 @@ function Section6Contact() {
 
         <div className="contact-info flex flex-col sm:flex-row items-center justify-center gap-4 mb-14">
           <motion.a
-            href="mailto:contact@musee-abysse.fr"
+            href="/contact"
             className="group relative px-6 py-3 bg-[#4CBBD5] text-[#020A19] font-semibold text-xs uppercase tracking-[0.1em] overflow-hidden"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
@@ -516,7 +516,7 @@ function Section6Contact() {
 
       <footer className="absolute bottom-6 left-0 right-0 text-center">
         <p className="text-[8px] uppercase tracking-[0.15em] text-white/25 font-medium">
-          © 2024 Projet Abysse
+          © 2026 Projet Abysse
         </p>
       </footer>
     </section>

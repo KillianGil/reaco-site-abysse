@@ -8,7 +8,9 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Calendar, Clock, ArrowRight, Users, Sparkles, Mail, Loader2 } from "lucide-react";
 import dynamic from "next/dynamic";
-import { useArticles, type ArticleCategory } from "@/hooks/useArticles";
+import { useArticles } from "@/hooks/useArticles";
+import { useCategories } from "@/hooks/useCategories";
+import { getColorClasses } from "@/types/category";
 
 const Navbar = dynamic(() => import("@/components/UI/Navbar").then(mod => mod.Navbar), { ssr: false });
 
@@ -16,10 +18,11 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function ActualitesPage() {
     const containerRef = useRef<HTMLDivElement>(null);
-    const [filter, setFilter] = useState<ArticleCategory>("all");
+    const [filter, setFilter] = useState<string>("all");
 
     // Récupération des articles depuis Firebase
     const { articles, loading, error } = useArticles();
+    const { categories } = useCategories();
 
     const filteredNews = filter === "all"
         ? articles
@@ -99,13 +102,9 @@ export default function ActualitesPage() {
         return () => ctx.revert();
     }, [filter]);
 
-    const getCategoryColor = (category: ArticleCategory) => {
-        switch (category) {
-            case "evenement": return "bg-[#4CBBD5]/20 text-[#4CBBD5] border-[#4CBBD5]/30";
-            case "decouverte": return "bg-emerald-500/20 text-emerald-400 border-emerald-500/30";
-            case "musee": return "bg-amber-500/20 text-amber-400 border-amber-500/30";
-            default: return "bg-white/10 text-white/70 border-white/20";
-        }
+    const getCategoryColor = (categoryKey: string) => {
+        const category = categories.find(c => c.key === categoryKey);
+        return category ? getColorClasses(category.color) : "bg-white/10 text-white/70 border-white/20";
     };
 
     return (
@@ -227,21 +226,26 @@ export default function ActualitesPage() {
 
                         {/* Filters */}
                         <div className="flex flex-wrap gap-2">
-                            {[
-                                { value: "all" as ArticleCategory, label: "Tout voir" },
-                                { value: "evenement" as ArticleCategory, label: "Événements" },
-                                { value: "decouverte" as ArticleCategory, label: "Découvertes" },
-                                { value: "musee" as ArticleCategory, label: "Vie du musée" }
-                            ].map((cat) => (
+                            <button
+                                key="all"
+                                onClick={() => setFilter("all")}
+                                className={`filter-btn px-4 py-2 text-xs uppercase tracking-wider rounded-full border transition-all duration-300 ${filter === "all"
+                                    ? "bg-[#4CBBD5] text-[#020A19] border-[#4CBBD5] font-semibold"
+                                    : "bg-transparent text-white/60 border-white/20 hover:border-[#4CBBD5]/50 hover:text-white"
+                                    }`}
+                            >
+                                Tout voir
+                            </button>
+                            {categories.map((category) => (
                                 <button
-                                    key={cat.value}
-                                    onClick={() => setFilter(cat.value)}
-                                    className={`px-4 py-2 text-xs uppercase tracking-wider rounded-full border transition-all duration-300 ${filter === cat.value
+                                    key={category.id}
+                                    onClick={() => setFilter(category.key)}
+                                    className={`filter-btn px-4 py-2 text-xs uppercase tracking-wider rounded-full border transition-all duration-300 ${filter === category.key
                                         ? "bg-[#4CBBD5] text-[#020A19] border-[#4CBBD5] font-semibold"
                                         : "bg-transparent text-white/60 border-white/20 hover:border-[#4CBBD5]/50 hover:text-white"
                                         }`}
                                 >
-                                    {cat.label}
+                                    {category.label}
                                 </button>
                             ))}
                         </div>

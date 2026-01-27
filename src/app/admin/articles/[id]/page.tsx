@@ -8,14 +8,13 @@ import { db } from "@/firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { Loader2, Upload, X, Check, AlertCircle, Calendar, Clock, FileText, Tag, Star, Save, ArrowLeft } from "lucide-react";
 import Link from "next/link";
-
-type ArticleCategory = "evenement" | "decouverte" | "musee";
+import { useCategories } from "@/hooks/useCategories";
 
 interface ArticleForm {
     titre: string;
     resume: string;
     contenu: string;
-    categorie: ArticleCategory;
+    categorie: string;
     label_categorie: string;
     image_url: string;
     mis_en_avant: boolean;
@@ -23,15 +22,10 @@ interface ArticleForm {
     heure_evenement: string;
 }
 
-const categoryLabels: Record<ArticleCategory, string> = {
-    evenement: "Événement",
-    decouverte: "Découverte",
-    musee: "Vie du musée"
-};
-
 function EditArticleContent() {
     const params = useParams();
     const articleId = params.id as string;
+    const { categories, loading: categoriesLoading } = useCategories();
 
     const [loading, setLoading] = useState(true);
     const [notFound, setNotFound] = useState(false);
@@ -72,7 +66,7 @@ function EditArticleContent() {
                         resume: data.resume || "",
                         contenu: data.contenu || "",
                         categorie: data.categorie || "musee",
-                        label_categorie: data.label_categorie || categoryLabels[data.categorie as ArticleCategory] || "Vie du musée",
+                        label_categorie: data.label_categorie || "Vie du musée",
                         image_url: data.image_url || "",
                         mis_en_avant: data.mis_en_avant || false,
                         date_evenement: data.date_evenement || "",
@@ -96,11 +90,11 @@ function EditArticleContent() {
         }
     }, [articleId]);
 
-    const handleCategoryChange = (cat: ArticleCategory) => {
+    const handleCategoryChange = (key: string, label: string) => {
         setForm(prev => ({
             ...prev,
-            categorie: cat,
-            label_categorie: categoryLabels[cat]
+            categorie: key,
+            label_categorie: label
         }));
     };
 
@@ -355,21 +349,27 @@ function EditArticleContent() {
                         <h2 className="text-lg font-medium">Catégorie</h2>
                     </div>
 
-                    <div className="flex flex-wrap gap-3">
-                        {(Object.entries(categoryLabels) as [ArticleCategory, string][]).map(([key, label]) => (
-                            <button
-                                key={key}
-                                type="button"
-                                onClick={() => handleCategoryChange(key)}
-                                className={`px-5 py-2.5 rounded-xl text-sm font-medium transition-all ${form.categorie === key
-                                    ? 'bg-[#4CBBD5] text-[#020A19]'
-                                    : 'bg-white/5 text-white/60 border border-white/20 hover:border-[#4CBBD5]/50 hover:text-white'
-                                    }`}
-                            >
-                                {label}
-                            </button>
-                        ))}
-                    </div>
+                    {categoriesLoading ? (
+                        <div className="flex items-center justify-center py-8">
+                            <Loader2 className="w-6 h-6 text-[#4CBBD5] animate-spin" />
+                        </div>
+                    ) : (
+                        <div className="flex flex-wrap gap-3">
+                            {categories.map((category) => (
+                                <button
+                                    key={category.id}
+                                    type="button"
+                                    onClick={() => handleCategoryChange(category.key, category.label)}
+                                    className={`px-5 py-2.5 rounded-xl text-sm font-medium transition-all ${form.categorie === category.key
+                                        ? 'bg-[#4CBBD5] text-[#020A19]'
+                                        : 'bg-white/5 text-white/60 border border-white/20 hover:border-[#4CBBD5]/50 hover:text-white'
+                                        }`}
+                                >
+                                    {category.label}
+                                </button>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 {/* Event Details */}

@@ -7,6 +7,8 @@ import { AdminProvider, useAdmin, AdminLogin, AdminLayout } from "@/components/a
 import { db } from "@/firebase";
 import { collection, getDocs, deleteDoc, doc, query, orderBy } from "firebase/firestore";
 import { Loader2, Trash2, ExternalLink, Search, Filter, Plus, Pencil } from "lucide-react";
+import { useCategories } from "@/hooks/useCategories";
+import { getColorClasses } from "@/types/category";
 
 interface Article {
     id: string;
@@ -19,24 +21,23 @@ interface Article {
     mis_en_avant: boolean;
 }
 
-const categoryLabels: Record<string, string> = {
-    evenement: "Événement",
-    decouverte: "Découverte",
-    musee: "Vie du musée"
-};
-
-const categoryColors: Record<string, string> = {
-    evenement: "bg-[#4CBBD5]/20 text-[#4CBBD5] border-[#4CBBD5]/30",
-    decouverte: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
-    musee: "bg-amber-500/20 text-amber-400 border-amber-500/30"
-};
-
 function ArticlesListContent() {
+    const { categories } = useCategories();
     const [articles, setArticles] = useState<Article[]>([]);
     const [loading, setLoading] = useState(true);
     const [deletingId, setDeletingId] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState("");
     const [filterCategory, setFilterCategory] = useState<string>("all");
+
+    const getCategoryLabel = (categoryKey: string): string => {
+        const category = categories.find(c => c.key === categoryKey);
+        return category?.label || categoryKey;
+    };
+
+    const getCategoryColor = (categoryKey: string): string => {
+        const category = categories.find(c => c.key === categoryKey);
+        return category ? getColorClasses(category.color) : 'bg-white/10 text-white/70 border-white/20';
+    };
 
     useEffect(() => {
         loadArticles();
@@ -57,7 +58,7 @@ function ArticlesListContent() {
                     resume: data.resume,
                     date_texte: data.date_texte,
                     categorie: data.categorie,
-                    label_categorie: data.label_categorie || categoryLabels[data.categorie],
+                    label_categorie: data.label_categorie || getCategoryLabel(data.categorie),
                     image_url: data.image_url,
                     mis_en_avant: data.mis_en_avant || false
                 });
@@ -127,9 +128,11 @@ function ArticlesListContent() {
                             className="appearance-none bg-white/5 border border-white/10 rounded-xl pl-10 pr-8 py-2.5 text-white focus:border-[#4CBBD5] focus:outline-none transition-colors cursor-pointer"
                         >
                             <option value="all" className="bg-[#041C30]">Toutes catégories</option>
-                            <option value="evenement" className="bg-[#041C30]">Événements</option>
-                            <option value="decouverte" className="bg-[#041C30]">Découvertes</option>
-                            <option value="musee" className="bg-[#041C30]">Vie du musée</option>
+                            {categories.map((category) => (
+                                <option key={category.id} value={category.key} className="bg-[#041C30]">
+                                    {category.label}
+                                </option>
+                            ))}
                         </select>
                     </div>
                 </div>
@@ -146,7 +149,7 @@ function ArticlesListContent() {
             {/* Articles Count */}
             <p className="text-white/40 text-sm">
                 {filteredArticles.length} article{filteredArticles.length > 1 ? 's' : ''}
-                {filterCategory !== "all" && ` dans "${categoryLabels[filterCategory]}"`}
+                {filterCategory !== "all" && ` dans "${getCategoryLabel(filterCategory)}"`}
                 {searchTerm && ` pour "${searchTerm}"`}
             </p>
 
@@ -185,7 +188,7 @@ function ArticlesListContent() {
                                 <div className="flex-1 p-4 md:p-5 flex flex-col">
                                     <div className="flex items-start justify-between gap-4 mb-2">
                                         <div>
-                                            <span className={`inline-block px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded border ${categoryColors[article.categorie] || 'bg-white/10 text-white/70 border-white/20'}`}>
+                                            <span className={`inline-block px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded border ${getCategoryColor(article.categorie)}`}>
                                                 {article.label_categorie}
                                             </span>
                                         </div>

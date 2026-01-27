@@ -3,7 +3,7 @@
 import { useState, createContext, useContext, ReactNode, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Lock, Eye, EyeOff, AlertCircle, Home, FileText, PlusCircle, LayoutDashboard, LogOut, CheckCircle, X, Loader2 } from "lucide-react";
+import { Lock, Eye, EyeOff, AlertCircle, Home, FileText, PlusCircle, LayoutDashboard, LogOut, CheckCircle, X, Loader2, Tag } from "lucide-react";
 
 const SESSION_KEY = "abysse_admin_session";
 
@@ -260,6 +260,7 @@ export function AdminLayout({ children, title }: { children: ReactNode; title: s
     const navItems = [
         { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
         { href: "/admin/articles", label: "Gérer les articles", icon: FileText },
+        { href: "/admin/categories", label: "Catégories", icon: Tag },
         { href: "/admin/nouveau", label: "Nouvel article", icon: PlusCircle },
     ];
 

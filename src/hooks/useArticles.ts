@@ -2,11 +2,9 @@ import { useState, useEffect } from "react";
 import { db } from "@/firebase";
 import { collection, getDocs, query, orderBy, Timestamp, doc, getDoc } from "firebase/firestore";
 
-export type ArticleCategory = "all" | "evenement" | "decouverte" | "musee";
-
 export interface Article {
     id: string;
-    categorie: ArticleCategory;
+    categorie: string;
     label_categorie: string;
     date_texte: string;
     titre: string;
@@ -22,7 +20,7 @@ export interface Article {
 // Interface adaptée pour le composant (garde la même structure que l'ancienne)
 export interface NewsItem {
     id: string;
-    category: ArticleCategory;
+    category: string;
     categoryLabel: string;
     date: string;
     title: string;
