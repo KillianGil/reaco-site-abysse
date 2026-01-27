@@ -39,7 +39,7 @@ export function DeleteCategoryModal({
 
         try {
             await onConfirm(needsReplacement ? selectedReplacement : undefined);
-        } catch (err) {
+        } catch {
             setError("Erreur lors de la suppression");
             setIsDeleting(false);
         }

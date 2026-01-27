@@ -125,7 +125,7 @@ export function CategoryForm({ category, onSubmit, onCancel, loading = false }: 
                 {isValidating && (
                     <p className="text-white/40 text-sm mt-1 flex items-center gap-1">
                         <Loader2 className="w-4 h-4 animate-spin" />
-                        Vérification de l'unicité...
+                        Vérification de l&apos;unicité...
                     </p>
                 )}
             </div>
@@ -163,7 +163,7 @@ export function CategoryForm({ category, onSubmit, onCancel, loading = false }: 
             {/* Ordre */}
             <div>
                 <label className="block text-sm text-white/60 mb-2">
-                    Ordre d'affichage
+                    Ordre d&apos;affichage
                 </label>
                 <input
                     type="number"
@@ -174,7 +174,7 @@ export function CategoryForm({ category, onSubmit, onCancel, loading = false }: 
                     disabled={loading}
                 />
                 <p className="text-xs text-white/30 mt-1">
-                    Les catégories seront affichées dans l'ordre croissant
+                    Les catégories seront affichées dans l&apos;ordre croissant
                 </p>
             </div>
 

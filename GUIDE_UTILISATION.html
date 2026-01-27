@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABYSSE - Guide d'Utilisation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 14pt;
+            line-height: 1.8;
+            color: #1a1a2e;
+            background: #ffffff;
+            padding: 60px 80px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 32pt;
+            color: #006994;
+            margin-bottom: 10px;
+            border-bottom: 4px solid #4CBBD5;
+            padding-bottom: 15px;
+        }
+
+        h2 {
+            font-size: 22pt;
+            color: #041C30;
+            margin-top: 50px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        h3 {
+            font-size: 16pt;
+            color: #006994;
+            margin-top: 35px;
+            margin-bottom: 15px;
+        }
+
+        h4 {
+            font-size: 14pt;
+            color: #333;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .subtitle {
+            font-size: 14pt;
+            color: #666;
+            margin-bottom: 40px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0 30px 0;
+            font-size: 13pt;
+        }
+
+        th,
+        td {
+            padding: 14px 18px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background: #006994;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 12pt;
+            color: #c7254e;
+        }
+
+        pre {
+            background: #1a1a2e;
+            color: #4CBBD5;
+            padding: 25px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-size: 12pt;
+            line-height: 1.6;
+        }
+
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+
+        ul,
+        ol {
+            margin: 15px 0 20px 30px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 18px 22px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 13pt;
+        }
+
+        .note {
+            background: #e7f5ff;
+            border-left: 5px solid #4CBBD5;
+            padding: 18px 22px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 13pt;
+        }
+
+        .tip {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 18px 22px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 13pt;
+        }
+
+        .credentials-box {
+            background: linear-gradient(135deg, #006994 0%, #041C30 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin: 30px 0;
+        }
+
+        .credentials-box h3 {
+            color: #4CBBD5;
+            margin-top: 0;
+        }
+
+        .credentials-box table {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+        }
+
+        .credentials-box th {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .credentials-box td,
+        .credentials-box th {
+            border-color: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        hr {
+            border: none;
+            border-top: 2px solid #e0e0e0;
+            margin: 40px 0;
+        }
+
+        .page-break {
+            page-break-before: always;
+        }
+
+        .footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
+            text-align: center;
+            color: #888;
+            font-size: 11pt;
+        }
+
+        a {
+            color: #006994;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        @media print {
+            body {
+                padding: 40px 50px;
+            }
+
+            .page-break {
+                page-break-before: always;
+            }
+
+            h2,
+            h3,
+            h4 {
+                page-break-after: avoid;
+            }
+
+            table,
+            ul,
+            ol,
+            pre {
+                page-break-inside: avoid;
+            }
+
+            .warning,
+            .note,
+            .tip {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>ABYSSE</h1>
+    <p class="subtitle">Guide d'Utilisation et de Passation</p>
+
+    <h2>Accès au Site</h2>
+
+    <table>
+        <tr>
+            <th>Environnement</th>
+            <th>URL</th>
+        </tr>
+        <tr>
+            <td>Site public</td>
+            <td><a href="https://site-abysse.vercel.app">https://site-abysse.vercel.app</a></td>
+        </tr>
+        <tr>
+            <td>Administration</td>
+            <td><a href="https://site-abysse.vercel.app/admin">https://site-abysse.vercel.app/admin</a></td>
+        </tr>
+        <tr>
+            <td>Dépôt GitHub</td>
+            <td><a
+                    href="https://github.com/KillianGil/reaco-site-abysse">https://github.com/KillianGil/reaco-site-abysse</a>
+            </td>
+        </tr>
+    </table>
+
+    <h2>Interface d'Administration</h2>
+
+    <h3>Connexion</h3>
+    <ol>
+        <li>Accédez à <code>/admin</code></li>
+        <li>Entrez le mot de passe administrateur : <code>AbysseSuperMusee2026</code></li>
+        <li>Cliquez sur <strong>Connexion</strong></li>
+    </ol>
+
+    <div class="note">
+        <strong>Note :</strong> La session reste active pendant 24h. Après déconnexion, le mot de passe sera redemandé.
+    </div>
+
+    <h3>Dashboard</h3>
+    <p>Le tableau de bord affiche :</p>
+    <ul>
+        <li><strong>Nombre total d'articles</strong> publiés</li>
+        <li><strong>Articles à la une</strong> mis en avant</li>
+        <li><strong>Articles du mois</strong> - publications récentes</li>
+        <li><strong>Dernière mise à jour</strong> - date du dernier article modifié</li>
+    </ul>
+
+    <h3>Gestion des Articles</h3>
+
+    <h4>Créer un article</h4>
+    <ol>
+        <li>Cliquez sur <strong>Nouvel Article</strong> dans le dashboard</li>
+        <li>Remplissez les champs :
+            <ul>
+                <li><strong>Titre</strong> - Titre principal de l'article</li>
+                <li><strong>Résumé</strong> - Extrait affiché dans la liste (max 200 caractères)</li>
+                <li><strong>Contenu</strong> - Corps complet de l'article</li>
+                <li><strong>Catégorie</strong> - Sélectionnez parmi les catégories existantes</li>
+                <li><strong>Image</strong> - Uploadez via le bouton ou glissez-déposez</li>
+            </ul>
+        </li>
+        <li>Options facultatives :
+            <ul>
+                <li><strong>Mettre à la une</strong> - Affiche l'article en vedette</li>
+                <li><strong>Date/Heure d'événement</strong> - Pour les événements</li>
+            </ul>
+        </li>
+        <li>Cliquez sur <strong>Publier</strong></li>
+    </ol>
+
+    <h4>Modifier un article</h4>
+    <ol>
+        <li>Allez dans <strong>Articles</strong> depuis le menu</li>
+        <li>Cliquez sur l'article à modifier</li>
+        <li>Effectuez vos changements</li>
+        <li>Cliquez sur <strong>Enregistrer</strong></li>
+    </ol>
+
+    <h4>Supprimer un article</h4>
+    <ol>
+        <li>Dans la liste des articles, cliquez sur l'icône <strong>Corbeille</strong></li>
+        <li>Confirmez la suppression</li>
+    </ol>
+
+    <div class="warning">
+        <strong>⚠️ Attention :</strong> La suppression est définitive et irréversible.
+    </div>
+
+    <h3>Gestion des Catégories</h3>
+    <p>L'espace admin permet de <strong>créer, modifier et supprimer des catégories</strong> d'articles.</p>
+
+    <h4>Catégories par défaut</h4>
+    <table>
+        <tr>
+            <th>Catégorie</th>
+            <th>Usage</th>
+            <th>Couleur</th>
+        </tr>
+        <tr>
+            <td>Événement</td>
+            <td>Annonces, vernissages, conférences</td>
+            <td>Cyan</td>
+        </tr>
+        <tr>
+            <td>Découverte</td>
+            <td>Sciences, biodiversité, exploration</td>
+            <td>Vert</td>
+        </tr>
+        <tr>
+            <td>Musée</td>
+            <td>Coulisses, équipe, projets</td>
+            <td>Orange</td>
+        </tr>
+    </table>
+
+    <h4>Créer une nouvelle catégorie</h4>
+    <ol>
+        <li>Dans l'espace admin, cliquez sur <strong>Catégories</strong> dans le menu</li>
+        <li>Cliquez sur le bouton <strong>+ Nouvelle catégorie</strong></li>
+        <li>Remplissez le formulaire :
+            <ul>
+                <li><strong>Nom</strong> : Le nom affiché (ex: "Événement")</li>
+                <li><strong>Identifiant</strong> : Clé technique sans espaces (ex: "evenement")</li>
+                <li><strong>Couleur</strong> : Choisissez une couleur pour le badge</li>
+            </ul>
+        </li>
+        <li>Cliquez sur <strong>Enregistrer</strong></li>
+    </ol>
+
+    <h4>Modifier une catégorie</h4>
+    <ol>
+        <li>Dans la liste des catégories, cliquez sur celle à modifier</li>
+        <li>Modifiez les informations souhaitées</li>
+        <li>Cliquez sur <strong>Enregistrer</strong></li>
+    </ol>
+
+    <h4>Supprimer une catégorie</h4>
+    <ol>
+        <li>Cliquez sur l'icône <strong>Corbeille</strong> à côté de la catégorie</li>
+        <li>Confirmez la suppression</li>
+    </ol>
+
+    <div class="warning">
+        <strong>⚠️ Attention :</strong> Si vous supprimez une catégorie, les articles existants qui l'utilisaient
+        n'auront plus de catégorie assignée. Il faudra les réassigner manuellement.
+    </div>
+
+    <h3>Upload d'Images</h3>
+    <ul>
+        <li><strong>Formats acceptés :</strong> JPG, PNG, WebP</li>
+        <li><strong>Taille recommandée :</strong> 1200x800 pixels minimum</li>
+        <li><strong>Poids maximum :</strong> 10 Mo</li>
+    </ul>
+    <p>Les images sont automatiquement compressées et hébergées sur Cloudinary (CDN).</p>
+
+    <div class="page-break"></div>
+
+    <h2>Tous les Identifiants</h2>
+
+    <table>
+        <tr>
+            <th>Service</th>
+            <th>Email</th>
+            <th>Mot de passe</th>
+        </tr>
+        <tr>
+            <td>Admin du site</td>
+            <td>—</td>
+            <td><code>AbysseSuperMusee2026</code></td>
+        </tr>
+        <tr>
+            <td>Firebase</td>
+            <td><code>abyssemusee@gmail.com</code></td>
+            <td><code>AbysseSuperMusee2026</code></td>
+        </tr>
+        <tr>
+            <td>Cloudinary</td>
+            <td><code>abyssemusee@gmail.com</code> (connexion via Google)</td>
+            <td><code>AbysseSuperMusee2026</code></td>
+        </tr>
+        <tr>
+            <td>Vercel</td>
+            <td><code>killiangil2003@gmail.com</code></td>
+            <td>Contacter Killian Gil</td>
+        </tr>
+    </table>
+
+    <h3>Liens des services</h3>
+    <ul>
+        <li><strong>Firebase :</strong> <a href="https://console.firebase.google.com">console.firebase.google.com</a>
+        </li>
+        <li><strong>Cloudinary :</strong> <a href="https://cloudinary.com/console">cloudinary.com/console</a></li>
+        <li><strong>Vercel :</strong> <a href="https://vercel.com/dashboard">vercel.com/dashboard</a></li>
+    </ul>
+
+    <p>Pour Vercel, contactez directement <strong>Killian Gil</strong> : <a
+            href="mailto:killiangil04@gmail.com">killiangil04@gmail.com</a></p>
+
+    <div class="page-break"></div>
+
+    <h2>Développement Local</h2>
+
+    <h3>Prérequis</h3>
+    <ul>
+        <li>Node.js 18+</li>
+        <li>npm ou yarn</li>
+    </ul>
+
+    <h3>Installation</h3>
+    <pre><code># Cloner le projet
+git clone https://github.com/KillianGil/reaco-site-abysse
+
+# Installer les dépendances
+npm install
+
+# Copier les variables d'environnement
+cp .env.example .env.local
+
+# Lancer le serveur de développement
+npm run dev</code></pre>
+
+    <p>Le site est accessible sur <code>http://localhost:3000</code></p>
+
+    <h3>Build de Production</h3>
+    <pre><code>npm run build
+npm run start</code></pre>
+
+    <h2>Maintenance</h2>
+
+    <h3>Mises à jour</h3>
+    <ol>
+        <li>Mettre à jour les dépendances : <code>npm update</code></li>
+        <li>Tester localement : <code>npm run dev</code></li>
+        <li>Vérifier le build : <code>npm run build</code></li>
+        <li>Pousser sur GitHub → Déploiement automatique sur Vercel</li>
+    </ol>
+
+    <h3>Sauvegardes</h3>
+    <ul>
+        <li><strong>Base de données :</strong> Export depuis la console Firebase</li>
+        <li><strong>Images :</strong> Disponibles dans Cloudinary</li>
+    </ul>
+
+    <h3>Problèmes Courants</h3>
+    <table>
+        <tr>
+            <th>Problème</th>
+            <th>Solution</th>
+        </tr>
+        <tr>
+            <td>Page blanche</td>
+            <td>Vérifier les variables d'environnement</td>
+        </tr>
+        <tr>
+            <td>Images non affichées</td>
+            <td>Vérifier la configuration Cloudinary</td>
+        </tr>
+        <tr>
+            <td>Erreur de connexion admin</td>
+            <td>Vérifier que le mot de passe est correct</td>
+        </tr>
+        <tr>
+            <td>Données non affichées</td>
+            <td>Vérifier les règles Firebase Firestore</td>
+        </tr>
+        <tr>
+            <td>Déploiement échoué</td>
+            <td>Vérifier les logs sur Vercel</td>
+        </tr>
+    </table>
+
+    <h2>Contacts</h2>
+    <table>
+        <tr>
+            <th>Rôle</th>
+            <th>Contact</th>
+        </tr>
+        <tr>
+            <td>Développeur principal</td>
+            <td><a href="mailto:killiangil04@gmail.com">killiangil04@gmail.com</a></td>
+        </tr>
+        <tr>
+            <td>Compte ABYSSE</td>
+            <td><a href="mailto:abyssemusee@gmail.com">abyssemusee@gmail.com</a></td>
+        </tr>
+    </table>
+
+    <div class="footer">
+        <p>Document mis à jour le 27 janvier 2026</p>
+        <p>ABYSSE - Musée Sous-Marin de Toulon</p>
+    </div>
+
+</body>
+
+</html>

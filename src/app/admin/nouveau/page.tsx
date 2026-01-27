@@ -8,7 +8,6 @@ import { db } from "@/firebase";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { Loader2, Upload, X, Check, AlertCircle, Calendar, Clock, FileText, Tag, Star, Send } from "lucide-react";
 import { useCategories } from "@/hooks/useCategories";
-import { getColorClasses } from "@/types/category";
 
 interface ArticleForm {
     titre: string;

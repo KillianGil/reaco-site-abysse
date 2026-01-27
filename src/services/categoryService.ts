@@ -1,6 +1,6 @@
 import { db } from "@/firebase";
-import { collection, getDocs, addDoc, query, where, orderBy, Timestamp, updateDoc, doc } from "firebase/firestore";
-import type { Category, CategoryFormData } from "@/types/category";
+import { collection, getDocs, addDoc, query, where, Timestamp, updateDoc, doc } from "firebase/firestore";
+import type { Category } from "@/types/category";
 import { validateCategoryKey } from "@/types/category";
 
 const DEFAULT_CATEGORIES = [

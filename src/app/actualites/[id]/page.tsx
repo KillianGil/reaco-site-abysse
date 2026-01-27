@@ -9,7 +9,9 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Calendar, Clock, ArrowLeft, ArrowRight, Share2, Loader2, Link2, Facebook, Linkedin, Instagram } from "lucide-react";
 import dynamic from "next/dynamic";
-import { useArticle, useArticles, type ArticleCategory } from "@/hooks/useArticles";
+import { useArticle, useArticles } from "@/hooks/useArticles";
+import { useCategories } from "@/hooks/useCategories";
+import { getColorClasses } from "@/types/category";
 
 const Navbar = dynamic(() => import("@/components/UI/Navbar").then(mod => mod.Navbar), { ssr: false });
 
@@ -29,6 +31,7 @@ export default function ArticlePage() {
 
     const { article, loading, error } = useArticle(id);
     const { articles } = useArticles();
+    const { categories } = useCategories();
 
     // Suggestions : autres articles de la même catégorie ou récents
     const suggestions = articles
@@ -84,13 +87,9 @@ export default function ArticlePage() {
         return () => ctx.revert();
     }, [article]);
 
-    const getCategoryColor = (category: ArticleCategory) => {
-        switch (category) {
-            case "evenement": return "bg-[#4CBBD5]/20 text-[#4CBBD5] border-[#4CBBD5]/30";
-            case "decouverte": return "bg-emerald-500/20 text-emerald-400 border-emerald-500/30";
-            case "musee": return "bg-amber-500/20 text-amber-400 border-amber-500/30";
-            default: return "bg-white/10 text-white/70 border-white/20";
-        }
+    const getCategoryColor = (categoryKey: string) => {
+        const category = categories.find(c => c.key === categoryKey);
+        return category ? getColorClasses(category.color) : "bg-white/10 text-white/70 border-white/20";
     };
 
     const shareUrl = typeof window !== "undefined" ? window.location.href : "";
