@@ -277,18 +277,20 @@ function CategoryCard({
                 <div className="flex items-center gap-2">
                     <button
                         onClick={() => onEdit(category)}
-                        className="p-2 hover:bg-white/10 rounded-lg transition-colors text-amber-400 hover:text-amber-300"
+                        className="px-3 py-2 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 rounded-lg transition-colors text-amber-400 hover:text-amber-300 flex items-center gap-2"
                         title="Modifier"
                     >
-                        <Pencil className="w-5 h-5" />
+                        <Pencil className="w-4 h-4" />
+                        <span className="text-sm font-medium">Modifier</span>
                     </button>
                     <button
                         onClick={() => onDelete(category)}
                         disabled={category.isDefault}
-                        className="p-2 hover:bg-white/10 rounded-lg transition-colors text-red-400 hover:text-red-300 disabled:opacity-30 disabled:cursor-not-allowed"
-                        title={category.isDefault ? "Les catégories par défaut ne peuvent pas être supprimées" : "Supprimer"}
+                        className="px-3 py-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 rounded-lg transition-colors text-red-400 hover:text-red-300 disabled:opacity-30 disabled:cursor-not-allowed flex items-center gap-2"
+                        title={category.isDefault ? "Les catégories par défaut ne peuvent pas être supprimées" : "Supprimer cette catégorie"}
                     >
-                        <Trash2 className="w-5 h-5" />
+                        <Trash2 className="w-4 h-4" />
+                        <span className="text-sm font-medium">Supprimer</span>
                     </button>
                 </div>
             </div>

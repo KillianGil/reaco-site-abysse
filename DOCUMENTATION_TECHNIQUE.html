@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABYSSE - Documentation Technique</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 13pt;
+            line-height: 1.7;
+            color: #1a1a2e;
+            background: #ffffff;
+            padding: 50px 70px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 28pt;
+            color: #006994;
+            margin-bottom: 8px;
+            border-bottom: 4px solid #4CBBD5;
+            padding-bottom: 12px;
+        }
+
+        h2 {
+            font-size: 18pt;
+            color: #041C30;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        h3 {
+            font-size: 14pt;
+            color: #006994;
+            margin-top: 25px;
+            margin-bottom: 12px;
+        }
+
+        p {
+            margin-bottom: 12px;
+            text-align: justify;
+        }
+
+        .subtitle {
+            font-size: 13pt;
+            color: #666;
+            margin-bottom: 35px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0 25px 0;
+            font-size: 12pt;
+        }
+
+        th,
+        td {
+            padding: 12px 15px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background: #006994;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 11pt;
+            color: #c7254e;
+        }
+
+        ul,
+        ol {
+            margin: 12px 0 18px 25px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #e0e0e0;
+            margin: 30px 0;
+        }
+
+        .page-break {
+            page-break-before: always;
+        }
+
+        .footer {
+            margin-top: 50px;
+            padding-top: 15px;
+            border-top: 2px solid #e0e0e0;
+            text-align: center;
+            color: #888;
+            font-size: 10pt;
+        }
+
+        a {
+            color: #006994;
+            text-decoration: none;
+        }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media print {
+            body {
+                padding: 35px 45px;
+            }
+
+            .page-break {
+                page-break-before: always;
+            }
+
+            h2,
+            h3 {
+                page-break-after: avoid;
+            }
+
+            table,
+            ul,
+            ol {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>ABYSSE</h1>
+    <p class="subtitle">Documentation Technique du Projet</p>
+
+    <h2>Présentation du Projet</h2>
+    <p>
+        <strong>ABYSSE</strong> est le site web officiel d'un musée maritime situé à Toulon.
+        Il s'agit d'une plateforme moderne proposant une expérience immersive en 3D sur la page d'accueil,
+        un système de gestion d'actualités avec interface d'administration complète,
+        et des pages d'informations pour les visiteurs.
+    </p>
+
+    <h3>Fonctionnalités principales</h3>
+    <ul>
+        <li>Scène 3D interactive avec modèle de sous-marin (Three.js)</li>
+        <li>Système de publication d'actualités (CRUD complet)</li>
+        <li>Gestion dynamique des catégories</li>
+        <li>Interface d'administration sécurisée</li>
+        <li>Upload et optimisation d'images automatique</li>
+        <li>Design responsive (mobile, tablette, desktop)</li>
+        <li>Animations fluides au scroll</li>
+        <li>Formulaire de contact fonctionnel</li>
+    </ul>
+
+    <h2>Arborescence du Site</h2>
+
+    <h3>Pages Publiques</h3>
+    <table>
+        <tr>
+            <th>Page</th>
+            <th>URL</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>Accueil</td>
+            <td><code>/</code></td>
+            <td>Page principale avec scène 3D immersive</td>
+        </tr>
+        <tr>
+            <td>Actualités</td>
+            <td><code>/actualites</code></td>
+            <td>Liste des articles avec filtrage par catégorie</td>
+        </tr>
+        <tr>
+            <td>Article</td>
+            <td><code>/actualites/[id]</code></td>
+            <td>Détail d'un article avec partage social</td>
+        </tr>
+        <tr>
+            <td>Informations</td>
+            <td><code>/informations</code></td>
+            <td>Horaires, tarifs, services du musée</td>
+        </tr>
+        <tr>
+            <td>Visiter</td>
+            <td><code>/visiter</code></td>
+            <td>Guide de visite et accès</td>
+        </tr>
+        <tr>
+            <td>Contact</td>
+            <td><code>/contact</code></td>
+            <td>Formulaire de contact et carte</td>
+        </tr>
+        <tr>
+            <td>Partenaires</td>
+            <td><code>/partenaires</code></td>
+            <td>Présentation des partenaires</td>
+        </tr>
+    </table>
+
+    <h3>Pages Administration</h3>
+    <table>
+        <tr>
+            <th>Page</th>
+            <th>URL</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>Dashboard</td>
+            <td><code>/admin</code></td>
+            <td>Statistiques et vue d'ensemble</td>
+        </tr>
+        <tr>
+            <td>Articles</td>
+            <td><code>/admin/articles</code></td>
+            <td>Liste avec recherche et filtre</td>
+        </tr>
+        <tr>
+            <td>Modifier</td>
+            <td><code>/admin/articles/[id]</code></td>
+            <td>Édition d'un article existant</td>
+        </tr>
+        <tr>
+            <td>Nouveau</td>
+            <td><code>/admin/nouveau</code></td>
+            <td>Création d'un nouvel article</td>
+        </tr>
+    </table>
+
+    <div class="page-break"></div>
+
+    <h2>Stack Technique</h2>
+
+    <h3>Framework & Langage</h3>
+    <table>
+        <tr>
+            <th>Technologie</th>
+            <th>Version</th>
+            <th>Rôle</th>
+        </tr>
+        <tr>
+            <td>Next.js</td>
+            <td>14.2</td>
+            <td>Framework React avec App Router et SSR</td>
+        </tr>
+        <tr>
+            <td>React</td>
+            <td>18</td>
+            <td>Bibliothèque UI</td>
+        </tr>
+        <tr>
+            <td>TypeScript</td>
+            <td>5</td>
+            <td>Typage statique JavaScript</td>
+        </tr>
+    </table>
+
+    <h3>3D & Visualisation</h3>
+    <table>
+        <tr>
+            <th>Technologie</th>
+            <th>Version</th>
+            <th>Rôle</th>
+        </tr>
+        <tr>
+            <td>Three.js</td>
+            <td>0.160</td>
+            <td>Rendu 3D WebGL</td>
+        </tr>
+        <tr>
+            <td>React Three Fiber</td>
+            <td>8.18</td>
+            <td>Intégration React de Three.js</td>
+        </tr>
+        <tr>
+            <td>@react-three/drei</td>
+            <td>9.122</td>
+            <td>Composants 3D utilitaires</td>
+        </tr>
+        <tr>
+            <td>Meshoptimizer</td>
+            <td>1.0</td>
+            <td>Optimisation des modèles 3D</td>
+        </tr>
+    </table>
+
+    <h3>Animations</h3>
+    <table>
+        <tr>
+            <th>Technologie</th>
+            <th>Version</th>
+            <th>Rôle</th>
+        </tr>
+        <tr>
+            <td>GSAP</td>
+            <td>3.13</td>
+            <td>Animations au scroll et transitions</td>
+        </tr>
+        <tr>
+            <td>Framer Motion</td>
+            <td>12.23</td>
+            <td>Animations d'interaction (hover, tap)</td>
+        </tr>
+        <tr>
+            <td>Lenis</td>
+            <td>1.0</td>
+            <td>Smooth scroll natif</td>
+        </tr>
+    </table>
+
+    <h3>Styling</h3>
+    <table>
+        <tr>
+            <th>Technologie</th>
+            <th>Version</th>
+            <th>Rôle</th>
+        </tr>
+        <tr>
+            <td>Tailwind CSS</td>
+            <td>3.4</td>
+            <td>Framework CSS utility-first</td>
+        </tr>
+        <tr>
+            <td>PostCSS</td>
+            <td>8</td>
+            <td>Traitement CSS</td>
+        </tr>
+        <tr>
+            <td>Lucide React</td>
+            <td>0.555</td>
+            <td>Bibliothèque d'icônes SVG</td>
+        </tr>
+    </table>
+
+    <h3>Backend & Services</h3>
+    <table>
+        <tr>
+            <th>Technologie</th>
+            <th>Version</th>
+            <th>Rôle</th>
+        </tr>
+        <tr>
+            <td>Firebase Firestore</td>
+            <td>12.8</td>
+            <td>Base de données NoSQL temps réel</td>
+        </tr>
+        <tr>
+            <td>Cloudinary</td>
+            <td>2.9</td>
+            <td>Hébergement et optimisation des images</td>
+        </tr>
+        <tr>
+            <td>Next Cloudinary</td>
+            <td>6.17</td>
+            <td>Intégration Next.js de Cloudinary</td>
+        </tr>
+        <tr>
+            <td>EmailJS</td>
+            <td>4.4</td>
+            <td>Envoi d'emails (formulaire contact)</td>
+        </tr>
+    </table>
+
+    <h3>Hébergement</h3>
+    <table>
+        <tr>
+            <th>Service</th>
+            <th>Rôle</th>
+        </tr>
+        <tr>
+            <td>Vercel</td>
+            <td>Hébergement et déploiement automatique</td>
+        </tr>
+        <tr>
+            <td>GitHub</td>
+            <td>Versionnement du code source</td>
+        </tr>
+    </table>
+
+    <div class="page-break"></div>
+
+    <h2>Architecture du Projet</h2>
+
+    <h3>Structure des dossiers</h3>
+    <table>
+        <tr>
+            <th>Dossier</th>
+            <th>Contenu</th>
+        </tr>
+        <tr>
+            <td><code>src/app/</code></td>
+            <td>Pages de l'application (App Router Next.js)</td>
+        </tr>
+        <tr>
+            <td><code>src/components/Canvas/</code></td>
+            <td>Composants 3D (scène, sous-marin, poissons...)</td>
+        </tr>
+        <tr>
+            <td><code>src/components/UI/</code></td>
+            <td>Composants d'interface (Navbar, Footer, Loader...)</td>
+        </tr>
+        <tr>
+            <td><code>src/components/admin/</code></td>
+            <td>Composants de l'interface d'administration</td>
+        </tr>
+        <tr>
+            <td><code>src/hooks/</code></td>
+            <td>Hooks personnalisés React</td>
+        </tr>
+        <tr>
+            <td><code>src/types/</code></td>
+            <td>Définitions de types TypeScript</td>
+        </tr>
+        <tr>
+            <td><code>src/providers/</code></td>
+            <td>Context providers (Lenis...)</td>
+        </tr>
+        <tr>
+            <td><code>public/</code></td>
+            <td>Assets statiques (images, modèles 3D, fonts)</td>
+        </tr>
+    </table>
+
+    <h3>Hooks personnalisés</h3>
+    <table>
+        <tr>
+            <th>Hook</th>
+            <th>Fonction</th>
+        </tr>
+        <tr>
+            <td><code>useArticles</code></td>
+            <td>Récupération et gestion des articles Firebase</td>
+        </tr>
+        <tr>
+            <td><code>useCategories</code></td>
+            <td>Gestion des catégories d'articles</td>
+        </tr>
+        <tr>
+            <td><code>useScrollProgress</code></td>
+            <td>Suivi de la progression du scroll</td>
+        </tr>
+    </table>
+
+    <h2>Modèle de Données</h2>
+
+    <h3>Collection <code>articles</code></h3>
+    <table>
+        <tr>
+            <th>Champ</th>
+            <th>Type</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>id</td>
+            <td>string</td>
+            <td>Identifiant unique auto-généré</td>
+        </tr>
+        <tr>
+            <td>titre</td>
+            <td>string</td>
+            <td>Titre de l'article</td>
+        </tr>
+        <tr>
+            <td>resume</td>
+            <td>string</td>
+            <td>Extrait affiché dans la liste</td>
+        </tr>
+        <tr>
+            <td>contenu</td>
+            <td>string</td>
+            <td>Corps complet de l'article</td>
+        </tr>
+        <tr>
+            <td>categorie</td>
+            <td>string</td>
+            <td>Identifiant de la catégorie</td>
+        </tr>
+        <tr>
+            <td>label_categorie</td>
+            <td>string</td>
+            <td>Label affiché de la catégorie</td>
+        </tr>
+        <tr>
+            <td>image_url</td>
+            <td>string</td>
+            <td>URL Cloudinary de l'image</td>
+        </tr>
+        <tr>
+            <td>mis_en_avant</td>
+            <td>boolean</td>
+            <td>Article affiché dans "À la Une"</td>
+        </tr>
+        <tr>
+            <td>date_evenement</td>
+            <td>string</td>
+            <td>Date de l'événement (optionnel)</td>
+        </tr>
+        <tr>
+            <td>heure_evenement</td>
+            <td>string</td>
+            <td>Heure de l'événement (optionnel)</td>
+        </tr>
+        <tr>
+            <td>date</td>
+            <td>Timestamp</td>
+            <td>Date de publication</td>
+        </tr>
+        <tr>
+            <td>date_texte</td>
+            <td>string</td>
+            <td>Date formatée lisible</td>
+        </tr>
+    </table>
+
+    <h3>Collection <code>categories</code></h3>
+    <table>
+        <tr>
+            <th>Champ</th>
+            <th>Type</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>id</td>
+            <td>string</td>
+            <td>Identifiant unique</td>
+        </tr>
+        <tr>
+            <td>label</td>
+            <td>string</td>
+            <td>Nom affiché de la catégorie</td>
+        </tr>
+        <tr>
+            <td>color</td>
+            <td>string</td>
+            <td>Couleur du badge</td>
+        </tr>
+    </table>
+
+    <div class="page-break"></div>
+
+    <h2>Design System</h2>
+
+    <h3>Palette de Couleurs</h3>
+    <table>
+        <tr>
+            <th>Couleur</th>
+            <th>Code Hex</th>
+            <th>Usage</th>
+        </tr>
+        <tr>
+            <td>Bleu Profond</td>
+            <td><code>#041C30</code></td>
+            <td>Arrière-plan principal des pages</td>
+        </tr>
+        <tr>
+            <td>Bleu Nuit</td>
+            <td><code>#020A19</code></td>
+            <td>Overlays, loader, dégradés</td>
+        </tr>
+        <tr>
+            <td>Cyan Accent</td>
+            <td><code>#4CBBD5</code></td>
+            <td>Boutons, liens, éléments d'accent</td>
+        </tr>
+        <tr>
+            <td>Océan</td>
+            <td><code>#006994</code></td>
+            <td>Scène 3D, éléments secondaires</td>
+        </tr>
+    </table>
+
+    <h3>Typographie</h3>
+    <table>
+        <tr>
+            <th>Police</th>
+            <th>Usage</th>
+        </tr>
+        <tr>
+            <td>Glancyr</td>
+            <td>Police principale (titres et corps)</td>
+        </tr>
+        <tr>
+            <td>System UI</td>
+            <td>Fallback système</td>
+        </tr>
+    </table>
+
+    <h3>Effets Visuels</h3>
+    <ul>
+        <li><strong>Glassmorphism</strong> : Effets de flou sur les cartes et overlays</li>
+        <li><strong>Dégradés animés</strong> : Arrière-plans dynamiques</li>
+        <li><strong>Animations GSAP</strong> : Déclenchées au scroll (ScrollTrigger)</li>
+        <li><strong>Micro-interactions</strong> : Hover, tap avec Framer Motion</li>
+        <li><strong>Smooth scroll</strong> : Navigation fluide avec Lenis</li>
+    </ul>
+
+    <h2>Responsive Design</h2>
+    <table>
+        <tr>
+            <th>Breakpoint</th>
+            <th>Taille</th>
+            <th>Adaptations</th>
+        </tr>
+        <tr>
+            <td>Mobile</td>
+            <td>&lt; 768px</td>
+            <td>Menu burger, disposition 1 colonne, navbar simplifiée</td>
+        </tr>
+        <tr>
+            <td>Tablette</td>
+            <td>768px - 1024px</td>
+            <td>Disposition 2 colonnes, navigation hybride</td>
+        </tr>
+        <tr>
+            <td>Desktop</td>
+            <td>&gt; 1024px</td>
+            <td>Disposition 3 colonnes, sidebar admin complète</td>
+        </tr>
+    </table>
+
+    <h2>Sécurité</h2>
+    <ul>
+        <li><strong>Variables d'environnement</strong> : Clés API stockées dans <code>.env.local</code></li>
+        <li><strong>Authentification admin</strong> : Mot de passe côté serveur (API route)</li>
+        <li><strong>Règles Firestore</strong> : Lecture publique, écriture restreinte</li>
+        <li><strong>Upload sécurisé</strong> : Validation des types de fichiers</li>
+    </ul>
+
+    <h2>Performance</h2>
+    <ul>
+        <li><strong>SSR / SSG</strong> : Pages pré-rendues avec Next.js</li>
+        <li><strong>Code splitting</strong> : Chargement dynamique des composants</li>
+        <li><strong>Images optimisées</strong> : Compression automatique Cloudinary</li>
+        <li><strong>Fonts locales</strong> : Pas de requêtes Google Fonts</li>
+        <li><strong>Lazy loading</strong> : Composants 3D chargés à la demande</li>
+        <li><strong>Tailwind purge</strong> : CSS non utilisé supprimé au build</li>
+    </ul>
+
+    <h2>Liens du Projet</h2>
+    <table>
+        <tr>
+            <th>Ressource</th>
+            <th>URL</th>
+        </tr>
+        <tr>
+            <td>Site en production</td>
+            <td><a href="https://site-abysse.vercel.app">https://site-abysse.vercel.app</a></td>
+        </tr>
+        <tr>
+            <td>Dépôt GitHub</td>
+            <td><a
+                    href="https://github.com/KillianGil/reaco-site-abysse">https://github.com/KillianGil/reaco-site-abysse</a>
+            </td>
+        </tr>
+    </table>
+
+    <div class="footer">
+        <p>Document technique ABYSSE — Janvier 2026</p>
+        <p>Développé par Killian Gil</p>
+    </div>
+
+</body>
+
+</html>

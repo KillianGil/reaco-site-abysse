@@ -71,8 +71,10 @@ export async function validateCategoryKeyUnique(key: string, excludeId?: string)
             return true;
         }
 
-        if (excludeId && snapshot.docs[0].id === excludeId) {
-            return true;
+        // Si on édite une catégorie, vérifier que la seule correspondance est la catégorie elle-même
+        if (excludeId) {
+            const otherDocs = snapshot.docs.filter(doc => doc.id !== excludeId);
+            return otherDocs.length === 0;
         }
 
         return false;
