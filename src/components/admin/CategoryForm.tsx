@@ -22,14 +22,14 @@ export function CategoryForm({ category, onSubmit, onCancel, loading = false }: 
     const [keyError, setKeyError] = useState<string | null>(null);
     const [labelError, setLabelError] = useState<string | null>(null);
     const [isValidating, setIsValidating] = useState(false);
-    const [keyTouched, setKeyTouched] = useState(false);
 
     useEffect(() => {
-        if (!keyTouched && form.label && !category) {
+        // Pour les nouvelles catégories, générer automatiquement la clé depuis le label
+        if (!category && form.label) {
             const generatedKey = generateKeyFromLabel(form.label);
             setForm(prev => ({ ...prev, key: generatedKey }));
         }
-    }, [form.label, keyTouched, category]);
+    }, [form.label, category]);
 
     const validateForm = async (): Promise<boolean> => {
         let isValid = true;
@@ -102,19 +102,22 @@ export function CategoryForm({ category, onSubmit, onCancel, loading = false }: 
             <div>
                 <label className="block text-sm text-white/60 mb-2">
                     Clé (URL-safe) *
-                    <span className="text-white/30 ml-2">Auto-générée depuis le nom</span>
+                    {!category && <span className="text-white/30 ml-2">Auto-générée depuis le nom</span>}
+                    {category && <span className="text-amber-400/70 ml-2">Non modifiable (utilisée par les articles)</span>}
                 </label>
                 <input
                     type="text"
                     value={form.key}
+                    readOnly={!!category}
                     onChange={(e) => {
-                        setForm(prev => ({ ...prev, key: e.target.value }));
-                        setKeyTouched(true);
-                        setKeyError(null);
+                        if (!category) {
+                            setForm(prev => ({ ...prev, key: e.target.value }));
+                            setKeyError(null);
+                        }
                     }}
-                    className={`w-full bg-white/5 border ${keyError ? 'border-red-500' : 'border-white/20'} rounded-xl px-4 py-3 text-white placeholder:text-white/30 focus:border-[#4CBBD5] focus:outline-none transition-colors font-mono text-sm`}
+                    className={`w-full bg-white/5 border ${keyError ? 'border-red-500' : 'border-white/20'} rounded-xl px-4 py-3 text-white placeholder:text-white/30 ${!category ? 'focus:border-[#4CBBD5]' : 'cursor-not-allowed opacity-60'} focus:outline-none transition-colors font-mono text-sm`}
                     placeholder="ex: innovation"
-                    disabled={loading}
+                    disabled={loading || !!category}
                 />
                 {keyError && (
                     <p className="text-red-400 text-sm mt-1 flex items-center gap-1">
@@ -126,6 +129,11 @@ export function CategoryForm({ category, onSubmit, onCancel, loading = false }: 
                     <p className="text-white/40 text-sm mt-1 flex items-center gap-1">
                         <Loader2 className="w-4 h-4 animate-spin" />
                         Vérification de l&apos;unicité...
+                    </p>
+                )}
+                {category && (
+                    <p className="text-xs text-white/40 mt-1">
+                        ⚠️ La clé ne peut pas être modifiée car elle est utilisée pour identifier la catégorie dans la base de données
                     </p>
                 )}
             </div>

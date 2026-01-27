@@ -160,23 +160,148 @@
 
     <h2>Présentation du Projet</h2>
     <p>
-        <strong>ABYSSE</strong> est le site web officiel d'un musée maritime situé à Toulon.
-        Il s'agit d'une plateforme moderne proposant une expérience immersive en 3D sur la page d'accueil,
-        un système de gestion d'actualités avec interface d'administration complète,
-        et des pages d'informations pour les visiteurs.
+        <strong>ABYSSE</strong> est le site web officiel d'un musée maritime fictif situé à Toulon.
+        Ce projet a été développé dans le cadre d'un projet scolaire REACO. Il s'agit d'une plateforme
+        web moderne et immersive, proposant une expérience utilisateur premium avec une scène 3D interactive,
+        un système complet de gestion de contenu, et une identité visuelle inspirée des fonds marins.
     </p>
 
-    <h3>Fonctionnalités principales</h3>
+    <h3>Page d'Accueil - Expérience 3D Immersive</h3>
+    <p>La page d'accueil propose une plongée visuelle dans l'univers sous-marin grâce à une scène 3D complète :</p>
     <ul>
-        <li>Scène 3D interactive avec modèle de sous-marin (Three.js)</li>
-        <li>Système de publication d'actualités (CRUD complet)</li>
-        <li>Gestion dynamique des catégories</li>
-        <li>Interface d'administration sécurisée</li>
-        <li>Upload et optimisation d'images automatique</li>
-        <li>Design responsive (mobile, tablette, desktop)</li>
-        <li>Animations fluides au scroll</li>
-        <li>Formulaire de contact fonctionnel</li>
+        <li><strong>Modèle 3D de sous-marin</strong> navigable avec contrôle de caméra</li>
+        <li><strong>Environnement océanique complet</strong> : brouillard, lumière volumétrique, caustiques</li>
+        <li><strong>Faune marine animée</strong> : bancs de poissons, méduses, raies manta, poissons des abysses</li>
+        <li><strong>Effets visuels</strong> : particules bioluminescentes, neige marine, rayons de lumière</li>
+        <li><strong>Algues et décorations</strong> procédurales avec mouvement naturel</li>
+        <li><strong>Overlay d'informations</strong> avec présentation du musée et CTA</li>
     </ul>
+
+    <h3>Page Actualités</h3>
+    <ul>
+        <li><strong>Liste des articles</strong> avec pagination et animations au scroll</li>
+        <li><strong>Section "À la Une"</strong> pour les articles mis en avant</li>
+        <li><strong>Filtrage par catégorie</strong> : Événements, Découvertes, Vie du musée</li>
+        <li><strong>Cartes interactives</strong> avec aperçu image, date, résumé</li>
+        <li><strong>Newsletter</strong> avec champ d'inscription</li>
+    </ul>
+
+    <h3>Page Article Détail</h3>
+    <ul>
+        <li><strong>Affichage du contenu complet</strong> avec typographie optimisée</li>
+        <li><strong>Image de couverture</strong> en grand format</li>
+        <li><strong>Boutons de partage social</strong> : X (Twitter), Facebook, LinkedIn, Instagram, Copier le lien</li>
+        <li><strong>Articles similaires</strong> suggérés en bas de page</li>
+        <li><strong>Navigation</strong> : retour aux actualités</li>
+    </ul>
+
+    <h3>Page Informations Pratiques</h3>
+    <ul>
+        <li><strong>Comment venir</strong> : À pied, en bus, en voiture avec coordonnées GPS</li>
+        <li><strong>Horaires d'ouverture</strong> avec durée de visite recommandée</li>
+        <li><strong>Grille tarifaire</strong> : Adulte (16€), Jeune (10€), Enfant (8€), Famille (42€)</li>
+        <li><strong>Services du musée</strong> : Accessibilité PMR, audioguides multilingues, cafétéria, boutique,
+            Wi-Fi, consignes</li>
+        <li><strong>Animations au scroll</strong> avec compteurs animés</li>
+    </ul>
+
+    <h3>Page Contact</h3>
+    <ul>
+        <li><strong>Formulaire de contact</strong> fonctionnel (EmailJS) : nom, email, sujet, message</li>
+        <li><strong>Informations de contact</strong> : adresse, téléphone, email</li>
+        <li><strong>Carte interactive</strong> iframe Google Maps</li>
+        <li><strong>FAQ accordéon</strong> : 6 questions fréquentes avec réponses détaillées</li>
+        <li><strong>Feedback visuel</strong> : états de chargement, succès, erreur</li>
+    </ul>
+
+    <h3>Page Visiter</h3>
+    <ul>
+        <li><strong>Présentation du parcours</strong> de visite</li>
+        <li><strong>Espaces thématiques</strong> du musée</li>
+        <li><strong>Informations pratiques</strong> complémentaires</li>
+    </ul>
+
+    <h3>Page Partenaires</h3>
+    <ul>
+        <li><strong>Logos des partenaires</strong> institutionnels et privés</li>
+        <li><strong>Présentation</strong> des collaborations</li>
+    </ul>
+
+    <h3>Interface d'Administration</h3>
+    <p>Espace sécurisé par mot de passe pour la gestion complète du contenu :</p>
+    <ul>
+        <li><strong>Dashboard</strong> : statistiques (nombre d'articles, à la une, publications du mois)</li>
+        <li><strong>Gestion des articles</strong> : création, modification, suppression avec éditeur complet</li>
+        <li><strong>Upload d'images</strong> : drag & drop, compression automatique via Cloudinary</li>
+        <li><strong>Gestion des catégories</strong> : CRUD complet avec personnalisation des couleurs</li>
+        <li><strong>Mise en avant</strong> : toggle pour afficher un article en "À la Une"</li>
+        <li><strong>Événements</strong> : champs optionnels date/heure pour les événements</li>
+        <li><strong>Recherche et filtrage</strong> dans la liste des articles</li>
+    </ul>
+
+    <h3>Composants 3D Développés</h3>
+    <table>
+        <tr>
+            <th>Composant</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>Scene.tsx</td>
+            <td>Orchestrateur principal de la scène 3D</td>
+        </tr>
+        <tr>
+            <td>Submarine.tsx</td>
+            <td>Modèle 3D du sous-marin avec contrôles</td>
+        </tr>
+        <tr>
+            <td>FishSchool.tsx</td>
+            <td>Bancs de poissons animés avec comportement de groupe</td>
+        </tr>
+        <tr>
+            <td>JellyFish.tsx</td>
+            <td>Méduses bioluminescentes animées</td>
+        </tr>
+        <tr>
+            <td>MantaRay.tsx</td>
+            <td>Raie manta avec mouvement fluide</td>
+        </tr>
+        <tr>
+            <td>Anglerfish.tsx</td>
+            <td>Poisson des abysses avec lumière</td>
+        </tr>
+        <tr>
+            <td>FastFish.tsx</td>
+            <td>Poissons rapides individuels</td>
+        </tr>
+        <tr>
+            <td>SeaWeed.tsx</td>
+            <td>Algues animées avec mouvement naturel</td>
+        </tr>
+        <tr>
+            <td>OceanEnvironment.tsx</td>
+            <td>Configuration environnement (brouillard, lumière)</td>
+        </tr>
+        <tr>
+            <td>BioluminescentParticles.tsx</td>
+            <td>Système de particules lumineuses</td>
+        </tr>
+        <tr>
+            <td>MarineSnow.tsx</td>
+            <td>Neige marine (particules descendantes)</td>
+        </tr>
+        <tr>
+            <td>CausticsEffect.tsx</td>
+            <td>Effet de réfraction lumineuse sous-marine</td>
+        </tr>
+        <tr>
+            <td>VolumetricLight.tsx</td>
+            <td>Rayons de lumière volumétrique</td>
+        </tr>
+        <tr>
+            <td>OceanDecorations.tsx</td>
+            <td>Éléments de décor (rochers, coraux)</td>
+        </tr>
+    </table>
 
     <h2>Arborescence du Site</h2>
 
