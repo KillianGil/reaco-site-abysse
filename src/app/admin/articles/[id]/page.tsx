@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import Image from "next/image";
 import { AdminProvider, useAdmin, AdminLogin, AdminLayout, SuccessModal } from "@/components/admin/AdminComponents";
 import { db } from "@/firebase";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { Loader2, Upload, X, Check, AlertCircle, Calendar, Clock, FileText, Tag, Star, Save, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useCategories } from "@/hooks/useCategories";
@@ -163,6 +163,14 @@ function EditArticleContent() {
                 imageUrl = await uploadImage();
             }
 
+            // Format de la date texte
+            const now = new Date();
+            const dateTexte = now.toLocaleDateString("fr-FR", {
+                day: "numeric",
+                month: "long",
+                year: "numeric"
+            });
+
             const articleData = {
                 titre: form.titre,
                 resume: form.resume,
@@ -172,10 +180,21 @@ function EditArticleContent() {
                 image_url: imageUrl,
                 mis_en_avant: form.mis_en_avant,
                 date_evenement: form.date_evenement || null,
-                heure_evenement: form.heure_evenement || null
+                heure_evenement: form.heure_evenement || null,
+                date_texte: dateTexte
             };
 
-            await updateDoc(doc(db, "articles", articleId), articleData);
+            // Modification via API sécurisée
+            const response = await fetch(`/api/articles/${articleId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(articleData)
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Erreur lors de la modification');
+            }
 
             setSubmitSuccess(true);
         } catch (error) {

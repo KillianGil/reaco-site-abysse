@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { AdminProvider, useAdmin, AdminLogin, AdminLayout } from "@/components/admin/AdminComponents";
 import { db } from "@/firebase";
-import { collection, getDocs, deleteDoc, doc, query, orderBy } from "firebase/firestore";
+import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { Loader2, Trash2, ExternalLink, Search, Filter, Plus, Pencil } from "lucide-react";
 import { useCategories } from "@/hooks/useCategories";
 import { getColorClasses } from "@/types/category";
@@ -76,12 +76,20 @@ function ArticlesListContent() {
 
         setDeletingId(article.id);
         try {
-            // Delete from Firestore
-            await deleteDoc(doc(db, "articles", article.id));
+            // Suppression via API sécurisée
+            const response = await fetch(`/api/articles/${article.id}`, {
+                method: 'DELETE'
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Erreur lors de la suppression');
+            }
+
             setArticles(prev => prev.filter(a => a.id !== article.id));
         } catch (error) {
             console.error("Erreur suppression:", error);
-            alert("Erreur lors de la suppression");
+            alert(error instanceof Error ? error.message : "Erreur lors de la suppression");
         } finally {
             setDeletingId(null);
         }

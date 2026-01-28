@@ -4,8 +4,6 @@ import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { AdminProvider, useAdmin, AdminLogin, AdminLayout, SuccessModal } from "@/components/admin/AdminComponents";
-import { db } from "@/firebase";
-import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { Loader2, Upload, X, Check, AlertCircle, Calendar, Clock, FileText, Tag, Star, Send } from "lucide-react";
 import { useCategories } from "@/hooks/useCategories";
 
@@ -133,11 +131,20 @@ function NewArticleContent() {
                 mis_en_avant: form.mis_en_avant,
                 date_evenement: form.date_evenement || null,
                 heure_evenement: form.heure_evenement || null,
-                date_texte: dateTexte,
-                date: Timestamp.now()
+                date_texte: dateTexte
             };
 
-            await addDoc(collection(db, "articles"), articleData);
+            // Création via API sécurisée
+            const response = await fetch('/api/articles', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(articleData)
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Erreur lors de la création');
+            }
 
             setSubmitSuccess(true);
         } catch (error) {
