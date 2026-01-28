@@ -58,7 +58,10 @@ export async function getCategoryByKey(key: string): Promise<Category | null> {
 }
 
 export async function validateCategoryKeyUnique(key: string, excludeId?: string): Promise<boolean> {
+    console.log("🔍 Validation de la clé:", key, "excludeId:", excludeId);
+
     if (!validateCategoryKey(key)) {
+        console.log("❌ Format de clé invalide");
         return false;
     }
 
@@ -67,19 +70,24 @@ export async function validateCategoryKeyUnique(key: string, excludeId?: string)
         const q = query(categoriesRef, where("key", "==", key));
         const snapshot = await getDocs(q);
 
+        console.log("📊 Résultats de la recherche:", snapshot.size, "document(s) trouvé(s)");
+
         if (snapshot.empty) {
+            console.log("✅ Clé disponible (aucun document trouvé)");
             return true;
         }
 
         // Si on édite une catégorie, vérifier que la seule correspondance est la catégorie elle-même
         if (excludeId) {
             const otherDocs = snapshot.docs.filter(doc => doc.id !== excludeId);
+            console.log("🔄 Mode édition: autres documents:", otherDocs.length);
             return otherDocs.length === 0;
         }
 
+        console.log("❌ Clé déjà utilisée");
         return false;
     } catch (error) {
-        console.error("Error validating category key:", error);
+        console.error("❌ Erreur lors de la validation:", error);
         return false;
     }
 }

@@ -28,12 +28,15 @@ export function CategoryForm({ category, onSubmit, onCancel, loading = false }: 
         if (!category && form.label) {
             const generatedKey = generateKeyFromLabel(form.label);
             setForm(prev => ({ ...prev, key: generatedKey }));
+            // Réinitialiser l'erreur quand la clé change
+            setKeyError(null);
         }
     }, [form.label, category]);
 
     const validateForm = async (): Promise<boolean> => {
         let isValid = true;
 
+        // Validation du nom
         if (!form.label.trim()) {
             setLabelError("Le nom est requis");
             isValid = false;
@@ -41,25 +44,34 @@ export function CategoryForm({ category, onSubmit, onCancel, loading = false }: 
             setLabelError(null);
         }
 
-        // Seulement valider la clé pour les nouvelles catégories
-        // Les catégories existantes ont leur clé verrouillée
+        // Validation de la clé (uniquement pour les nouvelles catégories)
         if (!category) {
-            if (!form.key.trim()) {
+            const keyToValidate = form.key.trim();
+
+            if (!keyToValidate) {
                 setKeyError("La clé est requise");
                 isValid = false;
-            } else if (!validateCategoryKey(form.key)) {
+            } else if (!validateCategoryKey(keyToValidate)) {
                 setKeyError("La clé doit contenir seulement des lettres minuscules, chiffres et tirets");
                 isValid = false;
             } else {
+                // Vérifier l'unicité
                 setIsValidating(true);
-                const isUnique = await validateCategoryKeyUnique(form.key);
-                setIsValidating(false);
+                try {
+                    const isUnique = await validateCategoryKeyUnique(keyToValidate);
+                    setIsValidating(false);
 
-                if (!isUnique) {
-                    setKeyError("Cette clé est déjà utilisée");
+                    if (!isUnique) {
+                        setKeyError("Cette clé est déjà utilisée");
+                        isValid = false;
+                    } else {
+                        setKeyError(null);
+                    }
+                } catch (error) {
+                    console.error("Erreur de validation:", error);
+                    setIsValidating(false);
+                    setKeyError("Erreur lors de la vérification de la clé");
                     isValid = false;
-                } else {
-                    setKeyError(null);
                 }
             }
         }

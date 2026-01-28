@@ -5,9 +5,7 @@ import { AdminProvider, useAdmin, AdminLogin, AdminLayout, SuccessModal } from "
 import { CategoryForm } from "@/components/admin/CategoryForm";
 import { DeleteCategoryModal } from "@/components/admin/DeleteCategoryModal";
 import { useCategories } from "@/hooks/useCategories";
-import { db } from "@/firebase";
-import { collection, addDoc, updateDoc, deleteDoc, doc, Timestamp } from "firebase/firestore";
-import { countArticlesInCategory, reassignArticles, getCategoryByKey } from "@/services/categoryService";
+import { countArticlesInCategory } from "@/services/categoryService";
 import type { Category, CategoryFormData } from "@/types/category";
 import { getColorClasses } from "@/types/category";
 import { Loader2, Plus, Pencil, Trash2, Tag, X, AlertCircle, FileText } from "lucide-react";
@@ -52,17 +50,29 @@ function CategoriesContent() {
 
         try {
             if (editingCategory) {
-                await updateDoc(doc(db, "categories", editingCategory.id), {
-                    ...data,
-                    updatedAt: Timestamp.now()
+                // Mise à jour via API sécurisée
+                const response = await fetch(`/api/categories/${editingCategory.id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
                 });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Erreur lors de la mise à jour');
+                }
             } else {
-                await addDoc(collection(db, "categories"), {
-                    ...data,
-                    isDefault: false,
-                    createdAt: Timestamp.now(),
-                    updatedAt: Timestamp.now()
+                // Création via API sécurisée
+                const response = await fetch('/api/categories', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
                 });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Erreur lors de la création');
+                }
             }
 
             await refreshCategories();
@@ -71,7 +81,7 @@ function CategoriesContent() {
             setEditingCategory(null);
         } catch (error) {
             console.error("Error saving category:", error);
-            setSubmitError("Erreur lors de l'enregistrement de la catégorie");
+            setSubmitError(error instanceof Error ? error.message : "Erreur lors de l'enregistrement de la catégorie");
         } finally {
             setIsSubmitting(false);
         }
@@ -95,25 +105,24 @@ function CategoriesContent() {
         if (!deleteModal.category) return;
 
         try {
-            if (replacementKey) {
-                const replacementCategory = await getCategoryByKey(replacementKey);
-                if (!replacementCategory) throw new Error("Replacement category not found");
+            // Suppression via API sécurisée
+            const response = await fetch(`/api/categories/${deleteModal.category.id}`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ replacementKey })
+            });
 
-                await reassignArticles(
-                    deleteModal.category.key,
-                    replacementCategory.key,
-                    replacementCategory.label
-                );
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Erreur lors de la suppression');
             }
-
-            await deleteDoc(doc(db, "categories", deleteModal.category.id));
 
             await refreshCategories();
             setDeleteModal({ isOpen: false, category: null, articleCount: 0 });
             setSubmitSuccess(true);
         } catch (error) {
             console.error("Error deleting category:", error);
-            alert("Erreur lors de la suppression de la catégorie");
+            alert(error instanceof Error ? error.message : "Erreur lors de la suppression de la catégorie");
         }
     };
 
