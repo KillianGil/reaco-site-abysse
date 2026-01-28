@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { adminDb } from '@/lib/firebase-admin';
+import { getAdminDb } from '@/lib/firebase-admin';
 import { FieldValue } from 'firebase-admin/firestore';
 
 // PUT - Modifier une catégorie
@@ -8,6 +8,7 @@ export async function PUT(
     { params }: { params: { id: string } }
 ) {
     try {
+        const adminDb = getAdminDb();
         const data = await request.json();
         const categoryId = params.id;
 
@@ -45,6 +46,7 @@ export async function DELETE(
     { params }: { params: { id: string } }
 ) {
     try {
+        const adminDb = getAdminDb();
         const categoryId = params.id;
         const { replacementKey } = await request.json();
 

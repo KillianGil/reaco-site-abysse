@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { adminDb } from '@/lib/firebase-admin';
+import { getAdminDb } from '@/lib/firebase-admin';
 import { FieldValue } from 'firebase-admin/firestore';
 
 // GET - Récupérer toutes les catégories
 export async function GET() {
     try {
+        const adminDb = getAdminDb();
         const snapshot = await adminDb.collection('categories').orderBy('order').get();
 
         const categories = snapshot.docs.map(doc => ({
@@ -25,6 +26,7 @@ export async function GET() {
 // POST - Créer une nouvelle catégorie
 export async function POST(request: NextRequest) {
     try {
+        const adminDb = getAdminDb();
         const data = await request.json();
 
         // Valider les données
