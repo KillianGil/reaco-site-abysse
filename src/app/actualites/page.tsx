@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Calendar, Clock, ArrowRight, Users, Sparkles, Mail, Loader2 } from "lucide-react";
+import { Calendar, Clock, ArrowRight, Sparkles, Mail, Loader2 } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useArticles } from "@/hooks/useArticles";
 import { useCategories } from "@/hooks/useCategories";
@@ -252,8 +252,25 @@ export default function ActualitesPage() {
                     </div>
 
                     {/* News Grid */}
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {regularNews.map((item) => (
+                    {regularNews.length === 0 ? (
+                        <div className="bg-white/5 rounded-2xl border border-white/10 p-12 text-center">
+                            <p className="text-white/40 mb-4">
+                                {filter === "all"
+                                    ? "Aucun article disponible"
+                                    : `Aucun article dans la catégorie "${categories.find(c => c.key === filter)?.label}"`}
+                            </p>
+                            {filter !== "all" && (
+                                <button
+                                    onClick={() => setFilter("all")}
+                                    className="text-[#4CBBD5] hover:underline"
+                                >
+                                    Voir tous les articles
+                                </button>
+                            )}
+                        </div>
+                    ) : (
+                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {regularNews.map((item) => (
                             <Link key={item.id} href={`/actualites/${item.id}`}>
                                 <article
                                     className="news-card group cursor-pointer"
@@ -314,13 +331,6 @@ export default function ActualitesPage() {
                                 </article>
                             </Link>
                         ))}
-                    </div>
-
-                    {/* Empty state */}
-                    {regularNews.length === 0 && (
-                        <div className="text-center py-16">
-                            <Users className="w-12 h-12 text-white/20 mx-auto mb-4" />
-                            <p className="text-white/50">Aucune actualité dans cette catégorie pour le moment.</p>
                         </div>
                     )}
                 </section>

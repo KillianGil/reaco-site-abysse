@@ -17,6 +17,7 @@ function CategoriesContent() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitSuccess, setSubmitSuccess] = useState(false);
     const [submitError, setSubmitError] = useState<string | null>(null);
+    const [lastAction, setLastAction] = useState<'create' | 'edit' | 'delete'>('create');
 
     const [deleteModal, setDeleteModal] = useState<{
         isOpen: boolean;
@@ -76,6 +77,7 @@ function CategoriesContent() {
             }
 
             await refreshCategories();
+            setLastAction(editingCategory ? 'edit' : 'create');
             setSubmitSuccess(true);
             setShowForm(false);
             setEditingCategory(null);
@@ -119,6 +121,7 @@ function CategoriesContent() {
 
             await refreshCategories();
             setDeleteModal({ isOpen: false, category: null, articleCount: 0 });
+            setLastAction('delete');
             setSubmitSuccess(true);
         } catch (error) {
             console.error("Error deleting category:", error);
@@ -175,12 +178,20 @@ function CategoriesContent() {
             <SuccessModal
                 isOpen={submitSuccess}
                 onClose={() => setSubmitSuccess(false)}
-                title={editingCategory ? "Catégorie modifiée !" : deleteModal.category ? "Catégorie supprimée !" : "Catégorie créée !"}
-                message={editingCategory
-                    ? "La catégorie a été modifiée avec succès."
-                    : deleteModal.category
+                title={
+                    lastAction === 'delete'
+                        ? "Catégorie supprimée !"
+                        : lastAction === 'edit'
+                            ? "Catégorie modifiée !"
+                            : "Catégorie créée !"
+                }
+                message={
+                    lastAction === 'delete'
                         ? "La catégorie a été supprimée avec succès."
-                        : "La catégorie a été créée avec succès."}
+                        : lastAction === 'edit'
+                            ? "La catégorie a été modifiée avec succès."
+                            : "La catégorie a été créée avec succès."
+                }
                 actions={[
                     { label: "Fermer", onClick: () => setSubmitSuccess(false), primary: true }
                 ]}
