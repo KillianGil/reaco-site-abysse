@@ -31,6 +31,7 @@ export default function ActualitesPage() {
     const featuredNews = articles.filter(item => item.featured);
     const regularNews = filteredNews.filter(item => !item.featured);
 
+    // Animations initiales (une seule fois au chargement)
     useEffect(() => {
         const ctx = gsap.context(() => {
             gsap.from(".hero-title", {
@@ -61,7 +62,7 @@ export default function ActualitesPage() {
                 }
             );
 
-            // Filter buttons animation
+            // Filter buttons animation - une seule fois
             gsap.from(".filter-btn", {
                 y: 20,
                 opacity: 0,
@@ -69,21 +70,6 @@ export default function ActualitesPage() {
                 stagger: 0.08,
                 delay: 0.3,
                 ease: "power2.out"
-            });
-
-            // News cards with scroll trigger
-            gsap.utils.toArray<HTMLElement>(".news-card").forEach((card, i) => {
-                gsap.from(card, {
-                    scrollTrigger: {
-                        trigger: card,
-                        start: "top 90%"
-                    },
-                    y: 50,
-                    opacity: 0,
-                    duration: 0.6,
-                    delay: (i % 3) * 0.08,
-                    ease: "power2.out"
-                });
             });
 
             // Newsletter section
@@ -96,6 +82,27 @@ export default function ActualitesPage() {
                 opacity: 0,
                 duration: 0.8,
                 ease: "power2.out"
+            });
+        }, containerRef);
+
+        return () => ctx.revert();
+    }, []); // Pas de dépendances = une seule fois au chargement
+
+    // Animations des cartes d'articles (se relance quand le filtre change)
+    useEffect(() => {
+        const ctx = gsap.context(() => {
+            gsap.utils.toArray<HTMLElement>(".news-card").forEach((card, i) => {
+                gsap.from(card, {
+                    scrollTrigger: {
+                        trigger: card,
+                        start: "top 90%"
+                    },
+                    y: 50,
+                    opacity: 0,
+                    duration: 0.6,
+                    delay: (i % 3) * 0.08,
+                    ease: "power2.out"
+                });
             });
         }, containerRef);
 
