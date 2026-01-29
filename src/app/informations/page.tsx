@@ -1,3 +1,36 @@
+/**
+ * Page : Informations Pratiques du Musée ABYSSE
+ *
+ * DESCRIPTION :
+ * Page regroupant toutes les informations pratiques pour préparer sa visite :
+ * - Comment venir (à pied, en bus, en voiture)
+ * - Horaires d'ouverture et durées de visite
+ * - Tarifs et forfaits (adulte, jeune, enfant, famille, groupes)
+ * - Services disponibles (accessibilité, wifi, cafétéria, etc.)
+ *
+ * SECTIONS :
+ * 1. Accès : 3 modes de transport avec icônes et détails
+ * 2. Horaires : Heures d'ouverture et durées moyennes de visite
+ * 3. Tarifs : Grille tarifaire complète avec prix animés
+ * 4. Services : 6 services proposés par le musée
+ *
+ * ANIMATIONS SPÉCIALES :
+ * - AnimatedNumber : Compteur animé pour les prix et durées
+ * - Shimmer effect : Effet de brillance sur les cartes de prix
+ * - Icon pop : Apparition des icônes avec rotation
+ * - Card stagger : Révélation progressive des cartes
+ *
+ * FONCTIONNALITÉS :
+ * - Lien Google Maps direct pour le parking
+ * - Numéros de bus cliquables (hover effect)
+ * - Cartes tarifaires avec effet shimmer au scroll
+ * - Responsive : Mobile 1 colonne, Desktop 2-3 colonnes
+ *
+ * TECHNOLOGIES :
+ * - GSAP + ScrollTrigger pour les animations
+ * - IntersectionObserver pour détecter la visibilité des nombres
+ * - Next.js Image pour l'optimisation des images
+ */
 "use client";
 
 import { Navbar, Footer } from "@/components/UI";
@@ -7,9 +40,29 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Footprints, Bus, Car, Clock, Ticket, GraduationCap, Baby, Globe, Accessibility, ShoppingBag, Coffee, Wifi, Lock } from "lucide-react";
 
+// Enregistrer le plugin ScrollTrigger de GSAP
 gsap.registerPlugin(ScrollTrigger);
 
-// Animated Number Component - Ultra smooth
+/**
+ * Composant : Compteur animé pour les nombres
+ *
+ * FONCTIONNEMENT :
+ * - Utilise IntersectionObserver pour détecter quand le nombre entre dans le viewport
+ * - Anime la valeur de 0 à la valeur cible avec GSAP
+ * - L'animation ne se déclenche qu'une seule fois (observer.disconnect après animation)
+ *
+ * PARAMÈTRES :
+ * - target : Valeur cible à atteindre
+ * - suffix : Suffixe à ajouter après le nombre (ex: "€", "mn", "%")
+ *
+ * UTILISATION :
+ * <AnimatedNumber target={16} suffix="€" /> affiche "16€" avec animation
+ *
+ * PERFORMANCE :
+ * - threshold: 0.5 : L'animation démarre quand 50% du composant est visible
+ * - duration: 2.5s : Animation douce et visible
+ * - ease: "power3.out" : Ralentissement progressif en fin d'animation
+ */
 function AnimatedNumber({ target, suffix = "" }: { target: number; suffix?: string }) {
     const [count, setCount] = useState(0);
     const ref = useRef<HTMLSpanElement>(null);

@@ -1,3 +1,42 @@
+/**
+ * Page : Partenaires du Musée ABYSSE
+ *
+ * DESCRIPTION :
+ * Page de présentation de l'écosystème de partenaires publics et privés soutenant le musée.
+ * Organisée en 4 sections thématiques avec des styles visuels distincts.
+ *
+ * SECTIONS :
+ * 1. Institutions Publiques : État, Région, Département, Métropole
+ *    Style : Liste interactive avec hover effects et badges de rôle
+ *
+ * 2. Sciences : Ifremer, Université, CNRS
+ *    Style : Hexagones (clip-path) disposés en nid d'abeille
+ *
+ * 3. Industrie : Naval Group, Pôle Mer, ECA Group, Orange Marine
+ *    Style : Blueprint technique avec lignes animées
+ *
+ * 4. Défense : Marine Nationale, CEPHISMER, SNA
+ *    Style : Interface radar avec scanning line animée
+ *
+ * ANIMATIONS SPÉCIFIQUES :
+ * - Hexagons : Scale-up avec ease "back.out" pour effet rebond
+ * - Blueprint lines : Animation de la largeur (drawing effect)
+ * - Radar scan : Rotation infinie de la ligne de scan
+ * - Institution items : Slide-in depuis la gauche en stagger
+ *
+ * DESIGN PATTERN :
+ * Chaque section utilise un langage visuel unique pour identifier
+ * visuellement le type de partenaire (scientifique, industriel, institutionnel).
+ *
+ * CTA (Call To Action) :
+ * Section finale avec formulaire de contact pour nouveaux partenariats.
+ * Email : partenariats@musee-abysse.fr
+ *
+ * TECHNOLOGIES :
+ * - GSAP + ScrollTrigger pour toutes les animations
+ * - clip-path CSS pour les formes hexagonales
+ * - Gradients et backdrop-blur pour les effets de profondeur
+ */
 "use client";
 
 import { Navbar, Footer } from "@/components/UI";
@@ -6,8 +45,30 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { FlaskConical, Cog, Anchor, Mail, Microscope, Atom, Ship, Radio } from "lucide-react";
 
+// Enregistrer le plugin ScrollTrigger de GSAP
 gsap.registerPlugin(ScrollTrigger);
 
+/**
+ * Composant principal de la page Partenaires
+ *
+ * ARCHITECTURE :
+ * - Hero section avec titre et sous-titre
+ * - 4 sections thématiques avec styles visuels distincts
+ * - Section CTA pour contact partenariats
+ * - Footer de navigation
+ *
+ * DONNÉES DYNAMIQUES :
+ * - institutions : Liste des partenaires publics (État, Région, etc.)
+ *
+ * ANIMATIONS GSAP :
+ * - Hero : Fade-in du titre
+ * - Section headers : Slide-in depuis la gauche
+ * - Institutions : Stagger horizontal avec hover effects
+ * - Hexagons (Sciences) : Scale-up avec délai progressif
+ * - Blueprint lines : Animation de la largeur (drawing)
+ * - Industry cards : Fade-up en stagger
+ * - CTA : Fade-up au scroll
+ */
 export default function PartenairesPage() {
     const containerRef = useRef<HTMLDivElement>(null);
 

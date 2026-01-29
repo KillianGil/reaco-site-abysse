@@ -1,3 +1,40 @@
+/**
+ * Page : Contact du Musée ABYSSE
+ *
+ * DESCRIPTION :
+ * Page de contact complète avec formulaire d'envoi d'email, informations pratiques,
+ * carte interactive Google Maps et section FAQ (Questions Fréquentes).
+ *
+ * FONCTIONNALITÉS PRINCIPALES :
+ * 1. Informations de contact (email, téléphone, adresse, horaires)
+ * 2. Formulaire de contact avec envoi via EmailJS
+ * 3. Carte Google Maps intégrée avec iframe
+ * 4. FAQ avec accordéon interactif
+ *
+ * INTÉGRATIONS :
+ * - EmailJS : Service d'envoi d'email sans backend
+ * - Google Maps : Carte interactive avec iframe
+ * - GSAP : Animations au scroll et à l'apparition
+ *
+ * ÉTATS DU FORMULAIRE :
+ * - idle : État initial, formulaire prêt
+ * - sending : Envoi en cours (spinner affiché)
+ * - success : Email envoyé avec succès (icône de validation)
+ * - error : Erreur lors de l'envoi (icône d'alerte)
+ *
+ * ANIMATIONS :
+ * - Hero : Fade-in du titre et du sous-titre
+ * - Contact blocks : Stagger sur les 4 cartes d'information
+ * - Formulaire : Slide-up avec fade-in
+ * - Map : Slide-in depuis la droite
+ * - FAQ : Animations individuelles au scroll
+ *
+ * CONFIGURATION EMAILJS :
+ * Nécessite 3 variables d'environnement :
+ * - NEXT_PUBLIC_EMAILJS_SERVICE_ID : ID du service EmailJS
+ * - NEXT_PUBLIC_EMAILJS_TEMPLATE_ID : ID du template d'email
+ * - NEXT_PUBLIC_EMAILJS_PUBLIC_KEY : Clé publique EmailJS
+ */
 "use client";
 
 import { Navbar, Footer } from "@/components/UI";
@@ -6,6 +43,21 @@ import gsap from "gsap";
 import emailjs from "@emailjs/browser";
 import { Mail, Phone, MapPin, Clock, Send, CheckCircle, AlertCircle, Loader2, MessageCircle, ChevronDown, HelpCircle } from "lucide-react";
 
+/**
+ * Données de la FAQ (Questions Fréquentes)
+ *
+ * STRUCTURE :
+ * - question : Question posée par les visiteurs
+ * - answer : Réponse détaillée du musée
+ *
+ * UTILISATION :
+ * Ces données alimentent la section FAQ en bas de page avec un système d'accordéon.
+ * Chaque question peut être ouverte/fermée individuellement.
+ *
+ * MAINTENANCE :
+ * Pour ajouter une nouvelle question, ajoutez simplement un objet au tableau.
+ * La FAQ s'adaptera automatiquement sans modification du code.
+ */
 const faqData = [
     {
         question: "Faut-il réserver à l'avance ?",

@@ -1,3 +1,35 @@
+/**
+ * Page : Visiter le Musée ABYSSE (Expositions et Parcours)
+ *
+ * DESCRIPTION :
+ * Page de présentation du parcours de visite du musée organisé en 4 zones thématiques :
+ * 1. Grande Halle des Engins - Véhicules sous-marins historiques
+ * 2. Biodiversité - Vie abyssale et spécimens des grands fonds
+ * 3. Enjeux Maritimes - Géopolitique et ressources océaniques
+ * 4. Ancrage Territorial - Histoire maritime de Toulon
+ *
+ * ANIMATIONS :
+ * - Hero : Fade-in du titre principal avec délai
+ * - Cartes de contenu : Apparition en stagger (décalage progressif)
+ * - Timeline : Animation alternée depuis les côtés gauche/droit
+ * - Particules : Mouvement flottant continu pour la zone biodiversité
+ * - Parallax : Effet de profondeur sur les lumières ambiantes
+ *
+ * STRUCTURE VISUELLE :
+ * - Hero immersif avec gradient et effets de lumière
+ * - Zones identifiées par numérotation (01, 02, 03, 04)
+ * - Grilles responsive : Mobile 1 colonne, Desktop 2-3 colonnes
+ * - Cartes interactives avec hover effects (bordure, scale, couleur)
+ *
+ * DONNÉES DYNAMIQUES :
+ * - techItems : Liste des engins sous-marins avec spécifications techniques
+ * - Timeline Toulon : Dates clés de l'histoire maritime toulonnaise (1888-2024)
+ *
+ * TECHNOLOGIES :
+ * - GSAP + ScrollTrigger pour toutes les animations au scroll
+ * - Lucide React pour les icônes thématiques
+ * - Tailwind CSS pour le styling responsive
+ */
 "use client";
 
 import { Navbar, Footer } from "@/components/UI";
@@ -6,18 +38,61 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Anchor, Ship, Globe, Radio, Database, ShieldAlert, Fish, Waves, Zap } from "lucide-react";
 
+// Enregistrer le plugin ScrollTrigger pour les animations au scroll
 gsap.registerPlugin(ScrollTrigger);
 
+/**
+ * Composant principal de la page Expositions
+ *
+ * ARCHITECTURE :
+ * - Hero section avec titre et description
+ * - 4 sections thématiques avec animations spécifiques
+ * - Footer de navigation
+ *
+ * ANIMATIONS GSAP :
+ * - Hero title : Slide-up avec fade-in (power4.out)
+ * - Section headers : Slide-in depuis la gauche
+ * - Zone 1 cards : Stagger vertical avec délai progressif
+ * - Zone 2 bio : Fade-up + particules flottantes infinies
+ * - Zone 3 enjeux : Slide-up avec délai
+ * - Zone 4 timeline : Slide alternée gauche/droite selon l'index
+ * - Ambient lights : Parallax au scroll (scrub)
+ *
+ * RESPONSIVE :
+ * - Mobile : Grilles 1 colonne, espacements réduits
+ * - Desktop : Grilles 2-3 colonnes, effets hover avancés
+ */
 export default function ExpositionsPage() {
+    // Référence au conteneur principal pour scoper les animations GSAP
     const containerRef = useRef<HTMLDivElement>(null);
 
+    /**
+     * Hook d'effet pour initialiser toutes les animations GSAP
+     *
+     * CONTEXTE GSAP :
+     * Toutes les animations sont créées dans un contexte GSAP pour faciliter le cleanup.
+     * Le contexte est automatiquement nettoyé au démontage du composant.
+     *
+     * STRUCTURE DES ANIMATIONS :
+     * 1. Hero : Animations d'entrée du titre et sous-titre
+     * 2. Section headers : Slide-in depuis la gauche au scroll
+     * 3. Zone 1 (Tech) : Cards en stagger vertical
+     * 4. Zone 2 (Bio) : Cards + particules flottantes infinies
+     * 5. Zone 3 (Enjeux) : Cards en stagger
+     * 6. Zone 4 (Timeline) : Alternance gauche/droite
+     * 7. Parallax : Mouvement des lumières ambiantes
+     */
     useEffect(() => {
         const ctx = gsap.context(() => {
-            // Hero Animations
+            // === HERO ANIMATIONS ===
+            // Titre principal : montée depuis le bas avec fade-in
             gsap.from(".hero-title", { y: 100, opacity: 0, duration: 1.2, delay: 0.2, ease: "power4.out" });
+            // Sous-titre : montée plus douce avec fade-in légèrement décalé
             gsap.from(".hero-subtitle", { y: 50, opacity: 0, duration: 1, delay: 0.4, ease: "power3.out" });
 
-            // Section Headers - animate from left
+            // === SECTION HEADERS ===
+            // Tous les headers de section apparaissent depuis la gauche au scroll
+            // Trigger : quand le header arrive à 85% de la hauteur de l'écran
             gsap.utils.toArray<HTMLElement>(".section-header").forEach((header) => {
                 gsap.from(header, {
                     scrollTrigger: { trigger: header, start: "top 85%" },
@@ -28,7 +103,9 @@ export default function ExpositionsPage() {
                 });
             });
 
-            // Zone 1: Tech Cards - staggered reveal
+            // === ZONE 1: TECH CARDS (Engins sous-marins) ===
+            // Les cartes techniques apparaissent en stagger (décalage progressif)
+            // Chaque carte a un délai basé sur son index (0.08s par carte)
             gsap.utils.toArray<HTMLElement>(".zone-1-card").forEach((card, i) => {
                 gsap.from(card, {
                     scrollTrigger: { trigger: card, start: "top 85%" },
@@ -40,7 +117,8 @@ export default function ExpositionsPage() {
                 });
             });
 
-            // Zone 2: Bio Cards - fade up with stagger
+            // === ZONE 2: BIO CARDS (Biodiversité) ===
+            // Fade-up avec stagger plus prononcé pour les cartes de biodiversité
             gsap.utils.toArray<HTMLElement>(".zone-2-card").forEach((card, i) => {
                 gsap.from(card, {
                     scrollTrigger: { trigger: card, start: "top 85%" },
@@ -52,7 +130,10 @@ export default function ExpositionsPage() {
                 });
             });
 
-            // Zone 2: Bio Particles floating
+            // === ZONE 2: PARTICULES FLOTTANTES ===
+            // Animation infinie des particules pour simuler le plancton
+            // yoyo: true fait osciller les particules de haut en bas
+            // stagger: random décale aléatoirement le démarrage de chaque particule
             gsap.to(".bio-particle", {
                 y: -20,
                 duration: 2,
@@ -65,7 +146,8 @@ export default function ExpositionsPage() {
                 }
             });
 
-            // Zone 3: Enjeux Cards - slide up
+            // === ZONE 3: ENJEUX CARDS (Géopolitique) ===
+            // Slide-up avec délai plus long entre chaque carte (0.15s)
             gsap.utils.toArray<HTMLElement>(".zone-3-card").forEach((card, i) => {
                 gsap.from(card, {
                     scrollTrigger: { trigger: card, start: "top 85%" },
@@ -77,18 +159,23 @@ export default function ExpositionsPage() {
                 });
             });
 
-            // Zone 4: Timeline - staggered from alternating sides
+            // === ZONE 4: TIMELINE (Histoire de Toulon) ===
+            // Animation alternée : éléments pairs viennent de la gauche, impairs de la droite
+            // Crée un effet de zigzag le long de la timeline centrale
             gsap.utils.toArray<HTMLElement>(".timeline-item").forEach((item, i) => {
                 gsap.from(item, {
                     scrollTrigger: { trigger: item, start: "top 80%" },
-                    x: i % 2 === 0 ? -40 : 40,
+                    x: i % 2 === 0 ? -40 : 40, // Alternance gauche/droite selon l'index pair/impair
                     opacity: 0,
                     duration: 0.8,
                     ease: "power2.out"
                 });
             });
 
-            // Parallax effect on ambient lights
+            // === PARALLAX: AMBIENT LIGHTS ===
+            // Effet de parallax sur les lumières d'ambiance
+            // scrub: 1 lie directement l'animation au scroll (pas de délai)
+            // Les lumières se déplacent vers le haut au scroll pour créer de la profondeur
             gsap.utils.toArray<HTMLElement>(".ambient-light").forEach((light) => {
                 gsap.to(light, {
                     scrollTrigger: {
@@ -104,9 +191,28 @@ export default function ExpositionsPage() {
 
         }, containerRef);
 
+        // Cleanup : revert() supprime toutes les animations créées dans ce contexte
         return () => ctx.revert();
     }, []);
 
+    /**
+     * Données des engins sous-marins exposés dans la Grande Halle (Zone 1)
+     *
+     * STRUCTURE :
+     * - name : Nom de l'engin ou du véhicule
+     * - year : Année de mise en service ou de construction
+     * - depth : Profondeur maximale atteinte (en mètres)
+     * - desc : Description historique et technique
+     * - icon : Composant d'icône Lucide React correspondant
+     *
+     * ÉVOLUTION HISTORIQUE :
+     * La liste est ordonnée chronologiquement pour montrer l'évolution technologique :
+     * 1. 1935 : Casabianca (80m) - Sous-marin militaire historique
+     * 2. 1953 : FNRS III (4050m) - Record de plongée bathyscaphe
+     * 3. 2024 : Drones ROV (6000m+) - Technologies modernes autonomes
+     *
+     * Cette progression illustre 90 ans d'innovation dans l'exploration sous-marine.
+     */
     const techItems = [
         {
             name: "Casabianca",
@@ -126,7 +232,7 @@ export default function ExpositionsPage() {
             name: "Drones & ROV",
             year: "2024",
             depth: "6000m+",
-            desc: "Les robots autonomes d'ECA Group et Ifremer. Ils descendent là où l'homme ne peut aller., jusqu’à plus de 6 000 mètres de profondeur, pour cartographier les fonds et prélever des échantillons.",
+            desc: "Les robots autonomes d'ECA Group et Ifremer. Ils descendent là où l'homme ne peut aller., jusqu'à plus de 6 000 mètres de profondeur, pour cartographier les fonds et prélever des échantillons.",
             icon: Radio
         }
     ];

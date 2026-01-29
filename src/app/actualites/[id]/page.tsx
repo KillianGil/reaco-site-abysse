@@ -1,3 +1,56 @@
+/**
+ * Page : Détail d'un Article (Route Dynamique)
+ *
+ * DESCRIPTION :
+ * Page affichant le contenu complet d'un article de blog/actualité du musée.
+ * Route dynamique basée sur l'ID de l'article : /actualites/[id]
+ *
+ * SECTIONS :
+ * 1. Header Article : Badge catégorie, date, titre, résumé
+ * 2. Boutons de partage : X, Facebook, LinkedIn, Instagram, Copier le lien
+ * 3. Image principale : Image featured de l'article (aspect ratio 2:1)
+ * 4. Contenu : HTML formaté avec styles Prose de Tailwind
+ * 5. Suggestions : 3 articles similaires (même catégorie prioritaire)
+ *
+ * DONNÉES DYNAMIQUES :
+ * - article : Récupéré via useArticle(id) depuis Firestore
+ * - articles : Liste complète pour les suggestions
+ * - categories : Pour afficher les couleurs de badges
+ *
+ * ÉTATS :
+ * - loading : Affichage d'un spinner pendant le chargement
+ * - error : Message d'erreur si l'article n'existe pas
+ * - success : Affichage du contenu de l'article
+ *
+ * PARTAGE SOCIAL :
+ * - X (Twitter) : Intent tweet avec URL et titre
+ * - Facebook : Sharer avec URL
+ * - LinkedIn : Sharing avec URL
+ * - Instagram : Ouverture de l'app (pas de partage direct)
+ * - Copier : Copie de l'URL dans le presse-papiers
+ *
+ * ALGORITHME DE SUGGESTIONS :
+ * 1. Exclure l'article actuel
+ * 2. Trier : articles de la même catégorie en premier
+ * 3. Limiter aux 3 premiers résultats
+ *
+ * ANIMATIONS GSAP :
+ * - Header : Slide-up avec fade-in
+ * - Image : Scale-in (zoom out) avec fade-in
+ * - Content : Fade-up du contenu
+ * - Suggestions : Stagger sur les 3 cartes au scroll
+ *
+ * TYPOGRAPHIE :
+ * Utilise prose de Tailwind Typography avec styles personnalisés :
+ * - prose-headings : Titres blancs et semi-bold
+ * - prose-p : Texte blanc/70 avec interligne 1.8
+ * - prose-a : Liens en cyan (#4CBBD5)
+ * - prose-blockquote : Citations avec bordure gauche cyan
+ *
+ * SEO :
+ * - next/image avec priority pour l'image principale
+ * - Balises meta dynamiques (titre, description) via l'article
+ */
 "use client";
 
 import { Footer } from "@/components/UI";
@@ -13,36 +66,76 @@ import { useArticle, useArticles } from "@/hooks/useArticles";
 import { useCategories } from "@/hooks/useCategories";
 import { getColorClasses } from "@/types/category";
 
+// Navbar chargée dynamiquement sans SSR pour éviter les problèmes d'hydratation
 const Navbar = dynamic(() => import("@/components/UI/Navbar").then(mod => mod.Navbar), { ssr: false });
 
+// Enregistrer le plugin ScrollTrigger de GSAP
 gsap.registerPlugin(ScrollTrigger);
 
-// Custom X (Twitter) icon component
+/**
+ * Composant : Icône personnalisée pour X (Twitter)
+ *
+ * RAISON :
+ * Lucide React n'inclut pas l'icône du nouveau logo X de Twitter.
+ * Cette icône SVG custom représente le logo X actuel.
+ *
+ * @param className - Classes Tailwind CSS à appliquer au SVG
+ */
 const XIcon = ({ className }: { className?: string }) => (
     <svg viewBox="0 0 24 24" className={className} fill="currentColor">
         <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
     </svg>
 );
 
+/**
+ * Composant principal de la page Article
+ *
+ * LOGIQUE :
+ * 1. Récupération de l'ID depuis les paramètres d'URL (Next.js App Router)
+ * 2. Chargement de l'article via le hook useArticle(id)
+ * 3. Chargement de tous les articles pour les suggestions
+ * 4. Filtrage et tri des suggestions (même catégorie prioritaire)
+ * 5. Animations GSAP après chargement de l'article
+ * 6. Affichage conditionnel : loading / error / success
+ *
+ * HOOKS UTILISÉS :
+ * - useParams() : Récupération de l'ID depuis l'URL
+ * - useArticle(id) : Chargement de l'article depuis Firestore
+ * - useArticles() : Chargement de tous les articles pour suggestions
+ * - useCategories() : Chargement des catégories pour les couleurs
+ */
 export default function ArticlePage() {
+    // Récupérer l'ID de l'article depuis les paramètres d'URL
     const params = useParams();
     const id = params.id as string;
     const containerRef = useRef<HTMLDivElement>(null);
 
+    // Charger l'article, la liste complète des articles et les catégories
     const { article, loading, error } = useArticle(id);
     const { articles } = useArticles();
     const { categories } = useCategories();
 
-    // Suggestions : autres articles de la même catégorie ou récents
+    /**
+     * Algorithme de suggestions d'articles similaires
+     *
+     * LOGIQUE :
+     * 1. Exclure l'article actuel de la liste
+     * 2. Trier en priorité les articles de la même catégorie
+     * 3. Limiter à 3 suggestions maximum
+     *
+     * PRIORITÉ :
+     * - Articles de la même catégorie en premier
+     * - Puis articles récents (ordre par défaut de Firestore)
+     */
     const suggestions = articles
-        .filter(a => a.id !== id)
+        .filter(a => a.id !== id) // Exclure l'article actuel
         .sort((a, b) => {
-            // Priorité aux articles de la même catégorie
+            // Priorité aux articles de la même catégorie que l'article actuel
             if (article && a.category === article.category && b.category !== article.category) return -1;
             if (article && b.category === article.category && a.category !== article.category) return 1;
-            return 0;
+            return 0; // Garder l'ordre par défaut pour les autres
         })
-        .slice(0, 3);
+        .slice(0, 3); // Limiter à 3 suggestions
 
     useEffect(() => {
         if (!article) return;
