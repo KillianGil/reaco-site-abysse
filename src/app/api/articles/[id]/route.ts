@@ -1,18 +1,59 @@
+/**
+ * API Route : Gestion d'un article spécifique (CRUD individuel)
+ *
+ * Endpoints disponibles :
+ * - PUT /api/articles/[id] : Modifier un article existant
+ * - DELETE /api/articles/[id] : Supprimer un article
+ *
+ * PARAMÈTRE DE ROUTE :
+ * - id : ID du document Firestore de l'article
+ *
+ * SÉCURITÉ :
+ * - Utilise Firebase Admin SDK (privilèges élevés)
+ * - Vérifie l'existence de l'article avant suppression (404 si introuvable)
+ * - Validation des données avant mise à jour
+ *
+ * NOTE IMPORTANTE :
+ * La route GET n'est pas nécessaire ici car :
+ * - La lecture côté client utilise le hook useArticle() avec Firebase client SDK
+ * - Seules les opérations d'écriture (PUT/DELETE) nécessitent l'Admin SDK
+ */
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { FieldValue } from 'firebase-admin/firestore';
 
-// PUT - Modifier un article
+/**
+ * PUT /api/articles/[id]
+ *
+ * Met à jour un article existant avec de nouvelles données
+ *
+ * PARAMÈTRES :
+ * - id : ID de l'article dans l'URL (ex: /api/articles/abc123)
+ *
+ * BODY REQUIS :
+ * Mêmes champs que POST (voir /api/articles/route.ts)
+ * La validation vérifie tous les champs obligatoires
+ *
+ * CHAMPS MIS À JOUR :
+ * - Tous les champs de l'article SAUF "date" et "createdAt" (conservés)
+ * - updatedAt : Mis à jour automatiquement avec timestamp serveur
+ *
+ * RÉPONSES :
+ * - 200 : { message: string } - Article mis à jour avec succès
+ * - 400 : { error: string } - Données manquantes
+ * - 500 : { error: string } - Erreur serveur
+ */
 export async function PUT(
     request: NextRequest,
     { params }: { params: { id: string } }
 ) {
     try {
+        // Récupérer l'instance Firestore Admin
         const adminDb = getAdminDb();
         const data = await request.json();
         const articleId = params.id;
 
-        // Valider les données obligatoires
+        // Valider que tous les champs obligatoires sont présents
         if (!data.titre || !data.resume || !data.contenu || !data.categorie || !data.image_url) {
             return NextResponse.json(
                 { error: 'Données manquantes' },
@@ -47,16 +88,40 @@ export async function PUT(
     }
 }
 
-// DELETE - Supprimer un article
+/**
+ * DELETE /api/articles/[id]
+ *
+ * Supprime définitivement un article de la base de données
+ *
+ * PARAMÈTRES :
+ * - id : ID de l'article dans l'URL (ex: /api/articles/abc123)
+ *
+ * SÉCURITÉ :
+ * - Vérifie l'existence de l'article avant suppression (évite les erreurs silencieuses)
+ * - Retourne 404 si l'article n'existe pas
+ *
+ * ATTENTION :
+ * La suppression est définitive et irréversible !
+ * Les images Cloudinary associées ne sont PAS supprimées automatiquement.
+ * Si nécessaire, ajoutez une suppression Cloudinary via leur API :
+ * await cloudinary.uploader.destroy(public_id)
+ *
+ * RÉPONSES :
+ * - 200 : { message: string } - Article supprimé avec succès
+ * - 404 : { error: string } - Article introuvable
+ * - 500 : { error: string } - Erreur serveur
+ */
 export async function DELETE(
     request: NextRequest,
     { params }: { params: { id: string } }
 ) {
     try {
+        // Récupérer l'instance Firestore Admin
         const adminDb = getAdminDb();
         const articleId = params.id;
 
-        // Vérifier que l'article existe
+        // Vérifier que l'article existe avant de le supprimer
+        // Cela évite les erreurs silencieuses et informe l'utilisateur
         const articleDoc = await adminDb.collection('articles').doc(articleId).get();
 
         if (!articleDoc.exists) {

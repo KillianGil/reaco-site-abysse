@@ -55,8 +55,8 @@ function DashboardContent() {
                     });
                 });
                 setRecentArticles(articles);
-            } catch (error) {
-                console.error("Erreur chargement:", error);
+            } catch {
+                // Erreur silencieuse - le dashboard affichera simplement 0 articles
             } finally {
                 setLoading(false);
             }

@@ -1,6 +1,12 @@
 import * as admin from 'firebase-admin';
 
-// Fonction d'initialisation lazy
+/**
+ * Initialise Firebase Admin SDK de manière lazy (à la demande)
+ * Utilisé uniquement côté serveur (API routes) avec privilèges élevés
+ * L'initialisation lazy évite les erreurs lors du build Next.js
+ * @returns Instance Firebase Admin
+ * @throws {Error} Si les credentials sont invalides
+ */
 function initializeFirebaseAdmin() {
     if (!admin.apps.length) {
         try {
@@ -11,21 +17,28 @@ function initializeFirebaseAdmin() {
                     privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
                 }),
             });
-            console.log('✅ Firebase Admin initialisé');
         } catch (error) {
-            console.error('❌ Erreur initialisation Firebase Admin:', error);
             throw error;
         }
     }
     return admin;
 }
 
-// Getters qui initialisent à la demande
+/**
+ * Récupère l'instance Firestore côté serveur avec privilèges admin
+ * Initialise Firebase Admin si nécessaire
+ * @returns Instance Firestore Admin
+ */
 export function getAdminDb() {
     initializeFirebaseAdmin();
     return admin.firestore();
 }
 
+/**
+ * Récupère l'instance Auth côté serveur avec privilèges admin
+ * Initialise Firebase Admin si nécessaire
+ * @returns Instance Auth Admin
+ */
 export function getAdminAuth() {
     initializeFirebaseAdmin();
     return admin.auth();

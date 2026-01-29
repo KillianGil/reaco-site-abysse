@@ -1,3 +1,42 @@
+/**
+ * Page : Actualités publiques du musée ABYSSE
+ *
+ * URL : /actualites
+ *
+ * FONCTIONNALITÉS :
+ * - Affichage de tous les articles du musée (événements, découvertes, vie du musée)
+ * - Filtrage par catégorie (dynamique, basé sur les catégories Firestore)
+ * - Section "À la Une" pour les articles mis en avant (featured)
+ * - Animations GSAP pour l'apparition progressive des éléments
+ * - Responsive design (mobile, tablette, desktop)
+ * - Section newsletter (inscription non fonctionnelle actuellement)
+ *
+ * STRUCTURE :
+ * 1. Hero Section : Titre animé de la page
+ * 2. Articles "À la Une" : Affichage en grand format des articles épinglés (featured)
+ * 3. Filtres de catégories : Boutons pour filtrer par catégorie
+ * 4. Grille d'articles : Tous les articles en grille 3 colonnes
+ * 5. Section Newsletter : Formulaire d'inscription (statique)
+ *
+ * DONNÉES :
+ * - Articles récupérés via useArticles() depuis Firestore
+ * - Catégories récupérées via useCategories() depuis Firestore
+ * - Tri par date décroissante (plus récents en premier)
+ *
+ * ANIMATIONS :
+ * - GSAP avec ScrollTrigger pour les animations d'apparition
+ * - Animations au scroll pour les cartes d'articles
+ * - Effets hover sur les cartes (scale, border color)
+ *
+ * NAVIGATION :
+ * - Cliquer sur un article redirige vers /actualites/[id]
+ * - Navbar dynamique (chargée côté client uniquement)
+ *
+ * ÉTAT DE CHARGEMENT :
+ * - Spinner pendant le chargement des articles
+ * - Message d'erreur si Firestore est indisponible
+ * - Fallback gracieux vers catégories par défaut
+ */
 "use client";
 
 import { Footer } from "@/components/UI";
@@ -12,23 +51,32 @@ import { useArticles } from "@/hooks/useArticles";
 import { useCategories } from "@/hooks/useCategories";
 import { getColorClasses } from "@/types/category";
 
+// Charger la Navbar uniquement côté client pour éviter les problèmes d'hydratation
 const Navbar = dynamic(() => import("@/components/UI/Navbar").then(mod => mod.Navbar), { ssr: false });
 
+// Enregistrer le plugin ScrollTrigger de GSAP pour les animations au scroll
 gsap.registerPlugin(ScrollTrigger);
 
 export default function ActualitesPage() {
+    // Référence au conteneur principal pour les animations GSAP
     const containerRef = useRef<HTMLDivElement>(null);
+
+    // État du filtre de catégorie actuel ("all" = toutes les catégories)
     const [filter, setFilter] = useState<string>("all");
 
-    // Récupération des articles depuis Firebase
-    const { articles, loading, error } = useArticles();
-    const { categories } = useCategories();
+    // Récupération des articles et catégories depuis Firestore via les hooks
+    const { articles, loading, error } = useArticles();      // Tous les articles triés par date décroissante
+    const { categories } = useCategories();                  // Toutes les catégories pour les filtres
 
+    // Articles filtrés selon la catégorie sélectionnée
     const filteredNews = filter === "all"
-        ? articles
-        : articles.filter(item => item.category === filter);
+        ? articles                                            // Tous les articles si "all"
+        : articles.filter(item => item.category === filter); // Articles de la catégorie sélectionnée
 
+    // Articles mis en avant (affichés dans la section "À la Une")
     const featuredNews = articles.filter(item => item.featured);
+
+    // Articles réguliers filtrés (excluant les articles mis en avant)
     const regularNews = filteredNews.filter(item => !item.featured);
 
     // Animations initiales (une seule fois au chargement)
@@ -109,8 +157,20 @@ export default function ActualitesPage() {
         return () => ctx.revert();
     }, [filter]);
 
+    /**
+     * Récupère les classes Tailwind CSS de couleur pour un badge de catégorie
+     *
+     * UTILISATION :
+     * Appelée pour afficher les badges de catégorie colorés sur les cartes d'articles
+     *
+     * @param categoryKey - Clé de la catégorie (ex: "evenement", "decouverte")
+     * @returns Classes Tailwind CSS complètes ou classes par défaut si catégorie introuvable
+     */
     const getCategoryColor = (categoryKey: string) => {
+        // Trouver la catégorie dans la liste chargée depuis Firestore
         const category = categories.find(c => c.key === categoryKey);
+
+        // Retourner les classes de couleur ou un style par défaut (gris)
         return category ? getColorClasses(category.color) : "bg-white/10 text-white/70 border-white/20";
     };
 

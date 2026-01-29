@@ -77,8 +77,8 @@ function EditArticleContent() {
                 } else {
                     setNotFound(true);
                 }
-            } catch (error) {
-                console.error("Erreur chargement article:", error);
+            } catch {
+                // En cas d'erreur, marquer l'article comme introuvable
                 setNotFound(true);
             } finally {
                 setLoading(false);
@@ -197,8 +197,8 @@ function EditArticleContent() {
             }
 
             setSubmitSuccess(true);
-        } catch (error) {
-            console.error("Erreur lors de la modification:", error);
+        } catch {
+            // Afficher l'erreur à l'utilisateur via l'état
             setSubmitError("Erreur lors de la modification. Veuillez réessayer.");
         } finally {
             setIsSubmitting(false);

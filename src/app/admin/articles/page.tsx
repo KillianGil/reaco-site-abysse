@@ -64,13 +64,15 @@ function ArticlesListContent() {
                 });
             });
             setArticles(loaded);
-        } catch (error) {
-            console.error("Erreur chargement:", error);
+        } catch {
+            // Erreur silencieuse - la liste affichera simplement un tableau vide
         } finally {
             setLoading(false);
         }
     }
 
+    // Supprime un article après confirmation de l'utilisateur
+    // Utilise l'API sécurisée côté serveur
     async function handleDelete(article: Article) {
         if (!confirm(`Êtes-vous sûr de vouloir supprimer "${article.titre}" ?`)) return;
 
@@ -86,10 +88,11 @@ function ArticlesListContent() {
                 throw new Error(error.error || 'Erreur lors de la suppression');
             }
 
+            // Retirer l'article de la liste localement
             setArticles(prev => prev.filter(a => a.id !== article.id));
-        } catch (error) {
-            console.error("Erreur suppression:", error);
-            alert(error instanceof Error ? error.message : "Erreur lors de la suppression");
+        } catch {
+            // Afficher l'erreur à l'utilisateur
+            alert("Erreur lors de la suppression");
         } finally {
             setDeletingId(null);
         }

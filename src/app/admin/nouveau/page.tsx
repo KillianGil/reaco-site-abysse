@@ -147,8 +147,8 @@ function NewArticleContent() {
             }
 
             setSubmitSuccess(true);
-        } catch (error) {
-            console.error("Erreur lors de l'ajout:", error);
+        } catch {
+            // Afficher l'erreur à l'utilisateur via l'état
             setSubmitError("Erreur lors de l'ajout de l'article. Veuillez réessayer.");
         } finally {
             setIsSubmitting(false);

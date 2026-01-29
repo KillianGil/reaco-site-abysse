@@ -82,14 +82,17 @@ function CategoriesContent() {
             setShowForm(false);
             setEditingCategory(null);
         } catch (error) {
-            console.error("Error saving category:", error);
+            // Afficher l'erreur à l'utilisateur via l'état
             setSubmitError(error instanceof Error ? error.message : "Erreur lors de l'enregistrement de la catégorie");
         } finally {
             setIsSubmitting(false);
         }
     };
 
+    // Gère le clic sur le bouton de suppression
+    // Compte les articles associés et ouvre le modal de confirmation
     const handleDeleteClick = async (category: Category) => {
+        // Bloquer la suppression des catégories par défaut
         if (category.isDefault) {
             alert("Les catégories par défaut ne peuvent pas être supprimées");
             return;
@@ -103,6 +106,8 @@ function CategoriesContent() {
         });
     };
 
+    // Confirme la suppression d'une catégorie
+    // Réassigne les articles si nécessaire avant de supprimer
     const handleDeleteConfirm = async (replacementKey?: string) => {
         if (!deleteModal.category) return;
 
@@ -124,7 +129,7 @@ function CategoriesContent() {
             setLastAction('delete');
             setSubmitSuccess(true);
         } catch (error) {
-            console.error("Error deleting category:", error);
+            // Afficher l'erreur via alert pour les suppressions
             alert(error instanceof Error ? error.message : "Erreur lors de la suppression de la catégorie");
         }
     };

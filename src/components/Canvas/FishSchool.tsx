@@ -25,9 +25,14 @@ interface FishData {
   pathType: string;
 }
 
-// Suppress FBXLoader warnings globally
+/**
+ * Suppression des warnings FBXLoader de Three.js
+ * Ces warnings sont générés par la bibliothèque et ne sont pas pertinents pour le fonctionnement
+ * NOTE: Override global - à utiliser avec précaution
+ */
 const originalWarn = console.warn;
 console.warn = (...args) => {
+  // Filtrer uniquement les warnings FBXLoader, laisser passer tous les autres
   if (typeof args[0] === 'string' && args[0].includes('THREE.FBXLoader')) return;
   originalWarn(...args);
 };

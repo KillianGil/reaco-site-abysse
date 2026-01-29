@@ -2,6 +2,10 @@ import { useState, useEffect } from "react";
 import { db } from "@/firebase";
 import { collection, getDocs, query, orderBy, Timestamp, doc, getDoc } from "firebase/firestore";
 
+/**
+ * Interface représentant un article dans Firestore
+ * Structure de données côté base de données (snake_case)
+ */
 export interface Article {
     id: string;
     categorie: string;
@@ -17,7 +21,11 @@ export interface Article {
     date: Timestamp;
 }
 
-// Interface adaptée pour le composant (garde la même structure que l'ancienne)
+/**
+ * Interface représentant un article pour les composants React
+ * Structure de données côté frontend (camelCase)
+ * Permet de maintenir la compatibilité avec les anciens composants
+ */
 export interface NewsItem {
     id: string;
     category: string;
@@ -32,7 +40,11 @@ export interface NewsItem {
     eventTime?: string;
 }
 
-// Transforme un article Firestore en NewsItem pour le composant
+/**
+ * Transforme un article Firestore (snake_case) en NewsItem pour les composants (camelCase)
+ * @param article - Article brut depuis Firestore
+ * @returns NewsItem formaté pour les composants
+ */
 function transformArticle(article: Article): NewsItem {
     return {
         id: article.id,
@@ -49,6 +61,11 @@ function transformArticle(article: Article): NewsItem {
     };
 }
 
+/**
+ * Hook pour récupérer tous les articles depuis Firestore
+ * Les articles sont triés par date décroissante (plus récents en premier)
+ * @returns {Object} articles, loading, error
+ */
 export function useArticles() {
     const [articles, setArticles] = useState<NewsItem[]>([]);
     const [loading, setLoading] = useState(true);
@@ -71,8 +88,7 @@ export function useArticles() {
                 });
 
                 setArticles(fetchedArticles);
-            } catch (err) {
-                console.error("Erreur lors de la récupération des articles:", err);
+            } catch {
                 setError("Impossible de charger les articles");
             } finally {
                 setLoading(false);
@@ -85,7 +101,11 @@ export function useArticles() {
     return { articles, loading, error };
 }
 
-// Hook pour récupérer un article par son ID
+/**
+ * Hook pour récupérer un article spécifique par son ID
+ * @param id - ID de l'article à récupérer
+ * @returns {Object} article, loading, error
+ */
 export function useArticle(id: string) {
     const [article, setArticle] = useState<NewsItem | null>(null);
     const [loading, setLoading] = useState(true);
@@ -112,8 +132,7 @@ export function useArticle(id: string) {
                 } else {
                     setError("Article non trouvé");
                 }
-            } catch (err) {
-                console.error("Erreur lors de la récupération de l'article:", err);
+            } catch {
                 setError("Impossible de charger l'article");
             } finally {
                 setLoading(false);

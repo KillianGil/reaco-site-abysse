@@ -1,3 +1,36 @@
+/**
+ * Composant : Formulaire de création/édition de catégorie
+ *
+ * FONCTIONNALITÉS :
+ * - Création d'une nouvelle catégorie avec validation complète
+ * - Édition d'une catégorie existante (nom, couleur, ordre uniquement)
+ * - Génération automatique de la clé depuis le nom (nouvelles catégories)
+ * - Validation en temps réel de l'unicité de la clé
+ * - Sélecteur visuel de couleurs
+ *
+ * VALIDATION :
+ * - Nom requis (non vide)
+ * - Clé requise et unique (format: lowercase, hyphens, chiffres uniquement)
+ * - Vérification asynchrone de l'unicité via Firestore
+ * - Protection : la clé ne peut pas être modifiée après création
+ *
+ * MODES D'UTILISATION :
+ * 1. Mode Création (category = null) :
+ *    - La clé est auto-générée depuis le nom
+ *    - L'utilisateur peut modifier manuellement la clé
+ *    - Validation d'unicité en temps réel
+ *
+ * 2. Mode Édition (category fourni) :
+ *    - La clé est en lecture seule (non modifiable)
+ *    - Seuls le nom, la couleur et l'ordre peuvent être changés
+ *    - Pas de validation d'unicité (clé existante conservée)
+ *
+ * PROPS :
+ * - category : Catégorie à éditer (null = mode création)
+ * - onSubmit : Callback appelé avec les données du formulaire
+ * - onCancel : Callback appelé lors de l'annulation
+ * - loading : État de chargement pendant la sauvegarde
+ */
 import { useState, useEffect } from "react";
 import { AlertCircle, Check, Loader2 } from "lucide-react";
 import type { CategoryFormData, Category } from "@/types/category";
@@ -5,34 +38,50 @@ import { AVAILABLE_COLORS, generateKeyFromLabel, validateCategoryKey } from "@/t
 import { validateCategoryKeyUnique } from "@/services/categoryService";
 
 interface CategoryFormProps {
-    category?: Category | null;
-    onSubmit: (data: CategoryFormData) => Promise<void>;
-    onCancel: () => void;
-    loading?: boolean;
+    category?: Category | null;               // Catégorie à éditer (undefined/null = création)
+    onSubmit: (data: CategoryFormData) => Promise<void>;  // Callback de soumission
+    onCancel: () => void;                     // Callback d'annulation
+    loading?: boolean;                        // État de chargement (désactive les inputs)
 }
 
 export function CategoryForm({ category, onSubmit, onCancel, loading = false }: CategoryFormProps) {
+    // État du formulaire avec valeurs initiales depuis la catégorie ou valeurs par défaut
     const [form, setForm] = useState<CategoryFormData>({
-        key: category?.key || "",
-        label: category?.label || "",
-        color: category?.color || "cyan",
-        order: category?.order || 1
+        key: category?.key || "",           // Clé existante ou vide
+        label: category?.label || "",       // Nom existant ou vide
+        color: category?.color || "cyan",   // Couleur existante ou cyan par défaut
+        order: category?.order || 1         // Ordre existant ou 1 par défaut
     });
 
-    const [keyError, setKeyError] = useState<string | null>(null);
-    const [labelError, setLabelError] = useState<string | null>(null);
-    const [isValidating, setIsValidating] = useState(false);
+    // États de validation et d'erreurs
+    const [keyError, setKeyError] = useState<string | null>(null);      // Erreur de validation de la clé
+    const [labelError, setLabelError] = useState<string | null>(null);  // Erreur de validation du nom
+    const [isValidating, setIsValidating] = useState(false);            // Indicateur de validation async en cours
 
+    // Effet : Auto-génération de la clé depuis le nom (mode création uniquement)
     useEffect(() => {
-        // Pour les nouvelles catégories, générer automatiquement la clé depuis le label
+        // Uniquement pour les nouvelles catégories (pas d'édition)
+        // Génère une clé URL-safe depuis le nom saisi
         if (!category && form.label) {
             const generatedKey = generateKeyFromLabel(form.label);
             setForm(prev => ({ ...prev, key: generatedKey }));
-            // Réinitialiser l'erreur quand la clé change
+            // Réinitialiser l'erreur car la clé vient de changer
             setKeyError(null);
         }
     }, [form.label, category]);
 
+    /**
+     * Valide tous les champs du formulaire
+     *
+     * VALIDATIONS APPLIQUÉES :
+     * 1. Nom : requis (non vide après trim)
+     * 2. Clé (création uniquement) :
+     *    - Requise (non vide)
+     *    - Format valide (lowercase, hyphens, chiffres uniquement)
+     *    - Unique dans Firestore (vérification asynchrone)
+     *
+     * @returns true si tous les champs sont valides, false sinon
+     */
     const validateForm = async (): Promise<boolean> => {
         let isValid = true;
 
@@ -67,8 +116,9 @@ export function CategoryForm({ category, onSubmit, onCancel, loading = false }: 
                     } else {
                         setKeyError(null);
                     }
-                } catch (error) {
-                    console.error("Erreur de validation:", error);
+                } catch {
+                    // En cas d'erreur de validation (ex: Firestore indisponible),
+                    // afficher un message à l'utilisateur et bloquer la soumission
                     setIsValidating(false);
                     setKeyError("Erreur lors de la vérification de la clé");
                     isValid = false;
@@ -79,12 +129,25 @@ export function CategoryForm({ category, onSubmit, onCancel, loading = false }: 
         return isValid;
     };
 
+    /**
+     * Gestionnaire de soumission du formulaire
+     *
+     * WORKFLOW :
+     * 1. Empêcher le comportement par défaut du formulaire
+     * 2. Valider tous les champs (asynchrone)
+     * 3. Si invalide : arrêter et afficher les erreurs
+     * 4. Si valide : appeler le callback onSubmit avec les données
+     *
+     * @param e - Événement de soumission du formulaire
+     */
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        // Valider le formulaire (asynchrone à cause de la vérification d'unicité)
         const isValid = await validateForm();
         if (!isValid) return;
 
+        // Appeler le callback parent avec les données validées
         await onSubmit(form);
     };
 
